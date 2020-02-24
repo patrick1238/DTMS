@@ -1,0 +1,50 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 19.06.2019, 17:46:23
+    Author     : rehkind
+*/
+
+div.textpanel {
+    padding: 5px 10px 5px 10px;
+    width: 800px;
+    background-color: #cccccc;
+    border-color: #ff0000;
+    border: 2px solid;
+}
+
+div.urlpanel {
+    padding: 20px 10px 20px 10px;
+    width: 780px;
+    background-color: #111111;
+    color: #dddddd;
+    border-color: #333333;
+    border: 2px solid;
+}
+
+div.urlpanel a:link {
+    color: #dddddd;
+    text-decoration: none;
+}
+div.urlpanel a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+div.urlpanel a:visited {
+    color: #bbbbbb;
+    text-decoration: none;
+}
+
+div.jsonpanel {
+    padding: 5px 10px 5px 10px;
+    width: 780px;
+    max-height: 300px;
+    overflow-y: scroll;
+    background-color: #ffffff;
+    color: #555555;
+    border-color: #dddddd;
+    border: 2px solid;
+}

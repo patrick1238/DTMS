@@ -1,0 +1,324 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.rehkind_mag.boundary;
+
+import java.util.List;
+import org.jboss.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import net.rehkind_mag.boundary.utils.DefaultResponse;
+import net.rehkind_mag.control.ErrorRepository;
+import net.rehkind_mag.control.LocalClinicRepository;
+import net.rehkind_mag.control.LocalContactPersonRepository;
+import net.rehkind_mag.control.LocalSubmitterRepository;
+import net.rehkind_mag.entity.ClinicEntity;
+import net.rehkind_mag.entity.ContactForClinicEntity;
+import net.rehkind_mag.entity.ContactForClinicEntityPK;
+import net.rehkind_mag.entity.validation.DefaultValidationException;
+import net.rehkind_mag.interfaces.IClinic;
+import net.rehkind_mag.interfaces.IContactForClinic;
+import net.rehkind_mag.interfaces.IContactPerson;
+
+/**
+ *
+ * @author HS
+ */
+@Path("/clinicpool")
+@Produces(MediaType.APPLICATION_JSON)
+public class ClinicsResource {
+    final private String CLINICS_URL="/clinics";
+    final private String CLINIC_URL="/clinic/{CLINICID}";
+    final private String CLINIC_UPDATE_URL="/clinic/update";
+    final private String CLINIC_CREATE_URL="/clinic/create";
+    final private String CLINIC_DELETE_URL="/clinic/delete";
+    
+    
+    @EJB
+    LocalClinicRepository clinicRepo;
+    @EJB
+    LocalSubmitterRepository submitterRepo;
+    @EJB
+    LocalContactPersonRepository contactRepo;
+    
+    @Context
+    UriInfo uriInfo;
+    
+    ContactPersonResource contactResource=new ContactPersonResource();
+    
+    @GET
+    @Path(CLINICS_URL)
+    public Response getClinics() {
+        JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
+        for(IClinic c : clinicRepo.getClinics()){
+            arrayBuilder.add( getClinicBuilderJson(c) );
+        }
+        return DefaultResponse.createOKResponse( arrayBuilder.build() );
+    }
+    
+    @GET
+    @Path(CLINIC_URL)
+    public Response getClinic(@PathParam("CLINICID") Integer id) {
+        IClinic clinicToBuild = clinicRepo.getClinic(id);
+        if(clinicToBuild==null){
+            System.out.println("clinic is NULL");
+        }
+        
+        return DefaultResponse.createOKResponse( buildClinicJson(clinicToBuild) );
+    }
+    
+    @PUT
+    @Path(CLINIC_UPDATE_URL)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateClinic(JsonArray input){
+        JsonObject updatedClinic=input.getJsonObject(0);
+        JsonObject submitter=input.getJsonObject(1);
+        
+        Logger.getLogger("global").log(Logger.Level.INFO, "update for clinic requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "updated object is "+toString(updatedClinic));
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            JsonObject err;
+            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update clinic with id="+updatedClinic.getInt("id"));
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
+        
+        Integer clinicId=updatedClinic.getInt("id");
+        IClinic clinicToUpdate = clinicRepo.getClinic(clinicId);
+        if(clinicToUpdate==null){
+            Logger.getLogger("global").log(Logger.Level.WARN, "Update requested for non-existing clinic.");
+            JsonObject errObject = ErrorRepository.createTargetNotExisting(ClinicsURLResource.getURL(clinicId, uriInfo), "update clinic[id="+clinicId+"]");
+            return DefaultResponse.createUnprocessableEntityResponse(errObject);
+        }
+        
+        Logger.getLogger("global").log(Logger.Level.INFO, "old object is "+toString(clinicToUpdate));
+        
+        clinicToUpdate.setName(updatedClinic.getString("name"));
+        clinicToUpdate.setStreet(updatedClinic.getString("street"));
+        clinicToUpdate.setZipCode(updatedClinic.getString("zipCode"));
+        clinicToUpdate.setCity(updatedClinic.getString("city"));
+        
+        try{
+            clinicRepo.updateClinic(clinicToUpdate);
+        }catch(EJBException ejbEx){
+            Exception cEx = ejbEx.getCausedByException();
+            if (cEx.getClass().equals(DefaultValidationException.class)){
+                return DefaultResponse.createUnprocessableEntityResponse(ErrorRepository.createValidationContraintsViolatedError(ClinicsURLResource.getURL(clinicId, uriInfo), "updating clinic id="+clinicId, ((DefaultValidationException)cEx).getViolations()));
+            }
+        }
+        
+        if(updatedClinic.getJsonArray("contacts")!=null){
+            for(JsonValue contactValue : updatedClinic.getJsonArray("contacts")){
+                JsonObject contactObj = (JsonObject)contactValue;
+                JsonObject contact = contactObj.getJsonObject("contactPerson");
+                
+                if( !contact.keySet().contains("contacId") ){
+                    Logger.getLogger("global").info("Creating new contact for clinic "+updatedClinic.getString("name"));
+                    Response res=contactResource.createContactPerson(contact);
+                    if( res.getStatus()!=202 ){ 
+                        Logger.getLogger("global").warn("Could not create contact '"+contact.getString("forename")+" "+contact.getString("surname")+"'");
+                    }else{
+                        IContactPerson createdContact=contactRepo.getContactPerson(contact.getInt("contactId"));
+                        contactRepo.addContactPersonToClinic(createdContact, clinicToUpdate, contact.getString("contactNotes"));
+                    }
+                }else{
+                    IContactPerson createdContact=contactRepo.getContactPerson(contact.getInt("contactId"));
+                    contactRepo.addContactPersonToClinic(createdContact, clinicToUpdate, contact.getString("contactNotes"));
+                }
+            }
+        }
+        
+        return DefaultResponse.createOKResponse( buildClinicJson(clinicToUpdate) );
+    }
+    
+    @PUT
+    @Path(CLINIC_CREATE_URL)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createClinic(JsonArray input){
+        JsonObject createClinic=input.getJsonObject(0);
+        JsonObject submitter=input.getJsonObject(1);
+        
+        Logger.getLogger("global").log(Logger.Level.INFO, "Create for Clinic requested.");
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            JsonObject err;
+            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new clinic");
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
+        
+        Integer clinicId=null;
+        try{ clinicId=createClinic.getInt("clinicId"); }catch(NullPointerException ex){  }
+        
+        IClinic clinicToCreate = (IClinic) new ClinicEntity();
+        clinicToCreate.setName(createClinic.getString("name"));
+        clinicToCreate.setStreet(createClinic.getString("street"));
+        clinicToCreate.setZipCode(createClinic.getString("zipCode"));
+        clinicToCreate.setCity(createClinic.getString("city"));
+        
+        try{
+            Logger.getLogger("global").log(Logger.Level.INFO, "clinicRepo.createClinic(clinicToCreate);");
+            clinicRepo.createClinic(clinicToCreate);
+        }catch(EJBException ejbEx){
+            Exception cEx = ejbEx.getCausedByException();
+            if (cEx.getClass().equals(DefaultValidationException.class)){
+                return DefaultResponse.createUnprocessableEntityResponse(ErrorRepository.createValidationContraintsViolatedError(CasesURLResource.getURL(clinicToCreate.getId(), uriInfo), "updating clinic id="+clinicToCreate.getId(), ((DefaultValidationException)cEx).getViolations()));
+            }
+        }
+        
+        if(createClinic.getJsonArray("contacts")!=null){
+            for(JsonValue contactValue : createClinic.getJsonArray("contacts")){
+                JsonObject contactObj = (JsonObject)contactValue;
+                JsonObject contact = contactObj.getJsonObject("contactPerson");
+                if( !contact.keySet().contains("contactId") ){
+                    Logger.getLogger("global").info("Creating new contact for clinic "+createClinic.getString("name"));
+                    Response res=contactResource.createContactPerson(contact);
+                    if( res.getStatus()!=202 ){ 
+                        Logger.getLogger("global").warn("Could not create contact '"+contact.getString("forename")+" "+contact.getString("surname")+"'");
+                    }else{
+                        IContactPerson createdContact=contactRepo.getContactPerson(contact.getInt("contactId"));
+                        contactRepo.addContactPersonToClinic(createdContact, clinicToCreate, contact.getString("contactNotes"));
+                    }
+                }else{
+                    IContactPerson createdContact=contactRepo.getContactPerson(contact.getInt("contactId"));
+                    contactRepo.addContactPersonToClinic(createdContact, clinicToCreate, contact.getString("contactNotes"));
+                }
+            }
+        }
+        
+        JsonObject returnValue=buildClinicJson(clinicToCreate);
+        return DefaultResponse.createOKResponse( returnValue );
+    }
+
+    @DELETE
+    @Path(CLINIC_DELETE_URL)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteClinic(JsonArray input){
+        JsonObject deleteClinic=input.getJsonObject(0);
+        JsonObject submitter=input.getJsonObject(1);
+        
+        Integer id = deleteClinic.getInt("id");
+        Logger.getLogger("global").log(Logger.Level.INFO, "Delete for clinic[id="+id+"] requested.");
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            JsonObject err;
+            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new clinic");
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
+        
+        IClinic clinicToDelete = clinicRepo.getClinic(id);
+        
+        try{
+            Logger.getLogger("global").log(Logger.Level.INFO, "clinicRepo.deleteClinic(clinicToDelete);");
+            clinicRepo.deleteClinic(clinicToDelete);
+            Logger.getLogger("global").log(Logger.Level.INFO, "clinic deleted");
+        }catch(Exception ex){
+            Logger.getLogger("global").log(Logger.Level.INFO, "returning createNotDeletedError");
+            return DefaultResponse.createUnprocessableEntityResponse(ErrorRepository.createNotDeletedError(CasesURLResource.getURL(clinicToDelete.getId(), uriInfo), "deleting clinic id="+clinicToDelete.getId()));
+        }
+        Logger.getLogger("global").log(Logger.Level.INFO, "returning OK status");
+        JsonObjectBuilder resultBuilder = Json.createObjectBuilder();
+        resultBuilder.add("Status", "200: OK");
+        return DefaultResponse.createOKResponse( resultBuilder.build() );
+    }
+    
+    public JsonObject buildClinicJson(IClinic clinicToConvert){
+        JsonObjectBuilder jsonCaseBuilder=getClinicBuilderJson(clinicToConvert);
+        return jsonCaseBuilder.build();
+    }
+    
+    public JsonObjectBuilder getClinicBuilderJson(IClinic clinicToBuild){
+        String url = ClinicsURLResource.getURL(clinicToBuild, uriInfo);
+        
+        JsonArrayBuilder jsonClinicContactsArrayBuilder = Json.createArrayBuilder();
+        //List<IContactForClinic> contacts = clinicRepo.getContactsForClinic( clinicToBuild );
+        List<IContactForClinic> contacts = clinicToBuild.getContactsForClinicList();
+        if(contacts!=null){
+            Logger.getLogger("global").log(Logger.Level.INFO, "checking for contacts");
+            for(IContactForClinic iCFC : contacts){
+                Logger.getLogger("global").log(Logger.Level.INFO, "adding contact: "+iCFC.getContact().getSurname());
+                jsonClinicContactsArrayBuilder.add(getClinicContactBuilder(iCFC));
+            }
+        }else{
+            Logger.getLogger("global").log(Logger.Level.INFO, "No contacts found for clinic id="+clinicToBuild.getId());
+        }
+        JsonObjectBuilder jsonClinicBuilder = Json.createObjectBuilder();
+        jsonClinicBuilder.add("id", clinicToBuild.getId())
+                .add("name", clinicToBuild.getName())
+                .add("street", clinicToBuild.getStreet())
+                .add("zipCode", clinicToBuild.getZipCode())
+                .add("city", clinicToBuild.getCity())
+                .add("contacts", jsonClinicContactsArrayBuilder)
+                .add("url", url);
+        return jsonClinicBuilder;
+    }
+    
+    public JsonObjectBuilder getClinicContactBuilder(IContactForClinic contact){
+        JsonObjectBuilder jsonClinicContactsBuilder = Json.createObjectBuilder();
+        jsonClinicContactsBuilder.add("contactClinicId", contact.getClinic().getId());
+        jsonClinicContactsBuilder.add("contactNotes", contact.getNotes());
+        
+        jsonClinicContactsBuilder.add("contactPerson", getClinicContactPersonBuilder(contact.getContact()));
+        return jsonClinicContactsBuilder;
+    }
+    
+    public JsonObjectBuilder getClinicContactPersonBuilder(IContactPerson contact){
+        JsonObjectBuilder jsonClinicContactPersonBuilder = Json.createObjectBuilder();
+        jsonClinicContactPersonBuilder.add("contactId", contact.getId())
+                .add("contactForename", contact.getForename())
+                .add("contactSurname", contact.getSurname())
+                .add("contactTitle", contact.getTitle())
+                .add("contactPhone", contact.getPhone())
+                .add("contactEmail", contact.getEmail());
+        return jsonClinicContactPersonBuilder;
+    }
+    
+    public String toString(JsonObject clinic) {
+        StringBuilder sb=new StringBuilder("Clinic[");
+        sb.append(clinic.getInt("clinicId")).append("]=");
+        //values
+        sb.append( "\tname: " ).append( clinic.getString( "name" ));
+        sb.append( "\tstreet " ).append( clinic.getString( "street" ));
+        sb.append( "\tzipcode: " ).append( clinic.getString( "zipCode" ));
+        sb.append( "\tcity: " ).append( clinic.getString( "city" ));
+        
+        return sb.toString();
+    }
+    
+    public String toString(IClinic clinic) {
+        StringBuilder sb=new StringBuilder("Clinic[");
+        sb.append(clinic.getId()).append("]=");
+        //values
+        sb.append( "\tname: " ).append( clinic.getName());
+        sb.append( "\tstreet " ).append( clinic.getStreet());
+        sb.append( "\tzipCode: " ).append( clinic.getZipCode());
+        sb.append( "\tcity: " ).append( clinic.getCity());
+        
+        return sb.toString();
+        
+    }
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Documentation: linfo-server</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="styles/webapp.css">
+    </head>
+    <body>
+        <h1>linfo server documentation</h1>
+        <div class="textpanel">
+            The root entry point for the linfo server webapp is $SERVER/webapp. All Json resources are
+            located at $SERVER/webapp/resources in sub categories for the different database entities,
+            e.g. casepool, clinicpool, servicepool, supplierpool...
+            
+        </div>
+        
+        <h2>casepool endpoints</h2>
+        <div class="textpanel">
+            
+            <div id="caseexample"></div>
+            <div id="allcasesexample"></div>
+            <div id="allcliniccasesexample"></div>
+        </div>
+        
+        <h2>supplierpool endpoints</h2>
+        <div class="textpanel">
+            <div id="supplierexample"></div>
+            <div id="suppliersexample"></div>
+        </div>
+        
+        <h2>clinicpool endpoints</h2>
+        <div class="textpanel">
+            <div id="clinicexample"></div>
+            <div id="clinicsexample"></div>
+        </div>
+    <script>
+        
+        loadCaseExamples();
+        loadClinicExamples();
+        loadExamples();
+        
+        function loadCaseExamples(){         
+            var url = `http://192.168.31.2:8585/webapp/resources/casepool/case/1`;
+            sendGetRequest("caseexample", url);
+   
+            var url2 = `http://192.168.31.2:8585/webapp/resources/casepool/cases`;
+            sendGetRequest("allcasesexample", url2);
+            
+            var url3 = `http://192.168.31.2:8585/webapp/resources/casepool/cases/forclinic/1`;
+            sendGetRequest("allcliniccasesexample", url3);
+        }
+        
+        function loadClinicExamples(){         
+            var url = `http://192.168.31.2:8585/webapp/resources/clinicpool/clinic/1`;
+            sendGetRequest("clinicexample", url);
+   
+            var url2 = `http://192.168.31.2:8585/webapp/resources/clinicpool/clinics`;
+            sendGetRequest("allclinicsexample", url2);
+        }
+        
+        function loadSupplierExamples(){         
+            var url = `http://192.168.31.2:8585/webapp/resources/supplierpool/supplier/1`;
+            sendGetRequest("supplierexample", url);
+   
+            var url2 = `http://192.168.31.2:8585/webapp/resources/supplierpool/suppliers`;
+            sendGetRequest("allsuppliersexample", url2);
+        }
+        
+        function sendGetRequest(targetName, url){
+            var invocation = new XMLHttpRequest();    
+            var asHtml="";
+            if(invocation) {    
+                invocation.open('GET', url, true);
+                invocation.setRequestHeader('Content-Type', 'application/json');
+                invocation.send();
+                invocation.onload = function() { 
+                  var jsonObj = JSON.parse( invocation.responseText );
+                  console.log("responseText:"+invocation.responseText);
+                  asHtml = asHtml + createHtmlDocEntry(url,jsonObj);
+                  console.log(`html: ${asHtml}`);
+                  document.getElementById(targetName).innerHTML = asHtml;
+                };
+            }
+            
+        }
+        function createHtmlDocEntry(url, json){
+            urlhtml=`<div class=\"urlpanel\"><a href=${url} target="_blank">${url}</a></div>`;
+            jsonhtml="<div class=\"jsonpanel\"><pre>"+JSON.stringify(json ,null, "\t")+"</pre></div>";
+            
+            var all=urlhtml+jsonhtml;
+            
+            return all;
+        }
+        
+                    
+        
+        
+    </script>
+    </body>
+    
+    
+</html>
