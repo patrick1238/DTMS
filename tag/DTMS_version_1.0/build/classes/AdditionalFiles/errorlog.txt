@@ -1,0 +1,47 @@
+Dez 21, 2019 4:34:49 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 21, 2019 4:34:50 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 21, 2019 4:34:51 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 21, 2019 4:34:51 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 21, 2019 4:34:52 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 21, 2019 4:34:52 PM BackgroundHandler.ErrorLog createLogEntry
+SCHWERWIEGEND: Backup creation failed
+Dez 21, 2019 4:34:52 PM BackgroundHandler.ErrorLog createLogEntry
+INFORMATION: Case registration started
+Dez 21, 2019 4:35:06 PM BackgroundHandler.ErrorLog close
+SCHWERWIEGEND: null
+java.nio.file.NoSuchFileException: C:\Users\patri\OneDrive\Dokumente\develop\DTMS\code\tag\DTMS_version_1.0\Resources\AdditionalFiles\errorlog.txt -> Y:\DTMS_File_Server\ErrorLogs\2019-12-21_04-35-06\errorlog.txt
+	at sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:79)
+	at sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:97)
+	at sun.nio.fs.WindowsFileCopy.copy(WindowsFileCopy.java:205)
+	at sun.nio.fs.WindowsFileSystemProvider.copy(WindowsFileSystemProvider.java:278)
+	at java.nio.file.Files.copy(Files.java:1274)
+	at BackgroundHandler.ErrorLog.close(ErrorLog.java:130)
+	at Windowcontroller.RegisterScreenController.close(RegisterScreenController.java:158)
+	at Windowcontroller.StartScreenController.lambda$start_register$0(StartScreenController.java:77)
+	at com.sun.javafx.event.CompositeEventHandler.dispatchBubblingEvent(CompositeEventHandler.java:86)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:238)
+	at com.sun.javafx.event.EventHandlerManager.dispatchBubblingEvent(EventHandlerManager.java:191)
+	at com.sun.javafx.event.CompositeEventDispatcher.dispatchBubblingEvent(CompositeEventDispatcher.java:59)
+	at com.sun.javafx.event.BasicEventDispatcher.dispatchEvent(BasicEventDispatcher.java:58)
+	at com.sun.javafx.event.EventDispatchChainImpl.dispatchEvent(EventDispatchChainImpl.java:114)
+	at com.sun.javafx.event.EventUtil.fireEventImpl(EventUtil.java:74)
+	at com.sun.javafx.event.EventUtil.fireEvent(EventUtil.java:54)
+	at javafx.event.Event.fireEvent(Event.java:198)
+	at com.sun.javafx.stage.WindowPeerListener.closing(WindowPeerListener.java:88)
+	at com.sun.javafx.tk.quantum.GlassWindowEventHandler.run(GlassWindowEventHandler.java:122)
+	at com.sun.javafx.tk.quantum.GlassWindowEventHandler.run(GlassWindowEventHandler.java:40)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.tk.quantum.GlassWindowEventHandler.lambda$handleWindowEvent$422(GlassWindowEventHandler.java:151)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.runWithoutRenderLock(QuantumToolkit.java:389)
+	at com.sun.javafx.tk.quantum.GlassWindowEventHandler.handleWindowEvent(GlassWindowEventHandler.java:149)
+	at com.sun.glass.ui.Window.handleWindowEvent(Window.java:1270)
+	at com.sun.glass.ui.Window.notifyClose(Window.java:1174)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$null$147(WinApplication.java:177)
+	at java.lang.Thread.run(Thread.java:748)
+

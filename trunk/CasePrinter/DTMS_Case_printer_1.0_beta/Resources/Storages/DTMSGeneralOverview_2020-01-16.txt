@@ -1,0 +1,130 @@
+###DTMS Overview
+
+Currently the Database consists of 5435 images in total.
+
+Detailed information about available images per diagnose: 
+LA (lymphomatoide Papulose): 2
+LA (kleinherdige Epithelinklusion): 23
+HL (NS, lymphozytenreich): 2
+epithelialen Tumor: 2
+LA (T-Zone): 68
+LA (Pulpahyperplasie, stimu T-Zone): 14
+CLL: 281
+HL: 46
+TL (CD30+, ALK-): 2
+FL (Grad 1): 261
+HL (NS, EBV+): 29
+LA (Sinushistozytose): 3
+DLBCL/Burkitt: 1
+LA (dermatopathisch): 41
+HL (MT): 129
+NP + CB: 1
+HL + DLBCL: 33
+MC: 100
+LA (monozytoide B-Zell, CD30+): 29
+FL (Grad 3a): 106
+LA (unspe): 26
+FL (Grad 3a-3b): 39
+FL (Grad 2-3): 1
+LA (unspe, monozytoide B_Zell, evtl Toxoplasmose): 112
+FL (Grad 1-2): 299
+MZ: 158
+LA (CD30+): 7
+Gastritis: 1
+grosszelliges neuroendokrines Karzinom: 2
+LA (stimu B- und T-Zone): 11
+NLPHL: 201
+LA (PTGC): 101
+x1: 1
+LK - Metastase: 1
+HL / FL: 2
+Morbus Castleman (hyal): 11
+MZ - DLBCL: 32
+Burkitt (Aehnlich): 1
+AITL: 280
+AILD: 1
+HL (NS): 392
+FL (Grad 3): 5
+Grauzonen-Lymphom: 4
+Adenoid: 659
+DLBCL: 443
+NP: 1
+FL: 68
+HL (MT, EBV+): 280
+Burkitt: 3
+ALCL: 38
+BL: 2
+HL (MT, Fibroblast reich): 33
+LA (bunte Pulpa): 6
+LA (Follikulaere Hyperplasie): 304
+cHL (lymphozytenreich): 76
+LA (Piringer): 12
+FL (Grad 2-3a): 76
+CLL + HL: 3
+CB: 1
+LA (Kikuchi): 13
+FL (Grad 2): 43
+ALCL (ALK+): 51
+T-Ly (TFH): 9
+HL (EBV): 2
+LA (T-Zone Verbreiterung, Sinushistiozytose): 8
+Richter-Syndrom: 2
+LA (Sarkoidose): 21
+LA: 210
+follikTZL: 6
+Duodenitis: 1
+TL: 1
+LA (unspe, bunte Pulpa): 60
+FL (Grad 3-DLBCL): 28
+LA (Pulpahyperplasie): 11
+FL (Grad 3b): 103
+
+Detailed information about available images per filetype: 
+4D: 357
+3D: 4525
+2D: 553
+
+Detailed information about available images per primary staining: 
+Unknown: 228
+CD20: 628
+PAS: 5
+Mum1: 5
+Cyclin: 6
+IGG4: 2
+Bfa1: 1
+CXCL13: 2
+CD11c: 1
+cd68: 1
+icos: 2
+Actin: 211
+CD19: 31
+EBV: 2
+CD15: 79
+CD35: 17
+Ki67: 18
+CD57: 18
+CD79: 24
+CD34: 419
+Lambda: 1
+CD10: 94
+TCRalpha: 1
+CD30: 366
+CD163: 197
+Oct-2: 1
+Kappa: 1
+Giemsa: 8
+Pax5: 366
+CD4: 83
+CD3: 85
+BCL6: 252
+CD5: 11
+CD8: 77
+BCL2: 78
+MNDA: 1
+CD68: 557
+PD1: 385
+PDL1: 29
+CD23: 764
+HE: 351
+S100A8: 14
+CD21: 13

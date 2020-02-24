@@ -1,0 +1,8 @@
+Feb 17, 2020 1:14:25 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 17, 2020 1:14:29 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 1:14:41 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 1:15:37 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed

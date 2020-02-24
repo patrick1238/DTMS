@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Windowcontroller.InstallationWindowController">
+   <children>
+      <TitledPane animated="false" collapsible="false" prefHeight="153.0" prefWidth="284.0" text="Installing Digital_tissue_management_suite" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <GridPane prefHeight="125.0" prefWidth="285.0" AnchorPane.bottomAnchor="-7.999999999999986" AnchorPane.leftAnchor="-9.600000000000023" AnchorPane.rightAnchor="-3.2000000000000455" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label prefHeight="18.0" prefWidth="134.0" text="Select an ImageServer:" />
+                        <Label prefHeight="18.0" prefWidth="134.0" text="Select a StorageFolder:" GridPane.rowIndex="1" />
+                        <Button fx:id="ServerButton" mnemonicParsing="false" onAction="#ServerButtonClicked" prefHeight="26.0" prefWidth="138.0" text="Select" GridPane.columnIndex="1" />
+                        <Button fx:id="StorageButton" mnemonicParsing="false" onAction="#StorageButtonClicked" prefHeight="26.0" prefWidth="138.0" text="Select" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button fx:id="StartButton" mnemonicParsing="false" onAction="#StartButtonClicked" prefHeight="26.0" prefWidth="138.0" text="Start" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
+   </children>
+</AnchorPane>

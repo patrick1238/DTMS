@@ -1,0 +1,28 @@
+Feb 17, 2020 1:21:30 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 17, 2020 1:21:33 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 1:21:38 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 1:21:39 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 1:21:39 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 1:21:40 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 1:21:40 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 1:21:42 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 1:21:43 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 1:21:43 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 1:21:44 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 1:21:44 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 1:21:45 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 1:21:46 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed

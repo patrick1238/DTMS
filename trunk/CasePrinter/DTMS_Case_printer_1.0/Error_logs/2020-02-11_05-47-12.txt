@@ -1,0 +1,12 @@
+Feb 11, 2020 5:47:12 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 11, 2020 5:47:15 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 11, 2020 5:47:17 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: Diagnosis empty
+Feb 11, 2020 5:48:27 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: Diagnosis empty
+Feb 11, 2020 5:48:34 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 11, 2020 5:48:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K120-12, Diagnosis: HL (NS), Block: 1, Stain: CD3 printed

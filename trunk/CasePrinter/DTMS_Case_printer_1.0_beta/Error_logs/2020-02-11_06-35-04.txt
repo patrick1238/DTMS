@@ -1,0 +1,12 @@
+Feb 11, 2020 6:35:04 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 11, 2020 6:35:07 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 11, 2020 6:35:15 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: K120-12 still exists
+Feb 11, 2020 6:35:28 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: k120-12 deleted
+Feb 11, 2020 6:35:31 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 11, 2020 6:35:41 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: K120-12 still exists

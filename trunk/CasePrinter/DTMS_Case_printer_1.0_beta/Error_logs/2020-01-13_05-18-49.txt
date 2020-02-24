@@ -1,0 +1,22 @@
+Jan 13, 2020 5:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Jan 13, 2020 5:18:49 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:18:50 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: CaseID is empty
+Jan 13, 2020 5:19:02 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K120-12 added
+Jan 13, 2020 5:19:15 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:20:05 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K120-12, Block: 1, Stain: Ki67 deleted
+Jan 13, 2020 5:20:13 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K120-12 deleted
+Jan 13, 2020 5:20:15 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:20:23 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K120-12 added
+Jan 13, 2020 5:20:29 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:20:46 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K120-12 deleted

@@ -1,0 +1,36 @@
+Dez 27, 2019 1:12:41 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Dez 27, 2019 1:12:41 PM Windowcontroller.SplashScreenController$ShowSplashScreen lambda$run$0
+SCHWERWIEGEND: null
+javafx.fxml.LoadException: 
+/C:/Users/patri/OneDrive/Dokumente/develop/DTMS/code/trunk/Case_Printer/DTMS_Case_printer_1.0_beta/build/classes/fxml/Database_view.fxml
+
+	at javafx.fxml.FXMLLoader.constructLoadException(FXMLLoader.java:2601)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2579)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2441)
+	at javafx.fxml.FXMLLoader.load(FXMLLoader.java:2409)
+	at Windowcontroller.SplashScreenController$ShowSplashScreen.lambda$run$0(SplashScreenController.java:54)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$172(PlatformImpl.java:295)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$173(PlatformImpl.java:294)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$null$147(WinApplication.java:177)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: java.lang.RuntimeException: Uncompilable source code - Erroneous tree type: <any>
+	at EventHandler.SearchFieldHandler.<init>(SearchFieldHandler.java:30)
+	at Windowcontroller.Database_viewController.initialize(Database_viewController.java:93)
+	at javafx.fxml.FXMLLoader.loadImpl(FXMLLoader.java:2548)
+	... 10 more
+
+Exception in thread "JavaFX Application Thread" java.lang.NullPointerException: Root cannot be null
+	at javafx.scene.Scene.<init>(Scene.java:336)
+	at javafx.scene.Scene.<init>(Scene.java:194)
+	at Windowcontroller.SplashScreenController$ShowSplashScreen.lambda$run$0(SplashScreenController.java:62)
+	at com.sun.javafx.application.PlatformImpl.lambda$null$172(PlatformImpl.java:295)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at com.sun.javafx.application.PlatformImpl.lambda$runLater$173(PlatformImpl.java:294)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$null$147(WinApplication.java:177)
+	at java.lang.Thread.run(Thread.java:748)

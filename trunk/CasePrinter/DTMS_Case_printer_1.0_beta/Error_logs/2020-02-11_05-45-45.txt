@@ -1,0 +1,4 @@
+Feb 11, 2020 5:45:45 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 11, 2020 5:45:51 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161

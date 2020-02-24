@@ -1,0 +1,30 @@
+Jan 17, 2020 1:26:30 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Jan 17, 2020 1:26:32 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 17, 2020 1:26:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: test added
+Jan 17, 2020 1:26:51 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: CD3 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: CD20 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: Ki67 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: CD30 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: CD15 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: PAX5 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: LMP1 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: MUM1 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: CD10 printed
+Jan 17, 2020 1:27:09 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test, Diagnosis: HL (MT, EBV+), Block: 1, Stain: LS printed
+Jan 17, 2020 1:27:15 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test deleted

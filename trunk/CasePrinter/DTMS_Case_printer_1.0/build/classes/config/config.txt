@@ -1,0 +1,8 @@
+##DTMS Label printer default config##
+
+##Paths
+database_path=#Path to your project folder#\DTMS_Case_printer_1.0_beta\Resources\Storages\database.csv
+cases_path=#Path to your project folder#\DTMS_Case_printer_1.0_beta\cases_processed\
+staining_path=#Path to your project folder#\DTMS_Case_printer_1.0_beta\Resources\Storages\staining.csv
+errorlog_path=#Path to your project folder#\DTMS_Case_printer_1.0_beta\Error_logs\
+template_path=#Path to your project folder#\DTMS_Case_printer_1.0_beta\Resources\AdditionalFiles\template.prn

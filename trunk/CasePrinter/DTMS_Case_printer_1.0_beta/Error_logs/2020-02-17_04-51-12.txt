@@ -1,0 +1,2 @@
+Feb 17, 2020 4:51:12 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started

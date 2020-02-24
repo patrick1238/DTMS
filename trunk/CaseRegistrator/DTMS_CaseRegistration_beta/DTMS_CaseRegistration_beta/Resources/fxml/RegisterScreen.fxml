@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="689.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Windowcontroller.RegisterScreenController">
+   <children>
+      <MenuBar fx:id="MenuBar" blendMode="DARKEN" layoutX="11.0" layoutY="14.0" prefHeight="26.0" prefWidth="667.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="14.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem fx:id="recentItem" mnemonicParsing="false" onAction="#recentClicked" text="open recent project" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Extras">
+               <items>
+                  <MenuItem fx:id="Settings" mnemonicParsing="false" onAction="#settingsClicked" text="Settings" />
+                  <MenuItem fx:id="HelpItem" mnemonicParsing="false" onAction="#helpClicked" text="Help" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane fx:id="DisplayAnchorPane" layoutX="11.0" layoutY="47.0" prefHeight="646.0" prefWidth="667.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="47.0" />
+      <Circle fx:id="statusCircle" fill="#13f073" layoutX="654.0" layoutY="26.0" onMouseEntered="#displayStatus" onMouseExited="#closeStatus" radius="8.0" stroke="BLACK" strokeType="INSIDE" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="18.0" />
+   </children>
+</AnchorPane>

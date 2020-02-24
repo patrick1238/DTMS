@@ -1,0 +1,22 @@
+##DIMS default config##
+
+#General
+clinic=Frankfurt
+supplier=Patrick Wurzel
+
+##Paths
+folder_path=C:\Users\patri\OneDrive\Dokumente\develop\DTMS\code\trunk\DTMS_2.0_beta\DTMS_CaseRegistration
+
+##Header
+imageheader=CaseID,Clinic,EntryDate,CaptureDate,PrimaryStaining,SecondaryStaining,TertiaryStaining,ImageType,FileName,Comments
+molheader=CaseID,Clinic,EntryDate,CaptureDate,FileType,Comments
+
+##FileTypes
+imagetypes=2D,3D,4D
+moltypes=Whole Exome, Whole Genome, Methylation
+
+#Used entries
+diagnose=NScHL,Mixed
+primary_staining=CD30,CD20
+secondary_staining=Actin,CD163
+tertiary_staining=DAPI,Actin

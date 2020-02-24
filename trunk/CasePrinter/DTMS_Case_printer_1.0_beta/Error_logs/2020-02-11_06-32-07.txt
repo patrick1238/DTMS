@@ -1,0 +1,10 @@
+Feb 11, 2020 6:32:07 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 11, 2020 6:33:30 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 11, 2020 6:33:36 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 11, 2020 6:33:48 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: CaseID field has to look like "PrimaryKey-Year"
+Feb 11, 2020 6:33:54 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: k120-12 added

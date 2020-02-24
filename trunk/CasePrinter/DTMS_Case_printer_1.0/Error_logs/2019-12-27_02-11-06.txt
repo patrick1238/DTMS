@@ -1,0 +1,8 @@
+Dez 27, 2019 2:11:06 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Dez 27, 2019 2:11:08 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K43-12 deleted
+Dez 27, 2019 2:11:10 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 27, 2019 2:11:18 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K43-12 added

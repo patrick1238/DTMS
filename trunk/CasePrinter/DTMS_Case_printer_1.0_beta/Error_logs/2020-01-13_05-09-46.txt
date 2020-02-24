@@ -1,0 +1,6 @@
+Jan 13, 2020 5:09:46 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Jan 13, 2020 5:09:48 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K143-13 deleted
+Jan 13, 2020 5:09:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K120-12 deleted

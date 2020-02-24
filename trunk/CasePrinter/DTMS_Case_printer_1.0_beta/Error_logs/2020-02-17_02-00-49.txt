@@ -1,0 +1,302 @@
+Feb 17, 2020 2:00:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 17, 2020 2:01:04 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:01:06 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:01:59 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:12:54 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:14:45 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:17:58 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:22:04 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:22:24 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: L90-18 added
+Feb 17, 2020 2:22:26 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:22:31 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:22:37 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:22:38 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:22:38 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:22:39 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:22:39 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:22:40 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:22:41 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 2:22:42 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 2:22:42 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:22:43 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 2:22:44 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:22:45 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:22:46 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L90-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:24:47 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:26:16 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: L5-18 added
+Feb 17, 2020 2:26:20 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:26:36 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:26:37 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:26:38 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:26:44 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:26:45 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:26:45 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:26:46 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: CyclinD1 deleted
+Feb 17, 2020 2:26:46 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:26:47 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Block: 1, Stain: bcl2 deleted
+Feb 17, 2020 2:27:01 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L5-18, Diagnosis: LA (unspe, bunte Pulpa), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:27:08 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:27:47 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K150-18 added
+Feb 17, 2020 2:27:50 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:27:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:27:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:27:57 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:27:58 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:27:59 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:27:59 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:28:00 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 2:28:01 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 2:28:01 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:28:02 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 2:28:02 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:28:04 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K150-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:30:29 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:30:44 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: L3-18 added
+Feb 17, 2020 2:30:46 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:30:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:30:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:30:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:30:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:30:54 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:30:54 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:30:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 2:30:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 2:30:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:30:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 2:30:57 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:30:59 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L3-18, Diagnosis: HL (MT), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:31:05 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:31:28 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: L116-18 added
+Feb 17, 2020 2:31:34 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:31:48 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:31:48 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:31:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:31:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:31:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:31:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:31:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 2:31:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 2:31:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:31:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 2:31:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:31:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L116-18, Diagnosis: HL (MT), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:33:58 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:34:16 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: H1070-18 added
+Feb 17, 2020 2:35:03 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:35:24 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:35:24 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:35:24 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:35:25 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:35:25 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:35:25 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:35:26 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: CyclinD1 deleted
+Feb 17, 2020 2:35:26 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:35:27 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Block: 1, Stain: bcl2 deleted
+Feb 17, 2020 2:35:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Diagnosis: LA (kleinherdige Epithelinklusion), Block: 1, Stain: Aktin printed
+Feb 17, 2020 2:36:01 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:36:39 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: L240-18 added
+Feb 17, 2020 2:36:42 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:36:47 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:36:48 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:36:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:36:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:36:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:36:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:36:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 2:36:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 2:36:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:36:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 2:36:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:36:55 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L240-18, Diagnosis: HL (MT), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:37:29 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:37:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: 105-18 added
+Feb 17, 2020 2:38:00 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: 105-18 deleted
+Feb 17, 2020 2:38:04 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:38:16 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K105-18 added
+Feb 17, 2020 2:38:21 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:38:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:38:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:38:50 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: Giemsa deleted
+Feb 17, 2020 2:38:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: CD3 deleted
+Feb 17, 2020 2:38:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: CD20 deleted
+Feb 17, 2020 2:38:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:38:51 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: CD30 deleted
+Feb 17, 2020 2:38:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: CD15 deleted
+Feb 17, 2020 2:38:52 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: PAX5 deleted
+Feb 17, 2020 2:38:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:38:53 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: MUM1 deleted
+Feb 17, 2020 2:38:54 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:38:58 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K105-18, Diagnosis: HL (NS), Block: 1, Stain: CD30RTU printed
+Feb 17, 2020 2:41:33 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:41:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K161-18 added
+Feb 17, 2020 2:41:54 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 2:44:36 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Block: 1, Stain: BCL2 deleted
+Feb 17, 2020 2:44:54 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Block: 1, Stain: HE deleted
+Feb 17, 2020 2:45:10 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Block: 1, Stain: PAS deleted
+Feb 17, 2020 2:45:20 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Block: 1, Stain: Ki67 deleted
+Feb 17, 2020 2:45:48 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Block: 1, Stain: LMP1 deleted
+Feb 17, 2020 2:46:05 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Block: 1, Stain: CD10 deleted
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: Giemsa printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: CD3 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: CD20 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: CD30 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: CD15 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: PAX5 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: MUM1 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: CD10 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: EBV printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: Aktin printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: ICOS printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: CXCL13 printed
+Feb 17, 2020 2:46:14 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K161-18, Diagnosis: HL (MT), Block: 1, Stain: PD1 printed

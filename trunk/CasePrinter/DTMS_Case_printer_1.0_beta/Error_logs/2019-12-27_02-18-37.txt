@@ -1,0 +1,16 @@
+Dez 27, 2019 2:18:37 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Dez 27, 2019 2:18:48 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 27, 2019 2:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K4-12, Diagnosis: NScHL, Block: 1, Stain: HE printed
+Dez 27, 2019 2:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K4-12, Diagnosis: NScHL, Block: 1, Stain: Giemsa printed
+Dez 27, 2019 2:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K4-12, Diagnosis: NScHL, Block: 1, Stain: CD30 printed
+Dez 27, 2019 2:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K4-12, Diagnosis: NScHL, Block: 1, Stain: CD20 printed
+Dez 27, 2019 2:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K4-12, Diagnosis: NScHL, Block: 1, Stain: CD3 printed
+Dez 27, 2019 2:18:49 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K4-12 finished

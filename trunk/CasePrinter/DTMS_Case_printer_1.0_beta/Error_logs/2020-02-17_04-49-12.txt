@@ -1,0 +1,14 @@
+Feb 17, 2020 4:49:12 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 17, 2020 4:49:15 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 4:49:18 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Diagnosis: LA (kleinherdige Epithelinklusion), Block: 1, Stain: Aktin printed
+Feb 17, 2020 4:50:04 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Diagnosis: LA (kleinherdige Epithelinklusion), Block: 1, Stain: Aktin printed
+Feb 17, 2020 4:50:42 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Diagnosis: LA (kleinherdige Epithelinklusion), Block: 1, Stain: Aktin printed
+Feb 17, 2020 4:50:59 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Diagnosis: LA (kleinherdige Epithelinklusion), Block: 1, Stain: Aktin printed
+Feb 17, 2020 4:51:18 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: H1070-18, Diagnosis: LA (kleinherdige Epithelinklusion), Block: 1, Stain: Aktin printed

@@ -1,0 +1,10 @@
+Dez 27, 2019 2:14:28 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Dez 27, 2019 2:14:31 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 27, 2019 2:14:37 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: Diagnosis is empty
+Dez 27, 2019 2:14:56 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: CaseID is empty or Case still exists
+Dez 27, 2019 2:15:02 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: CaseID is empty or Case still exists

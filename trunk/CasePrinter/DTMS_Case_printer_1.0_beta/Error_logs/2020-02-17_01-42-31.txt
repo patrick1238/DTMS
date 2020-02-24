@@ -1,0 +1,16 @@
+Feb 17, 2020 1:42:31 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 17, 2020 1:42:33 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 1:42:35 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: L109-18, Diagnosis: HL (NS), Block: 1, Stain: CD30 printed
+Feb 17, 2020 1:42:43 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 1:42:50 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: CaseID field has to look like "PrimaryKey-Year"
+Feb 17, 2020 1:42:56 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: test-11 added
+Feb 17, 2020 1:42:58 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Feb 17, 2020 1:43:00 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: test-11, Diagnosis: undefined, Block: 1, Stain: HE printed

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="800.0" maxWidth="900.0" minHeight="150.0" minWidth="439.0" prefHeight="229.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Windowcontroller.ObjectWindowController">
+   <children>
+      <TitledPane fx:id="titledPane" collapsible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" maxHeight="850.0" maxWidth="500.0" minHeight="150.0" minWidth="437.0" prefHeight="200.0" prefWidth="437.0">
+               <content>
+                  <GridPane fx:id="gpane" alignment="CENTER" cache="true" cacheHint="SPEED" hgap="30.0" maxWidth="500.0" minWidth="434.0" prefHeight="165.0" prefWidth="438.0" vgap="15.0">
+                     <columnConstraints>
+                        <ColumnConstraints fillWidth="false" hgrow="NEVER" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                        <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="ALWAYS" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+         </content>
+      </TitledPane>
+   </children>
+</AnchorPane>

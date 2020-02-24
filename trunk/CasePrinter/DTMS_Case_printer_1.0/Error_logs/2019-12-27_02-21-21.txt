@@ -1,0 +1,2 @@
+Dez. 27, 2019 2:21:21 NACHM. Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started

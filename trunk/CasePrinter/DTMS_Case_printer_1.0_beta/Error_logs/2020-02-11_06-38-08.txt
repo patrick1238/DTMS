@@ -1,0 +1,4 @@
+Feb 11, 2020 6:38:08 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Feb 11, 2020 6:38:13 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K120-12 deleted

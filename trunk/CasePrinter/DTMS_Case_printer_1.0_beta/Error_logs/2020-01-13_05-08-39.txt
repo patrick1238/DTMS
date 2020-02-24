@@ -1,0 +1,14 @@
+Jan 13, 2020 5:08:39 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Jan 13, 2020 5:08:44 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:08:59 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K143-13 added
+Jan 13, 2020 5:09:04 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:09:25 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: K113-12 added
+Jan 13, 2020 5:09:27 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Jan 13, 2020 5:09:40 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: Case: K113-12 deleted

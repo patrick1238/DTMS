@@ -1,0 +1,6 @@
+Dez 27, 2019 1:56:15 PM Background_handler.ErrorLog createLogEntry
+INFORMATION: DTMS Case printer started
+Dez 27, 2019 1:56:37 PM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.161
+Dez 27, 2019 1:56:44 PM Background_handler.ErrorLog createLogEntry
+SCHWERWIEGEND: Case: , Diagnosis: NScHL, Block: 1, Stain: Giemsa Diagnosis or CaseID empty
