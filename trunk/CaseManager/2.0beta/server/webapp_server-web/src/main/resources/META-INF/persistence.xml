@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="net.rehkind-mag_linfo_0.1" transaction-type="JTA">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <jta-data-source>java:/jdbc/linfo_open</jta-data-source>
+    <class>net.rehkind_mag.entity.CaseEntity</class>
+    <class>net.rehkind_mag.entity.ServiceEntity</class>
+    <class>net.rehkind_mag.entity.ServiceDefinitionEntity</class>
+    <class>net.rehkind_mag.entity.ClinicEntity</class>
+    <class>net.rehkind_mag.entity.ContactForClinicEntity</class>
+    <class>net.rehkind_mag.entity.ContactPersonEntity</class>
+    <class>net.rehkind_mag.entity.ContactForSupplierEntity</class>
+    <class>net.rehkind_mag.entity.LocationEntity</class>
+    <class>net.rehkind_mag.entity.MetadataValueEntity</class>
+    <class>net.rehkind_mag.entity.MetadataStringEntity</class>
+    <class>net.rehkind_mag.entity.MetadataIntEntity</class>
+    <class>net.rehkind_mag.entity.MetadataTextEntity</class>
+    <class>net.rehkind_mag.entity.MetadataDoubleEntity</class>
+    <class>net.rehkind_mag.entity.SubmitterEntity</class>
+    <class>net.rehkind_mag.entity.LogEntryEntity</class>
+    <class>net.rehkind_mag.entity.MetadataUrlEntity</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
+    </properties>
+  </persistence-unit>
+</persistence>
