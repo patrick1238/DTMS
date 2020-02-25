@@ -42,8 +42,6 @@ public class Slice {
 
     private Integer block_id;
     private Case corresponding_case;
-    
-    private HashMap<String,String> label;
 
     public Slice(String stain, String status, Integer block_id, Case corresponding_case) {
         this.Stain = new SimpleStringProperty(stain);
@@ -52,14 +50,6 @@ public class Slice {
         this.Remove = new Button("Remove");
         this.block_id = block_id;
         this.corresponding_case = corresponding_case;
-        
-        this.label = new HashMap<>();
-        this.label.put("PrimKey", this.corresponding_case.getPrimaryKey());
-        this.label.put("Block", Integer.toString(block_id));
-        this.label.put("Year", this.corresponding_case.getYear());
-        this.label.put("Stain", stain);
-        this.label.put("Diagnosis", this.corresponding_case.getDiagnosis());
-
 
         Remove.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -123,12 +113,23 @@ public class Slice {
         }
     }
     
+    private HashMap<String,String> prepareLabel(){
+        HashMap<String,String> label = new HashMap<>();
+        label.put("PrimKey", this.corresponding_case.getPrimaryKey());
+        label.put("Block", Integer.toString(block_id));
+        label.put("Year", this.corresponding_case.getYear());
+        label.put("Stain", Stain.getValue());
+        label.put("Diagnosis", this.corresponding_case.getDiagnosis());
+        return label;
+    }
+    
     /**
      *
      * @throws FileNotFoundException
      * @throws IOException
      */
     private String generateEPLCommand() {
+        HashMap<String,String> label = prepareLabel();
         String command = "";
         try (FileReader reader = new FileReader(Config.getConfig().get("template_path"))) {
             BufferedReader bufferedReader = new BufferedReader(reader);
@@ -138,9 +139,9 @@ public class Slice {
                 if (line.contains("$")) {
                     split = line.split("\\$");
                     for (String splitted : split) {
-                        if (this.label.containsKey(splitted)) {
+                        if (label.containsKey(splitted)) {
                             splitted.replace("_", "");
-                            line = line.replace("$" + splitted + "$", this.label.get(splitted));
+                            line = line.replace("$" + splitted + "$", label.get(splitted));
                         }
                     }
                     command += line + "\n";
@@ -163,7 +164,6 @@ public class Slice {
         int pservice = 0;
         for (int i = 0; i < services.length; i++) {
             if (services[i].getName().toLowerCase().contains("epl")) {
-                System.out.println(services[i].getName());
                 pservice = i;
                 break;
             }
