@@ -60,7 +60,7 @@ public class StainDatabase {
         if(this.stains.containsKey(diagnosis)){
             return this.stains.get(diagnosis);
         }else{
-            return this.stains.get("Standard");
+            return this.stains.get("undefined");
         }
     }
     
