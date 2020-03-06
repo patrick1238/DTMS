@@ -28,7 +28,8 @@ public class Config {
 
     HashMap<String, String> configHandler;
     ObservableList<String> configObserver;
-    private String configPath = "C:\\Users\\patri\\OneDrive\\Dokumente\\develop\\DTMS\\code\\trunk\\Case_Printer\\DTMS_Case_printer_1.0_beta\\Resources\\config\\config.txt";
+    //private String configPath;
+    private String configPath = "C:\\Users\\mlhpa\\Documents\\develop\\DTMS\\trunk\\CasePrinter\\DTMS_Case_printer_1.0\\Resources\\config\\config.txt";
     
     
     private Config() {
