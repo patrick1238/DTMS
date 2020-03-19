@@ -6,9 +6,7 @@
 package net.rehkindmag.views;
 
 import com.sun.scenario.Settings;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -17,7 +15,6 @@ import javax.json.JsonObject;
 import javax.json.JsonStructure;
 import javax.json.JsonValue;
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.border.EmptyBorder;
@@ -84,9 +81,7 @@ public class CaseAccessView extends javax.swing.JPanel implements IHttpResponseR
 
         jLabel2.setText("select an endpoint:");
 
-        jPanel1.setBackground(new java.awt.Color(210, 210, 210));
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(100, 100, 100)));
+        jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(175, 175, 175)));
         jPanel3.setMaximumSize(new java.awt.Dimension(565656, 60));
         jPanel3.setMinimumSize(new java.awt.Dimension(100, 60));
         jPanel3.setOpaque(false);
@@ -103,8 +98,7 @@ public class CaseAccessView extends javax.swing.JPanel implements IHttpResponseR
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        spCaseViewScreen.setBackground(new java.awt.Color(230, 230, 230));
-        spCaseViewScreen.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(100, 40, 30)));
+        spCaseViewScreen.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(175, 175, 175)));
         spCaseViewScreen.setForeground(new java.awt.Color(30, 60, 30));
         spCaseViewScreen.setViewportBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -310,9 +304,9 @@ public class CaseAccessView extends javax.swing.JPanel implements IHttpResponseR
         JViewport vport = new JViewport();
         vport.add(pCaseViewScreen);
         
-        spCaseViewScreen.getInsets().set(20, 20, 20, 20);
-        spCaseViewScreen.setViewportBorder(new EmptyBorder(15, 15, 15, 15));
-        //spCaseViewScreen.add(pCaseViewScreen);
+//        spCaseViewScreen.getInsets().set(20, 20, 20, 20);
+//        spCaseViewScreen.setViewportBorder(new EmptyBorder(15, 15, 15, 15));
+//        spCaseViewScreen.add(pCaseViewScreen);
         spCaseViewScreen.setViewport(vport);
         
         spCaseViewScreen.validate();
