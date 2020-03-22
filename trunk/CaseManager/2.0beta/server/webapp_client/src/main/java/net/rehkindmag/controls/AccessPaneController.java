@@ -14,6 +14,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -33,7 +35,7 @@ public abstract class AccessPaneController implements IHttpResponseReceiver {
     protected String epTemplate;
     protected String epResult;
     
-    UUIDGenerator uuidGen = new UUIDGenerator();
+    static UUIDGenerator uuidGen = new UUIDGenerator();
     HashMap<Integer, String> pendingHttpRequests=new HashMap<>();
     
     //FXML attributes:
@@ -41,8 +43,12 @@ public abstract class AccessPaneController implements IHttpResponseReceiver {
     @FXML HBox hbEndpointVariables;
     @FXML Label lblEndpoint;
     @FXML Label lblUUID;
+    @FXML TextField txtCaseJson;
+    //   -- HttpResponseStatus
+    @FXML HBox hbHTTPResponseStatus;
+    @FXML Label lblResponseStatus;
+    @FXML Label lblResponseTime;
     
-    @FXML
     public void onEndpointTemplateSelected(){
         String newEndpointName=cbEndpointTemplate.getSelectionModel().getSelectedItem();
         if( newEndpointName != this.epTemplateName ){
@@ -51,7 +57,7 @@ public abstract class AccessPaneController implements IHttpResponseReceiver {
             // TODO: update GUI / listener
             this.epTemplateName=newEndpointName;
         }
-        
+        hbHTTPResponseStatus.setVisible(false);
         updateEndpointGUI();
         updateEndpointResult();
     }
@@ -104,6 +110,23 @@ public abstract class AccessPaneController implements IHttpResponseReceiver {
     public void fireHTTPRequest(){
         HttpRequestManager manager = HttpRequestManager.createHttpRequestManager(Settings.get("server.address"), HttpRequestManager.CONTANT_TYPE_JSON);
         String uuid = lblUUID.getText();
+        
+        if( cbEndpointTemplate.getSelectionModel().getSelectedItem().startsWith("@DELETE")
+            || cbEndpointTemplate.getSelectionModel().getSelectedItem().startsWith("@CREATE")
+            || cbEndpointTemplate.getSelectionModel().getSelectedItem().startsWith("@UPDATE"))
+        {
+            String asJson=txtCaseJson.getText();
+            if(asJson.equals("")){ 
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Case not set as Json object...");
+                alert.setHeaderText("DELETE/CREATE/UPDATE HTTPRequests need an input object...");
+                alert.setContentText("Insert a valid json object representation of the object you would like to create/delete/update...");
+
+                alert.showAndWait();
+                return;
+            }
+        }
+        
         //JsonParser parser=Json.createParser(new ByteArrayInputStream(txtaRequestBody.getText().getBytes(Charset.forName("UTF-8"))));
         HttpAccessRequest request = new HttpAccessRequest( lblEndpoint.getText(), uuid, UserLogin.getLoginAsJson(), Json.createObjectBuilder().build() );
         Integer requestID=manager.fireJsonHttpGETRequest(request, this);

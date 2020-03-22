@@ -126,6 +126,14 @@
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                      <children>
                         <Button layoutX="303.0" layoutY="5.0" maxHeight="40.0" maxWidth="200.0" minHeight="40.0" minWidth="200.0" mnemonicParsing="false" onAction="#fireHTTPRequest" prefHeight="40.0" prefWidth="200.0" styleClass="button-dark" text="Send HTTPRequest" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                        <HBox fx:id="hbHTTPResponseStatus" alignment="CENTER_LEFT" layoutX="-13.0" layoutY="-27.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="visibility: false;" styleClass="style-dark" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="5.0">
+                           <children>
+                              <Label text="Status:" textFill="#c7643a" />
+                              <Label fx:id="lblResponseStatus" alignment="CENTER" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" prefHeight="30.0" prefWidth="30.0" text="&lt;s&gt;" textFill="#ebd2c3" />
+                              <Label text="Time:" textFill="#c7643a" />
+                              <Label fx:id="lblResponseTime" text="&lt;time&gt;" textFill="#ebd2c3" />
+                           </children>
+                        </HBox>
                      </children>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="9">
@@ -139,14 +147,20 @@
                   </AnchorPane>
                   <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="7">
                      <children>
-                        <TextField layoutY="7.0" promptText="required for CREATE/UPDATE requests" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <TextField fx:id="txtCaseJson" layoutY="7.0" promptText="required for CREATE/UPDATE requests" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </children>
             </GridPane>
-            <ScrollPane prefHeight="600.0" prefWidth="200.0">
+            <ScrollPane prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #666666;">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                <AnchorPane>
+                     <children>
+                        <HBox fx:id="bResponseCases" spacing="10.0" style="-fx-background-color: #666666;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                           </padding></HBox>
+                     </children></AnchorPane>
               </content>
             </ScrollPane>
          </children>

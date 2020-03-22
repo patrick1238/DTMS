@@ -6,28 +6,23 @@
 package net.rehkindmag.controls;
 
 import com.sun.javafx.collections.ObservableListWrapper;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Observable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import net.rehkind_mag.interfaces.IHttpResponse;
 
 /**
@@ -36,7 +31,8 @@ import net.rehkind_mag.interfaces.IHttpResponse;
  * @author rehkind
  */
 public class CaseAccessPaneController extends AccessPaneController implements Initializable {
-
+    @FXML HBox bResponseCases;
+    
     /**
      * Initializes the controller class.
      */
@@ -62,8 +58,66 @@ public class CaseAccessPaneController extends AccessPaneController implements In
 
     @Override
     public void receiveHttpResponse(Integer requestID, IHttpResponse response) {
-        Logger.getLogger(getClass().getName()).info("HttpResponse received: id="+requestID+" status: "+response.getResponseStatus()+" message: "+response.getMessage());
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{requestID, response.getResponseStatus(), response.getMessage()});
+        if( response.getResponseStatus()!=200 ){
+            handleHttpResponseError(requestID, response);
+            return;
+        }
+        
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                
+
+                String request = pendingHttpRequests.get(requestID);
+                bResponseCases.getChildren().clear();
+                
+                if( request.startsWith("@GET cases") ){ // response is json array containing cases as JSON objects
+                    Logger.getLogger(getClass().getName()).info("Received JsonArray for cases, creating views...");
+                    JsonArray casesAsJsonArray = (JsonArray)response.getContent();
+                    casesAsJsonArray.forEach((curCase) -> {
+                        JsonObject caseAsJson = (JsonObject)curCase;
+                        ClientCase responseCase = new ClientCase(caseAsJson);
+
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_case_pane.fxml"));
+                            Pane casePane=loader.load();
+                            CasePaneController controller = loader.getController();
+                            controller.setCase(responseCase);
+                            bResponseCases.getChildren().add(casePane);
+                        } catch (IOException ex) {
+                            Logger.getLogger(CaseAccessPaneController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    });
+                }else if(request.startsWith("@DELETE cases")){ // no case as response (deleted)
+                    Logger.getLogger(getClass().getName()).info("Case deleted successfully.");
+                }
+                else{ // all other request result in a single case as JSON object
+                    Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
+                    JsonObject caseAsJson = (JsonObject)response.getContent();
+                    ClientCase responseCase = new ClientCase(caseAsJson);
+
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_case_pane.fxml"));
+                        Pane casePane=loader.load();
+                        CasePaneController controller = loader.getController();
+                        controller.setCase(responseCase);
+                        bResponseCases.getChildren().add(casePane);
+                    } catch (IOException ex) {
+                        Logger.getLogger(CaseAccessPaneController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        hbHTTPResponseStatus.setVisible(true);
     }
     
-    
+    private void handleHttpResponseError(Integer requestID, IHttpResponse response){
+        switch( response.getResponseStatus() ){
+            
+            default:
+                Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
+        }
+        
+    }
 }
