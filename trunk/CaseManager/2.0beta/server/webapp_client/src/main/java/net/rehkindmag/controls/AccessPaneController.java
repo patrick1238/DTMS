@@ -5,6 +5,8 @@
  */
 package net.rehkindmag.controls;
 
+import net.rehkindmag.http.HttpRequestManager;
+import net.rehkindmag.entities.UserLogin;
 import com.sun.scenario.Settings;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +21,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javax.json.Json;
+import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.IHttpResponseReceiver;
 import net.rehkind_mag.utils.HttpAccessRequest;
 import net.rehkind_mag.utils.UUIDGenerator;
@@ -128,10 +132,11 @@ public abstract class AccessPaneController implements IHttpResponseReceiver {
         }
         
         //JsonParser parser=Json.createParser(new ByteArrayInputStream(txtaRequestBody.getText().getBytes(Charset.forName("UTF-8"))));
-        HttpAccessRequest request = new HttpAccessRequest( lblEndpoint.getText(), uuid, UserLogin.getLoginAsJson(), Json.createObjectBuilder().build() );
-        Integer requestID=manager.fireJsonHttpGETRequest(request, this);
+        HttpAccessRequest request = new HttpAccessRequest( epTemplate, epResult, uuid, UserLogin.getLoginAsJson(), Json.createObjectBuilder().build() );
+        IHttpResponse cachedResponse = manager.fireJsonHttpRequest(request, this);
         
-        pendingHttpRequests.put(requestID, cbEndpointTemplate.getSelectionModel().getSelectedItem()+" "+lblEndpoint.getText()+" uuid="+uuid);
+        pendingHttpRequests.put(cachedResponse.getRequestId(), cbEndpointTemplate.getSelectionModel().getSelectedItem()+" "+lblEndpoint.getText()+" uuid="+uuid);
+        if( cachedResponse.responseSucceeded() ){ this.receiveHttpResponse(cachedResponse); }
     }
     
     @FXML

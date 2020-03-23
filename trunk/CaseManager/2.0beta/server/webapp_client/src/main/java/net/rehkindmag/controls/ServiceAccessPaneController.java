@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -45,8 +46,8 @@ public class ServiceAccessPaneController extends AccessPaneController implements
     }    
 
     @Override
-    public void receiveHttpResponse(Integer requestID, IHttpResponse response) {
-        Logger.getLogger(getClass().getName()).info("HttpResponse received: id="+requestID+" status: "+response.getResponseStatus()+" message: "+response.getMessage());
+    public void receiveHttpResponse(IHttpResponse response) {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{response.getRequestId(), response.getResponseStatus(), response.getMessage()});
     }
     
 }

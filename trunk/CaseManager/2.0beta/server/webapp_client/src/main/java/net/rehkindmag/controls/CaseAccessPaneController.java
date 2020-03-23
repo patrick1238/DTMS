@@ -5,6 +5,7 @@
  */
 package net.rehkindmag.controls;
 
+import net.rehkindmag.entities.ClientCase;
 import com.sun.javafx.collections.ObservableListWrapper;
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.rehkind_mag.interfaces.IHttpResponse;
+import net.rehkind_mag.utils.HTTP_STATUS;
 
 /**
  * FXML Controller class
@@ -57,10 +59,19 @@ public class CaseAccessPaneController extends AccessPaneController implements In
     }
 
     @Override
-    public void receiveHttpResponse(Integer requestID, IHttpResponse response) {
-        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{requestID, response.getResponseStatus(), response.getMessage()});
-        if( response.getResponseStatus()!=200 ){
-            handleHttpResponseError(requestID, response);
+    public void receiveHttpResponse(IHttpResponse response) {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{response.getRequestId(), response.getResponseStatus(), response.getMessage()});
+        long timeMS=-1;
+        Boolean isCached=false;
+        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[CACHED] HttpResponse {0} ms.", timeMS);
+            isCached=true;
+        }else{
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[HTTP] HttpResponse {0} ms.", timeMS);
+        }
+        final boolean finalIsCached=isCached;
+        if( response.getResponseStatus()!=HTTP_STATUS.OK && response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            handleHttpResponseError(response.getRequestId(), response);
             return;
         }
         
@@ -69,7 +80,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
             public void run() {
                 
 
-                String request = pendingHttpRequests.get(requestID);
+                String request = pendingHttpRequests.get(response.getRequestId());
                 bResponseCases.getChildren().clear();
                 
                 if( request.startsWith("@GET cases") ){ // response is json array containing cases as JSON objects
@@ -84,6 +95,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                             Pane casePane=loader.load();
                             CasePaneController controller = loader.getController();
                             controller.setCase(responseCase);
+                            controller.setCachedView(finalIsCached);
                             bResponseCases.getChildren().add(casePane);
                         } catch (IOException ex) {
                             Logger.getLogger(CaseAccessPaneController.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,6 +113,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_case_pane.fxml"));
                         Pane casePane=loader.load();
                         CasePaneController controller = loader.getController();
+                        controller.setCachedView(finalIsCached);
                         controller.setCase(responseCase);
                         bResponseCases.getChildren().add(casePane);
                     } catch (IOException ex) {

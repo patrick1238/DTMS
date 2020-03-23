@@ -5,6 +5,7 @@
  */
 package net.rehkindmag.controls;
 
+import net.rehkindmag.entities.ClientCase;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -45,12 +46,11 @@ public class CasePaneController extends ClientObjectController implements Initia
     
     @Override
     protected void bindGUIElements(){
-        
+        viewCaseId.textProperty().bindBidirectional(myCase.getIdProperty(), new NumberStringConverter());
         viewCaseNumber.textProperty().bindBidirectional(myCase.getCaseNumberProperty());
         viewDiagnosis.textProperty().bindBidirectional(myCase.getDiagnosisProperty());
         viewSubmitter.textProperty().bindBidirectional(myCase.getSubmitterIDProperty(), new NumberStringConverter());
         viewClinic.textProperty().bindBidirectional(myCase.getClinicIDProperty(), new NumberStringConverter());
         viewEntryDate.textProperty().bindBidirectional(myCase.getEntryDateProperty());
-    
     }
 }

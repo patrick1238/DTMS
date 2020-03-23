@@ -6,7 +6,7 @@
 package net.rehkindmag.views;
 
 import java.awt.Dimension;
-import net.rehkindmag.controls.ClientCase;
+import net.rehkindmag.entities.ClientCase;
 
 /**
  * Displays a single case

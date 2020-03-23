@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.controls;
+package net.rehkindmag.entities;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +31,7 @@ public class ClientCase implements ICase{
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     JsonObject caseOriginal;
     
-    int ID;
+    IntegerProperty ID = new SimpleIntegerProperty();
     StringProperty caseNumber = new SimpleStringProperty();
     StringProperty diagnosis = new SimpleStringProperty();
     StringProperty entryDate = new SimpleStringProperty();
@@ -45,7 +45,9 @@ public class ClientCase implements ICase{
     }
     
     @Override
-    public int getId(){ return ID; }
+    public int getId(){ return ID.getValue(); }
+    
+    public IntegerProperty getIdProperty(){ return ID; }
     
     public StringProperty getCaseNumberProperty(){ return caseNumber; }
     @Override
@@ -88,7 +90,7 @@ public class ClientCase implements ICase{
      * 
      */
     final public void resetCase(){
-        ID=caseOriginal.getInt("id");
+        ID.setValue( caseOriginal.getInt("id") );
         setCaseNumber( caseOriginal.getString("caseNumber") );
         setDiagnose( caseOriginal.getString("diagnose") );
         try{
