@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.IntegerProperty;
@@ -22,12 +23,13 @@ import net.rehkind_mag.interfaces.ICase;
 import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IService;
 import net.rehkind_mag.interfaces.ISubmitter;
+import net.rehkind_mag.interfaces.client.IClientObject;
 
 /**
  *
  * @author rehkind
  */
-public class ClientCase implements ICase{
+public class ClientCase implements ICase, IClientObject{
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     JsonObject caseOriginal;
     
@@ -106,14 +108,7 @@ public class ClientCase implements ICase{
     
     @Override
     public String toString(){
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("id", getId());
-        builder.add("caseNumber", getCaseNumber());
-        builder.add("diagnose", getDiagnose());
-        builder.add("entryDate", formatter.format( getEntryDate() ));
-        builder.add("clinicId", getClinic().getId());
-        builder.add("submitterId", getSubmitter().getId());
-        return builder.build().toString();
+        return toJson().toString();
     }
 
     @Override
@@ -121,5 +116,30 @@ public class ClientCase implements ICase{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public boolean hasLocalChanges() {
+        return !toJson().equals(caseOriginal);
+    }
 
+    @Override
+    public JsonObject toJson() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("id", getId());
+        builder.add("caseNumber", getCaseNumber());
+        builder.add("diagnose", getDiagnose());
+        builder.add("entryDate", formatter.format( getEntryDate() ));
+        builder.add("clinicId", getClinic().getId());
+        builder.add("submitterId", getSubmitter().getId());
+        return builder.build(); 
+    }
+
+    public boolean wasIdenticalTo(JsonObject objToCompare){
+        if(caseOriginal.getInt("id")!=objToCompare.getInt("id")){ return false; }
+        if(!Objects.equals( caseOriginal.getString("caseNumber"),objToCompare.getString("caseNumber") )){ return false; }
+        if(!Objects.equals( caseOriginal.getString("diagnose"),objToCompare.getString("diagnose") )){ return false; }
+        if(!Objects.equals( caseOriginal.getString("entryDate"),objToCompare.getString("entryDate") )){ return false; }
+        if(caseOriginal.getInt("clinicId")!=objToCompare.getInt("clinicId")){ return false; }
+        if(caseOriginal.getInt("submitterId")!=objToCompare.getInt("submitterId")){ return false; }
+        return true;
+    }
 }

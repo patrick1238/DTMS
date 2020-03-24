@@ -16,28 +16,38 @@ import javafx.scene.layout.Pane;
  */
 abstract class ClientObjectController {
     boolean editable;
-    @FXML Pane editablePane;
+    
+    @FXML Pane editPane;
     @FXML Pane viewPane;
-    @FXML ImageView ivStatusImage;
+    @FXML ImageView viewStatus;
+    @FXML ImageView editStatus;
+    @FXML ImageView editEdit;
     
     public void setEditable(Boolean editable){
         this.editable=editable;
+        
         if( editable ){
-            editablePane.toFront();
-            editablePane.setVisible(true);
+            editEdit.setImage(new Image("/edit_icon_30.png"));
+            editPane.toFront();
+            editPane.setVisible(true);
+            viewPane.toBack();
             viewPane.setVisible(false);
+            
         }else{
             viewPane.toFront();
             viewPane.setVisible(true);
-            editablePane.setVisible(false);
+            editPane.toBack();
+            editPane.setVisible(false);
         }
     }
     
     public void setCachedView(Boolean isCached){
         if(isCached){
-            ivStatusImage.setImage( new Image("/wait_icon_30.png") );
+            viewStatus.setImage( new Image("/wait_icon_30.png") );
+            editStatus.setImage( new Image("/wait_icon_30.png") );
         }else{
-            ivStatusImage.setImage(null);
+            viewStatus.setImage(null);
+            editStatus.setId(null);
         }
     }
     

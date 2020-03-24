@@ -24,6 +24,20 @@
     
 }
 
+.edit-dark {
+    -fx-background-color:#ffffff66;
+    -fx-border-width:2px;
+    -fx-border-style:solid;
+    -fx-border-color:#c7643a88;
+    -fx-text-fill:#ebd2c3;
+    -fx-cursor: text;
+}
+
+.edit-dark:active {
+    -fx-border-color:#c7643aaa;
+    -fx-text-fill:#c7643a;
+}
+
 .button-dark {
 	-fx-box-shadow:inset 0px 3px 10px 0px #444444;
 	-fx-background-radius:10px;

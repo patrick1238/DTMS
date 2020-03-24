@@ -8,9 +8,13 @@ package net.rehkindmag.controls;
 import net.rehkindmag.entities.ClientCase;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.util.converter.NumberStringConverter;
 
 /**
@@ -30,6 +34,12 @@ public class CasePaneController extends ClientObjectController implements Initia
     @FXML Label viewEntryDate;
     
     // FXML edit
+    @FXML Label editCaseId;
+    @FXML TextField editCaseNumber;
+    @FXML TextField editDiagnosis;
+    @FXML TextField editSubmitter;
+    @FXML TextField editClinic;
+    @FXML TextField editEntryDate;
     
     /**
      * Initializes the controller class.
@@ -52,5 +62,35 @@ public class CasePaneController extends ClientObjectController implements Initia
         viewSubmitter.textProperty().bindBidirectional(myCase.getSubmitterIDProperty(), new NumberStringConverter());
         viewClinic.textProperty().bindBidirectional(myCase.getClinicIDProperty(), new NumberStringConverter());
         viewEntryDate.textProperty().bindBidirectional(myCase.getEntryDateProperty());
+        
+        editCaseId.textProperty().bindBidirectional(myCase.getIdProperty(), new NumberStringConverter());
+        editCaseNumber.textProperty().bindBidirectional(myCase.getCaseNumberProperty());
+        editDiagnosis.textProperty().bindBidirectional(myCase.getDiagnosisProperty());
+        editSubmitter.textProperty().bindBidirectional(myCase.getSubmitterIDProperty(), new NumberStringConverter());
+        editClinic.textProperty().bindBidirectional(myCase.getClinicIDProperty(), new NumberStringConverter());
+        editEntryDate.textProperty().bindBidirectional(myCase.getEntryDateProperty());
+        
+        ChangeListener listener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                onStatusChanged();
+            }
+        };
+        editCaseId.textProperty().addListener(listener);
+        editCaseNumber.textProperty().addListener(listener);
+        editDiagnosis.textProperty().addListener(listener);
+        editSubmitter.textProperty().addListener(listener);
+        editClinic.textProperty().addListener(listener);
+        editEntryDate.textProperty().addListener(listener);
+    }
+    
+    protected void onStatusChanged(){
+        if( myCase.hasLocalChanges() ){
+            viewStatus.setImage( new Image("/changed_icon_30.png") );
+            editStatus.setImage( new Image("/changed_icon_30.png") );
+        }else{
+            viewStatus.setImage( null );
+            editStatus.setImage( null );
+        }
     }
 }

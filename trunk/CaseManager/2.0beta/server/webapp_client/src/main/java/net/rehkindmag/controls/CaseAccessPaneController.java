@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -34,7 +35,9 @@ import net.rehkind_mag.utils.HTTP_STATUS;
  */
 public class CaseAccessPaneController extends AccessPaneController implements Initializable {
     @FXML HBox bResponseCases;
+    @FXML CheckBox cbEditable;
     
+    ArrayList<CasePaneController> caseController=new ArrayList<>();
     /**
      * Initializes the controller class.
      */
@@ -84,6 +87,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                 bResponseCases.getChildren().clear();
                 
                 if( request.startsWith("@GET cases") ){ // response is json array containing cases as JSON objects
+                    caseController.clear();
                     Logger.getLogger(getClass().getName()).info("Received JsonArray for cases, creating views...");
                     JsonArray casesAsJsonArray = (JsonArray)response.getContent();
                     casesAsJsonArray.forEach((curCase) -> {
@@ -94,8 +98,10 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_case_pane.fxml"));
                             Pane casePane=loader.load();
                             CasePaneController controller = loader.getController();
+                            caseController.add(controller);
                             controller.setCase(responseCase);
                             controller.setCachedView(finalIsCached);
+                            controller.setEditable(cbEditable.isSelected());
                             bResponseCases.getChildren().add(casePane);
                         } catch (IOException ex) {
                             Logger.getLogger(CaseAccessPaneController.class.getName()).log(Level.SEVERE, null, ex);
@@ -113,8 +119,10 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_case_pane.fxml"));
                         Pane casePane=loader.load();
                         CasePaneController controller = loader.getController();
+                        caseController.add(controller);
                         controller.setCachedView(finalIsCached);
                         controller.setCase(responseCase);
+                        controller.setEditable(cbEditable.isSelected());
                         bResponseCases.getChildren().add(casePane);
                     } catch (IOException ex) {
                         Logger.getLogger(CaseAccessPaneController.class.getName()).log(Level.SEVERE, null, ex);
@@ -132,5 +140,11 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                 Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
         }
         
+    }
+    
+    @FXML public void onEditableChanged(){
+        for (CasePaneController cpc : caseController){
+            cpc.setEditable(cbEditable.isSelected());
+        }
     }
 }
