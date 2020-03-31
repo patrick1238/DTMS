@@ -15,8 +15,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import net.rehkindmag.entities.pool.CasePool;
 
 /**
  *
@@ -72,14 +72,20 @@ public class WebappClientFXML extends Application {
             Logger.getGlobal().info(line);
         }
         
+        preloadClientObjectPools();
         
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_main_pane.fxml"));
         
-        Scene scene = new Scene(root, 1200, 800);
+        Scene scene = new Scene(root, 1200, 900);
         
         primaryStage.setTitle("TestClient for HTTPRequests - LINFO");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+    
+    private void preloadClientObjectPools(){
+        // calls @GET_ALL for all entity_pools for intitial caching
+        CasePool.createPool().getAllEntities();
     }
 
     /**

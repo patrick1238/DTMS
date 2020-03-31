@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.util.converter.NumberStringConverter;
+import org.jboss.logging.Logger;
 
 /**
  * FXML Controller class
@@ -24,6 +25,7 @@ import javafx.util.converter.NumberStringConverter;
  */
 public class CasePaneController extends ClientObjectController implements Initializable {
     ClientCase myCase;
+    ChangeListener statusChangedListener;
     
     // FXML view
     @FXML Label viewCaseId;
@@ -51,7 +53,19 @@ public class CasePaneController extends ClientObjectController implements Initia
     
     public void setCase( ClientCase theCase ){
         myCase=theCase;
-        bindGUIElements();
+        if( theCase==null ){
+            try{
+                dispose();
+            }catch(Exception ex){
+                Logger.getLogger(getClass()).warn("setCase(null) was called...error while trying to dispose()");
+            }
+        }else{
+            try{
+                bindGUIElements();
+            }catch( NullPointerException ex ){
+                Logger.getLogger(getClass()).fatal("setCase(ClientCase) was called...error while trying to bindGUIElements()");
+            }
+        }
     }
     
     @Override
@@ -70,18 +84,44 @@ public class CasePaneController extends ClientObjectController implements Initia
         editClinic.textProperty().bindBidirectional(myCase.getClinicIDProperty(), new NumberStringConverter());
         editEntryDate.textProperty().bindBidirectional(myCase.getEntryDateProperty());
         
-        ChangeListener listener = new ChangeListener() {
+        statusChangedListener = new ChangeListener() {
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 onStatusChanged();
             }
         };
-        editCaseId.textProperty().addListener(listener);
-        editCaseNumber.textProperty().addListener(listener);
-        editDiagnosis.textProperty().addListener(listener);
-        editSubmitter.textProperty().addListener(listener);
-        editClinic.textProperty().addListener(listener);
-        editEntryDate.textProperty().addListener(listener);
+        editCaseId.textProperty().addListener(statusChangedListener);
+        editCaseNumber.textProperty().addListener(statusChangedListener);
+        editDiagnosis.textProperty().addListener(statusChangedListener);
+        editSubmitter.textProperty().addListener(statusChangedListener);
+        editClinic.textProperty().addListener(statusChangedListener);
+        editEntryDate.textProperty().addListener(statusChangedListener);
+    }
+    
+    @Override
+    protected void dispose(){
+        // remove all listener objects
+        if(myCase==null){ return; }
+        viewCaseId.textProperty().unbindBidirectional(myCase.getIdProperty());
+        viewCaseNumber.textProperty().unbindBidirectional(myCase.getCaseNumberProperty());
+        viewDiagnosis.textProperty().unbindBidirectional(myCase.getDiagnosisProperty());
+        viewSubmitter.textProperty().unbindBidirectional(myCase.getSubmitterIDProperty());
+        viewClinic.textProperty().unbindBidirectional(myCase.getClinicIDProperty());
+        viewEntryDate.textProperty().unbindBidirectional(myCase.getEntryDateProperty());
+        
+        editCaseId.textProperty().unbindBidirectional(myCase.getIdProperty());
+        editCaseNumber.textProperty().unbindBidirectional(myCase.getCaseNumberProperty());
+        editDiagnosis.textProperty().unbindBidirectional(myCase.getDiagnosisProperty());
+        editSubmitter.textProperty().unbindBidirectional(myCase.getSubmitterIDProperty());
+        editClinic.textProperty().unbindBidirectional(myCase.getClinicIDProperty());
+        editEntryDate.textProperty().unbindBidirectional(myCase.getEntryDateProperty());
+        
+        editCaseId.textProperty().removeListener(statusChangedListener);
+        editCaseNumber.textProperty().removeListener(statusChangedListener);
+        editDiagnosis.textProperty().removeListener(statusChangedListener);
+        editSubmitter.textProperty().removeListener(statusChangedListener);
+        editClinic.textProperty().removeListener(statusChangedListener);
+        editEntryDate.textProperty().removeListener(statusChangedListener);
     }
     
     protected void onStatusChanged(){

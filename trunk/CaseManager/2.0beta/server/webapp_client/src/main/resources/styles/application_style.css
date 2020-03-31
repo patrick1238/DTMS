@@ -9,6 +9,7 @@
 
 .style-dark {
    -fx-background-color: rgb(95,95,95);
+   -fx-background: rgb(85,80,70);
    -fx-color: rgb(95,95,95);
    -fx-text-fill: #ebd2c3;
 }

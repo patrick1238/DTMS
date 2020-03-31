@@ -6,6 +6,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="489.0" prefWidth="600.0" styleClass="style-dark" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rehkindmag.controls.CaseAccessPaneController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" styleClass="style-dark" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rehkindmag.controls.CaseAccessPaneController">
     <stylesheets>
         <URL value="@styles/application_style.css" />
     </stylesheets>
@@ -39,8 +40,6 @@
               <rowConstraints>
                   <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
@@ -55,29 +54,9 @@
                         <Label layoutX="14.0" layoutY="5.0" text="Endpoint template" textFill="#ebd2c3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                     <children>
-                        <Label layoutX="40.0" layoutY="8.0" text="Endpoint variables" textFill="#ebd2c3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
-                     <children>
-                        <Label layoutX="21.0" layoutY="6.0" text="Endpoint" textFill="#ebd2c3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <ComboBox fx:id="cbEndpointTemplate" layoutY="5.0" maxHeight="25.0" onAction="#onEndpointTemplateSelected" prefHeight="25.0" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <children>
-                        <HBox fx:id="hbEndpointVariables" layoutX="-58.0" layoutY="-37.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                     <children>
-                        <Label fx:id="lblEndpoint" layoutY="11.0" style="-fx-background-color: rgba(255,255,255,0.1);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <ComboBox fx:id="cbMethod" layoutY="5.0" maxHeight="25.0" onAction="#onMethodSelected" prefHeight="25.0" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane>
@@ -89,7 +68,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
                         <Label text="Create request body" textFill="#c7643a" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
@@ -98,36 +77,71 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
                      <children>
                         <Label text="Login account" textFill="#ebd2c3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
                      <children>
                         <Label text="UUID" textFill="#ebd2c3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <children>
-                        <Label fx:id="lblUUID" layoutY="12.0" prefHeight="25.6" style="-fx-background-color: #bbbbbb;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" />
-                        <Button layoutX="320.0" layoutY="5.0" maxHeight="40.0" maxWidth="200.0" minHeight="40.0" minWidth="200.0" mnemonicParsing="false" onAction="#generateUUID" prefHeight="40.0" prefWidth="200.0" styleClass="button-dark" text="generate UUID" AnchorPane.rightAnchor="0.0" />
+                        <Label fx:id="lblUUID" layoutY="12.0" prefHeight="25.6" style="-fx-background-color: #bbbbbb;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <children>
-                        <ComboBox layoutX="220.0" layoutY="7.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                        <HBox alignment="TOP_CENTER" layoutX="93.0" layoutY="-24.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="250.0">
+                                 <children>
+                                    <Label text="User">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txtUser" />
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="250.0">
+                                 <children>
+                                    <Label text="Passwort">
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <PasswordField fx:id="pfPassword" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <children>
+                                    <Label>
+                                       <font>
+                                          <Font size="10.0" />
+                                       </font>
+                                    </Label>
+                                    <Button alignment="CENTER" mnemonicParsing="false" onAction="#onLoginChanged" prefWidth="250.0" text="apply" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
                      <children>
                         <Label text="Case as JSON" textFill="#ebd2c3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                      <children>
-                        <Button layoutX="303.0" layoutY="5.0" maxHeight="40.0" maxWidth="200.0" minHeight="40.0" minWidth="200.0" mnemonicParsing="false" onAction="#fireHTTPRequest" prefHeight="40.0" prefWidth="200.0" styleClass="button-dark" text="Send HTTPRequest" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+                        <Button layoutX="303.0" layoutY="5.0" maxHeight="40.0" maxWidth="200.0" minHeight="40.0" minWidth="200.0" mnemonicParsing="false" onAction="#fireRequest" prefHeight="40.0" prefWidth="200.0" styleClass="button-dark" text="Send request" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
                         <HBox fx:id="hbHTTPResponseStatus" alignment="CENTER_LEFT" layoutX="-13.0" layoutY="-27.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="visibility: false;" styleClass="style-dark" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="5.0">
                            <children>
                               <Label text="Status:" textFill="#c7643a" />
@@ -138,7 +152,7 @@
                         </HBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="9">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="7">
                      <children>
                         <Label text="Response" textFill="#c7643a" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <font>
@@ -147,27 +161,33 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="7">
+                  <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <children>
                         <TextField fx:id="txtCaseJson" layoutY="7.0" promptText="required for CREATE/UPDATE requests" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                      </children>
                   </AnchorPane>
-                  <CheckBox fx:id="cbEditable" mnemonicParsing="false" onAction="#onEditableChanged" text="editable cases" textFill="#ebd2c3" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
+                  <CheckBox fx:id="cbEditable" mnemonicParsing="false" onAction="#onEditableChanged" text="editable cases" textFill="#ebd2c3" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </CheckBox>
                </children>
             </GridPane>
-            <ScrollPane prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #666666;">
+            <ScrollPane minHeight="250.0" prefHeight="400.0" prefWidth="200.0" styleClass="style-dark" vbarPolicy="NEVER">
               <content>
-                <AnchorPane>
+                <AnchorPane translateX="5.0" translateY="5.0">
                      <children>
-                        <HBox fx:id="bResponseCases" spacing="10.0" style="-fx-background-color: #666666;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox fx:id="bResponseCases" spacing="10.0" styleClass="style-dark" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <padding>
                               <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                           </padding></HBox>
-                     </children></AnchorPane>
+                           </padding>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets></HBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets></AnchorPane>
               </content>
             </ScrollPane>
          </children>

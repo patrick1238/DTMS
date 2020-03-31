@@ -10,8 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,13 +22,15 @@ import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IService;
 import net.rehkind_mag.interfaces.ISubmitter;
 import net.rehkind_mag.interfaces.client.IClientObject;
+import org.jboss.logging.Logger;
+import org.jboss.logging.Logger.Level;
 
 /**
  *
  * @author rehkind
  */
-public class ClientCase implements ICase, IClientObject{
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+public class ClientCase implements ICase, IClientObject<ClientCase>{
+    static final private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
     JsonObject caseOriginal;
     
     IntegerProperty ID = new SimpleIntegerProperty();
@@ -41,9 +41,19 @@ public class ClientCase implements ICase, IClientObject{
     IntegerProperty submitterID = new SimpleIntegerProperty();
     
     public ClientCase(JsonObject caseAsJson){
-        
         caseOriginal = caseAsJson;
         resetCase();
+    }
+    
+    static public ClientCase getCaseTemplate(){
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("id", -1);
+        builder.add("caseNumber", "");
+        builder.add("diagnose", "");
+        builder.add("entryDate", formatter.format( new Date() ));
+        builder.add("clinicId", -1);
+        builder.add("submitterId", -1);
+        return new ClientCase( builder.build() );
     }
     
     @Override
@@ -64,7 +74,7 @@ public class ClientCase implements ICase, IClientObject{
     public Date getEntryDate(){ try {
             return formatter.parse(entryDate.getValue()) ;
         } catch (ParseException ex) {
-            Logger.getLogger(ClientCase.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientCase.class.getName()).log(Level.FATAL, null, ex);
             return null;
         }
     }
@@ -98,9 +108,10 @@ public class ClientCase implements ICase, IClientObject{
         try{
             setEntryDate( formatter.parse( caseOriginal.getString("entryDate")) );
         }catch(ParseException ex){
-            Logger.getLogger("global").warning("Could not parse entryDate string: "+caseOriginal.getString("entryDate"));
+            Logger.getLogger("global").warn("Could not parse entryDate string: "+caseOriginal.getString("entryDate"));
         }
         setClinic( new ClientClinic( caseOriginal.getInt("clinicId") ) );
+        submitterID.setValue( caseOriginal.getInt("submitterId") );
         Logger.getLogger("global").info("------------ resetCase() called -------------");
         Logger.getLogger("global").info("caseOriginal: "+caseOriginal.toString());
         Logger.getLogger("global").info("toString():   "+toString());
@@ -118,7 +129,24 @@ public class ClientCase implements ICase, IClientObject{
 
     @Override
     public boolean hasLocalChanges() {
-        return !toJson().equals(caseOriginal);
+        Boolean hasChanges=false;
+        Boolean hasChangesId = !ID.getValue().equals(caseOriginal.getInt("id"));
+        Boolean hasChangescaseNumber = !caseNumber.getValue().equals(caseOriginal.getString("caseNumber"));
+        Boolean hasChangesDiagnose = !diagnosis.getValue().equals(caseOriginal.getString("diagnose"));
+        Boolean hasChangesEntryDate=true;
+        try{
+            hasChangesEntryDate = formatter.parse(entryDate.getValue()).equals(formatter.parse(caseOriginal.getString("entryDate")));
+        }catch(ParseException ex){ 
+            // ignored we just set it 'true'
+        }
+        
+        Boolean hasChangesClinic = !clinicID.getValue().equals(caseOriginal.getInt("clinicId"));
+        Boolean hasChangesSubmitter = !submitterID.getValue().equals(caseOriginal.getInt("submitterId"));
+        
+        Object[] results = new Object[]{hasChangesId,hasChangescaseNumber,hasChangesDiagnose,hasChangesEntryDate,hasChangesClinic,hasChangesSubmitter};
+        Logger.getLogger(getClass()).info("id: {0} | caseNumber: {1} | diagnose: {2} | entryDate: {3} | clinic: {4} | submitter: {5}", results);
+        if( hasChanges != (!toJson().equals(caseOriginal)) ){ Logger.getLogger(getClass()).info("hasLocalChanges() JSON_TEST != VALUE_TEST");}
+        return hasChanges;
     }
 
     @Override
@@ -141,5 +169,29 @@ public class ClientCase implements ICase, IClientObject{
         if(caseOriginal.getInt("clinicId")!=objToCompare.getInt("clinicId")){ return false; }
         if(caseOriginal.getInt("submitterId")!=objToCompare.getInt("submitterId")){ return false; }
         return true;
+    }
+
+    @Override
+    public ClientCase getLocalClone() {
+        return new ClientCase(caseOriginal);
+    }
+
+    @Override
+    public void merge(ClientCase toMergeWith) {
+        if( getId()!=toMergeWith.getId() ){
+             Logger.getLogger(getClass()).warn("Cannot merge case objects: different identifiers");
+        }
+        this.caseOriginal=toMergeWith.caseOriginal;
+        if(hasLocalChanges()){
+            Logger.getLogger(getClass()).warn("Cannot merge case objects: has local changes\n\told: {0}\n\t+++: {1}\n\tnew: {2}", new String[]{toString(), caseOriginal.toString(), toMergeWith.toString()});
+            
+        }else{
+            ID.setValue(toMergeWith.getId());
+            caseNumber.setValue(toMergeWith.getCaseNumber());
+            diagnosis.setValue(toMergeWith.getDiagnose());
+            entryDate.setValue(ClientCase.formatter.format( toMergeWith.getEntryDate() ));
+            clinicID.setValue(toMergeWith.getClinicIDProperty().getValue());
+            submitterID.setValue(toMergeWith.getSubmitterIDProperty().getValue());
+        }
     }
 }

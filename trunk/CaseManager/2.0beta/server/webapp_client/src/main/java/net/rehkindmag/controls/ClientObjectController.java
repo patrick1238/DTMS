@@ -52,4 +52,5 @@ abstract class ClientObjectController {
     }
     
     abstract void bindGUIElements();
+    abstract void dispose();
 }

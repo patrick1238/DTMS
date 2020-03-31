@@ -6,17 +6,24 @@
 package net.rehkindmag.entities.pool;
 
 import java.util.HashMap;
-import java.util.List;
+import javafx.application.Platform;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import net.rehkind_mag.interfaces.IHttpResponse;
-import net.rehkind_mag.interfaces.client.AClientObjectPool;
+import net.rehkind_mag.interfaces.client.ClientObjectList;
+import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
+import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
 import net.rehkindmag.entities.ClientCase;
 import net.rehkindmag.http.HTTP_ENDPOINT_TEMPLATES;
+import net.rehkind_mag.utils.HTTP_STATUS;
+import org.jboss.logging.Logger;
+import org.jboss.logging.Logger.Level;
 
 /**
  *
  * @author rehkind
  */
-public class CasePool extends AClientObjectPool<ClientCase>{
+public class CasePool extends AClientObjectPool<ClientCase> {
     private final static String GET_CASE=HTTP_ENDPOINT_TEMPLATES.GET_CASE;
     private final static String GET_CASES=HTTP_ENDPOINT_TEMPLATES.GET_CASES;
     private final static String CREATE_CASE=HTTP_ENDPOINT_TEMPLATES.CREATE_CASE;
@@ -25,38 +32,43 @@ public class CasePool extends AClientObjectPool<ClientCase>{
     
     private static CasePool singletonPool;
     
-    HashMap<Integer, ClientCase> cachedCases = new HashMap<>();
+    private static ClientCase defaultCase;
+    
+    
+    ClientObjectList<ClientCase> cachedCaseList=new ClientObjectList();
     
     private CasePool(){
-        
+        defaultCase = ClientCase.getCaseTemplate();
     }
     
-    @Override
-    public AClientObjectPool<ClientCase> createPool() {
+    static public CasePool createPool() {
         if (CasePool.singletonPool == null){ CasePool.singletonPool=new CasePool(); }
         
         return CasePool.singletonPool;
     }
     
-    public ClientCase getEntity(int caseId){
-        throw new UnsupportedOperationException("CasePool.getEntity not yet implemented.");
+    @Override
+    public ReadOnlyClientObjectList getAllEntities(){
+        fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_CASES, HTTP_REQUEST_TYPE.GET_ALL);
+        return cachedCaseList;
     }
     
     @Override
-    public List<ClientCase> getAllEntities(){
-        throw new UnsupportedOperationException("CasePool.getAllEntities not yet implemented.");
-    }
-
-
-
-    @Override
-    public ClientCase getEntity() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ClientCase getEntity(int caseId) {
+        ClientCase returnCase = this.cachedCaseList.get(caseId);
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_CASE;
+        String buildEP = templateEP.replace("{ID}", ""+caseId);
+        
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("case_id", caseId);
+        fireHTTPRequest(templateEP, HTTP_REQUEST_TYPE.GET_ALL, param);
+        
+        return (returnCase==null) ? defaultCase.getLocalClone() : returnCase;
     }
 
     @Override
     public ClientCase createEntity() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return defaultCase.getLocalClone();
     }
 
     @Override
@@ -71,7 +83,62 @@ public class CasePool extends AClientObjectPool<ClientCase>{
 
     @Override
     public void receiveHttpResponse(IHttpResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{response.getRequestId(), response.getResponseStatus(), response.getMessage()});
+        long timeMS=-1;
+        Boolean isCached=false;
+        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[CACHED] HttpResponse {0} ms.", new Object[]{timeMS});
+            isCached=true;
+        }else{
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[HTTP] HttpResponse {0} ms.", new Object[]{timeMS});
+        }
+        
+        if( response.getResponseStatus()!=HTTP_STATUS.OK && response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            handleHttpResponseError(response.getRequestId(), response);
+            return;
+        }
+        
+        Platform.runLater(new Runnable() {
+            @Override
+                public void run() {
+                printPendingRequests();
+                PendingRequest requestToFinish;
+                if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
+                    requestToFinish = getPendingRequest(response.getRequestId());
+                }else{
+                    requestToFinish = finishPendingRequest(response.getRequestId());
+                }
+                Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
+                Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
+
+                if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
+                    Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local case list");
+                    JsonArray casesAsJsonArray = (JsonArray)response.getContent();
+
+                    casesAsJsonArray.forEach((curCase) -> {
+                        JsonObject theCase=(JsonObject)curCase;
+                        Logger.getLogger(getClass()).info("Processing JsonObject case: {0}", new String[]{ theCase.toString() });
+
+                        cachedCaseList.put(new ClientCase(theCase));
+                    });
+                } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
+                    Logger.getLogger(getClass().getName()).info("Case deleted successfully.");
+                } else{ // all other request result in a single case as JSON object
+                    Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
+                    JsonObject caseAsJsonObject = (JsonObject)response.getContent();
+
+                    cachedCaseList.put(new ClientCase( caseAsJsonObject) );
+                }
+            }
+        });
     }
     
+    private void handleHttpResponseError(Integer requestID, IHttpResponse response){
+        switch( response.getResponseStatus() ){
+            
+            default:
+                Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
+        }
+        
+    }
 }
