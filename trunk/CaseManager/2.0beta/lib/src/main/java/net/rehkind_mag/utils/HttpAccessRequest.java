@@ -17,12 +17,17 @@ import javax.json.JsonStructure;
  */
 public class HttpAccessRequest {
     String endpoint;
+    String compiledEndpoint;
     String uuid;
     JsonObject submitter;
     JsonObject body;
+    ServerSettings settings;
     
-    public HttpAccessRequest(String endpoint, String uuid, JsonObject submitter, JsonObject body){
-        this.endpoint=endpoint;
+    protected HttpAccessRequest(){}
+    
+    public HttpAccessRequest(String endpointTemplate, String compiledEndpoint, String uuid, JsonObject submitter, JsonObject body){
+        this.endpoint=endpointTemplate;
+        this.compiledEndpoint=compiledEndpoint;
         this.uuid=uuid;
         this.submitter=submitter;
         this.body=body;
@@ -52,7 +57,20 @@ public class HttpAccessRequest {
         return body;
     }
 
+    public String getCompiledEndpoint() {
+        return compiledEndpoint;
+    }
+    
     public String getEndpoint() {
         return endpoint;
     }
+    
+    public ServerSettings getServerSettings() {
+        return settings;
+    }
+    
+    public void setServerSettings(ServerSettings settings) {
+        this.settings=settings;
+    }
+        
 }

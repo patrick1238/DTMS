@@ -8,6 +8,7 @@ package net.rehkind_mag.utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -22,15 +23,25 @@ import net.rehkind_mag.interfaces.IHttpResponse;
 public class JsonObjectHttpResponse implements IHttpResponse<JsonStructure> {
     List<String> headerFields;
     int status;
+    int requestId;
     JsonStructure content;
     String message;
     
-    public JsonObjectHttpResponse( HttpURLConnection con ) throws IOException{
+    private JsonObjectHttpResponse( List<String> headerFields, int status, int requestId, JsonStructure content, String message ){
+        this.headerFields=headerFields;
+        this.status=status;
+        this.requestId=requestId;
+        this.content=content;
+        this.message=message;
+    }
+    
+    public JsonObjectHttpResponse( HttpURLConnection con, Integer requestId ) throws IOException{
         status = con.getResponseCode();
         message = con.getResponseMessage();
         
         headerFields = IHttpResponse.parseHeader(con);
         content = parseContent(con);
+        this.requestId=requestId;
     }
     
     @Override
@@ -60,6 +71,23 @@ public class JsonObjectHttpResponse implements IHttpResponse<JsonStructure> {
     @Override
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public int getRequestId() {
+        return this.requestId;
+    }
+
+    @Override
+    public IHttpResponse clone(int cloneId, int statusOverride) {
+        ArrayList<String> newHeader=new ArrayList<>();
+        this.headerFields.forEach((field) -> { newHeader.add(field); });
+        return new JsonObjectHttpResponse(newHeader, statusOverride, cloneId, content, ""+message);
+    }
+
+    @Override
+    public boolean responseSucceeded() {
+        return (status==HTTP_STATUS.OK || status==HTTP_STATUS.CACHED);
     }
     
 }

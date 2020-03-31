@@ -16,11 +16,13 @@ import java.util.List;
  * @param <T> type of the responses content (e.g. JsonObject)
  */
 public interface IHttpResponse<T> {
-    
+    public boolean responseSucceeded();
     public List<String> getHeaderFields();
     public int getResponseStatus();
     public T getContent();
     public String getMessage();
+    public int getRequestId();
+    public IHttpResponse clone(int cloneId, int statusOverride);
     
     static public List<String> parseHeader( HttpURLConnection con ){
         List<String> headerFieldList = new ArrayList<>();
@@ -42,4 +44,5 @@ public interface IHttpResponse<T> {
             });
         return headerFieldList;
     }
+    
 }

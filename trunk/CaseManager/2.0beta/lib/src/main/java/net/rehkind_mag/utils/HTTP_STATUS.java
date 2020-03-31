@@ -3,12 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkind_mag.interfaces;
+package net.rehkind_mag.utils;
 
 /**
  *
  * @author rehkind
  */
-public interface IHttpResponseReceiver {
-    public void receiveHttpResponse(IHttpResponse response);
+public class HTTP_STATUS {
+    public static final int OK=200;
+    
+    
+    // custom stati:
+    public static final int NOT_CACHED=-345;
+    public static final int CACHED=-200;
 }
