@@ -154,6 +154,8 @@ public class CasesResource {
         try{ caseId=updatedCase.getInt("id"); }catch(NullPointerException ex){  }
         Integer clinicId=null;
         try{ clinicId=updatedCase.getInt("clinicId"); }catch(NullPointerException ex){  }
+        Integer submitterId=null;
+        try{ submitterId=updatedCase.getInt("submitterId"); }catch(NullPointerException ex){  }
         
         ICase caseToUpdate = caseRepo.getCase(caseId);
         if(caseToUpdate==null){
@@ -167,14 +169,19 @@ public class CasesResource {
         }else{
             caseToUpdate.setClinic(null);
         }
+        if(submitterId!=null){
+            caseToUpdate.setSubmitter(submitterRepo.getSubmitter(submitterId));
+        }else{
+            caseToUpdate.setSubmitter(null);
+        }
+        
         String diagnose = updatedCase.getString("diagnose");
         caseToUpdate.setDiagnose(diagnose);
         String dateAsString = updatedCase.getString("entryDate");
         Date date=null;
         try{
-            Date d=new Date(119, 5, 23, 10, 15, 11);
+            //Date d=new Date(119, 5, 23, 10, 15, 11);
             // Logger.getLogger("global").info( "example date: "+df.format(d));
-            
             date=df.parse(dateAsString);
             
         }catch(ParseException pEx){
@@ -216,6 +223,8 @@ public class CasesResource {
         
         Integer clinicId=null;
         try{ clinicId=createCase.getInt("clinicId"); }catch(NullPointerException ex){  }
+        Integer submitterId=null;
+        try{ submitterId=createCase.getInt("submitterId"); }catch(NullPointerException ex){  }
         
         ICase caseToCreate = (ICase) new CaseEntity();
         caseToCreate.setCaseNumber(createCase.getString("caseNumber"));
@@ -224,6 +233,11 @@ public class CasesResource {
             caseToCreate.setClinic(clinicRepo.getClinic(clinicId));
         }else{
             caseToCreate.setClinic(null);
+        }
+        if(submitterId!=null){
+            caseToCreate.setSubmitter(submitterRepo.getSubmitter(submitterId));
+        }else{
+            caseToCreate.setSubmitter(null);
         }
         String entryDate=createCase.getString("entryDate");
         Date date=null;
@@ -306,7 +320,7 @@ public class CasesResource {
                 .add("caseNumber", caseToBuild.getCaseNumber())
                 .add("entryDate", ((caseToBuild.getEntryDate()!=null)?df.format( caseToBuild.getEntryDate() ):""))
                 .add("diagnose", (caseToBuild.getDiagnose()!=null)?caseToBuild.getDiagnose():"")
-                .add("submitter",caseToBuild.getSubmitter().getId() )
+                .add("submitterId",caseToBuild.getSubmitter().getId() )
                 .add("clinicId", caseToBuild.getClinic().getId() )
                 .add("caseServices", jsonCaseServicesBuilder)
                 .add("url", url)
@@ -325,6 +339,9 @@ public class CasesResource {
                 (aCase.getString("entryDate")!=null) ? aCase.getString("entryDate") : " - " );
         sb.append("\tdiagnosis: ").append(
                 (aCase.getString("diagnose")!=null) ? aCase.getString("diagnose") : "-" );
+        sb.append("\tsubmitter: ").append(
+                (aCase.getString("submitterId")!=null) ? aCase.getString("diagnose") : "-" );
+        
         return sb.toString();
     }
     
@@ -338,6 +355,8 @@ public class CasesResource {
                 (aCase.getEntryDate() != null) ? df.format( aCase.getEntryDate() ) : "-" );
         sb.append("\tdiagnosis: ").append(
                 (aCase.getDiagnose() != null) ? aCase.getDiagnose() : "-" );
+        sb.append("\tsubmitter: ").append(
+                (aCase.getSubmitter()!=null) ? aCase.getSubmitter().getId() : "-" );
         return sb.toString();
     }
 }
