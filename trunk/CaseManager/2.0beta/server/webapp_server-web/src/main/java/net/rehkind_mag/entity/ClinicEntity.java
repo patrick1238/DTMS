@@ -73,7 +73,6 @@ public class ClinicEntity implements Serializable, IClinic {
         return idclinic;
     }
 
-    @Override
     public void setId(int idclinic) {
         this.idclinic = idclinic;
     }
