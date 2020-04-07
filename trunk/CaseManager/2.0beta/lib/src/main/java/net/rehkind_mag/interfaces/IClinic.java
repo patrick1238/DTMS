@@ -17,7 +17,6 @@ public interface IClinic {
     public String getZipCode();    
     public String getCity();
     public String getStreet();
-    public void setId(int id);
     public void setName(String name);
     public void setZipCode(String zipcode);    
     public void setCity(String city);

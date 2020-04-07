@@ -21,7 +21,7 @@ public class ReadOnlyClientObjectList<T extends IClientObject> extends Observabl
         return (T)cachedObjects.get(index);
     }
 
-    public Collection<T> getAll(int index) {
+    public Collection<T> getAll() {
         return (Collection<T>)cachedObjects.values();
     }
     

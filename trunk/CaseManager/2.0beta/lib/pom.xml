@@ -5,7 +5,7 @@
     <groupId>net.rehkind-mag</groupId>
     <artifactId>webapp_server_lib</artifactId>
     <version>0.1</version>
-    <packaging>ejb</packaging>
+    <packaging>jar</packaging>
 
     <name>webapp_server_lib</name>
 
@@ -41,30 +41,5 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
-                <dependencies>
-                  <dependency>
-                    <groupId>org.apache.maven.surefire</groupId>
-                    <artifactId>surefire-junit47</artifactId>
-                    <version>3.0.0-M4</version>
-                  </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-ejb-plugin</artifactId>
-                <configuration>
-                    <ejbVersion>3.0</ejbVersion>
-                </configuration>
-            </plugin>
-            
-        </plugins>
-    </build>
 
 </project>

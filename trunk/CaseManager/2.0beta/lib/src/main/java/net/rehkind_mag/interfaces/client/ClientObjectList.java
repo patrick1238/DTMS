@@ -7,6 +7,8 @@ package net.rehkind_mag.interfaces.client;
 
 import java.util.Collection;
 import java.util.HashMap;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableListBase;
 import org.jboss.logging.Logger;
 
@@ -14,7 +16,7 @@ import org.jboss.logging.Logger;
  *
  * @author rehkind
  */
-public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObjectList<T>{
+public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObjectList<T> implements ChangeListener<IClientObject>{
     
     public void put(T object){
         beginChange();
@@ -48,11 +50,18 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
         }
         IClientObject alreadyInList = get(id);
         if( alreadyInList==null ){
+            object.addListener(this);
             this.cachedObjects.put(id, object);
         }else{
             Logger.getLogger( getClass() ).info("ClientObject is already in list calling ClientObject.merge().");
             alreadyInList.merge(object);
         }
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends IClientObject> observable, IClientObject oldValue, IClientObject newValue) {
+        System.out.println("[ClientObjectList]: one of my objects changed: "+((IClientObject)observable).getId());
+        
     }
     
     
