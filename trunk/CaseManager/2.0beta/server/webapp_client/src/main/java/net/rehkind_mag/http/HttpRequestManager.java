@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.http;
+package net.rehkind_mag.http;
 
-import net.rehkindmag.http.IBufferedEndpoint;
+import net.rehkind_mag.http.IBufferedEndpoint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="489.0" prefWidth="600.0" styleClass="style-dark" stylesheets="@../styles/application_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rehkindmag.controls.ServiceAccessPaneController">
+<AnchorPane id="AnchorPane" prefHeight="489.0" prefWidth="600.0" styleClass="style-dark" stylesheets="@../styles/application_style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.rehkind_mag.controls.ServiceAccessPaneController">
    <children>
       <VBox layoutX="15.0" layoutY="40.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="10.0">
          <children>

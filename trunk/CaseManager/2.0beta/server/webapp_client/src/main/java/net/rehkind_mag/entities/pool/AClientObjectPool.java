@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.entities.pool;
+package net.rehkind_mag.entities.pool;
 
 import com.sun.scenario.Settings;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 import javax.json.Json;
 import javax.json.JsonObject;
 import net.rehkind_mag.interfaces.IHttpResponse;
@@ -16,8 +17,8 @@ import net.rehkind_mag.interfaces.client.IClientObject;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
 import net.rehkind_mag.utils.HttpAccessRequest;
 import net.rehkind_mag.utils.UUIDGenerator;
-import net.rehkindmag.entities.UserLogin;
-import net.rehkindmag.http.HttpRequestManager;
+import net.rehkind_mag.entities.UserLogin;
+import net.rehkind_mag.http.HttpRequestManager;
 import org.jboss.logging.Logger;
 
 /**
@@ -46,6 +47,9 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     }
     protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody, HashMap<String,Object> param){
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, httpBody, param);
+    }
+    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, HashMap<String, Object> param){
+        fireHTTPRequest(endpointTemplate, endpointCompiled, type, Json.createObjectBuilder().build(), param);
     }
     protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, JsonObject httpBody, HashMap<String, Object> additionalParameters){
         HttpRequestManager manager = HttpRequestManager.createHttpRequestManager(Settings.get("server.address"), HttpRequestManager.CONTANT_TYPE_JSON);
@@ -89,6 +93,28 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
             builder.append(pendingHttpRequests.get(id).toString());
         }
         Logger.getLogger(getClass()).info( builder.toString() );
+    }
+    
+    public void waitFor() throws TimeoutException{
+        waitFor(10000);
+    }
+    
+    public void waitFor(int timeout) throws TimeoutException{
+        long start = System.currentTimeMillis();
+        int loopCounter=0;
+        while( pendingHttpRequests.size()>0 ){
+            loopCounter++;
+            if( (System.currentTimeMillis()-start)>timeout ){
+                throw new TimeoutException( String.format( "[%s] HTTP requests pending to long ( > %d ms )...and are timed out.", new Object[]{getClass().getName(), timeout}) );
+            }
+            try {
+                if( loopCounter%10 == 0 ){
+                    Logger.getLogger(getClass()).info( "{0} still waitFor() - pending requests {1}", new Object[]{getClass().getName(), pendingHttpRequests.size()});
+                }
+                Thread.sleep(200);
+            } catch (Exception e) {
+            }
+        }
     }
     
     protected class PendingRequest{

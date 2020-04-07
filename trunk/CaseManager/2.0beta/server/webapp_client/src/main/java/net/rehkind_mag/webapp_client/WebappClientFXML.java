@@ -3,20 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.webapp_client;
+package net.rehkind_mag.webapp_client;
 
 import com.sun.scenario.Settings;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
-import net.rehkindmag.entities.pool.CasePool;
+import net.rehkind_mag.entities.pool.CasePool;
+import net.rehkind_mag.entities.pool.ClinicPool;
 
 /**
  *
@@ -85,7 +90,42 @@ public class WebappClientFXML extends Application {
     
     private void preloadClientObjectPools(){
         // calls @GET_ALL for all entity_pools for intitial caching
+        ClinicPool.createPool().getAllEntities();
+        try{
+            ClinicPool.createPool().waitFor(6000);
+        }
+        catch(TimeoutException ex){
+            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
+            ex.printStackTrace();
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Timeout during start-up");
+            alert.setHeaderText("Connection to wildfly server could not be established.");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
+            
+            System.exit(1);
+        }
+        //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(1).toString() );
+        //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(2).toString() );
+        
         CasePool.createPool().getAllEntities();
+        try{
+            CasePool.createPool().waitFor(6000);
+        }
+        catch(TimeoutException ex){
+            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
+            ex.printStackTrace();
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Timeout during start-up");
+            alert.setHeaderText("Connection to wildfly server could not be established.");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
+
+            System.exit(1);
+        }
+        
     }
 
     /**

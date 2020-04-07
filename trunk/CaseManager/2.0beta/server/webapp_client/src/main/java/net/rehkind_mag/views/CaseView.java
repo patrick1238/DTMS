@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.views;
+package net.rehkind_mag.views;
 
 import java.awt.Dimension;
-import net.rehkindmag.entities.ClientCase;
+import net.rehkind_mag.entities.ClientCase;
 
 /**
  * Displays a single case

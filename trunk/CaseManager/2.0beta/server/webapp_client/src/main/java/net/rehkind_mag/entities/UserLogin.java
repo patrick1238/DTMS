@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.entities;
+package net.rehkind_mag.entities;
 
 import javax.json.Json;
 import javax.json.JsonObject;

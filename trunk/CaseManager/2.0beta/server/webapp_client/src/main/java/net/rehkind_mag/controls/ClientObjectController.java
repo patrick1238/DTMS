@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.controls;
+package net.rehkind_mag.controls;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;

@@ -3,25 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.entities;
+package net.rehkind_mag.entities;
 
-import java.util.List;
 import javax.json.JsonObject;
-import net.rehkind_mag.interfaces.IClinic;
-import net.rehkind_mag.interfaces.IContactForClinic;
+import net.rehkind_mag.interfaces.ISubmitter;
 
 /**
  *
  * @author rehkind
  */
-public class ClientClinic implements IClinic {
-    final int id;
+public class ClientSubmitter implements ISubmitter{
     
-    public ClientClinic(Integer id){
-        this.id = id;
-    }
+    int id;
     
-    public ClientClinic(JsonObject clinicAsJson){
+    public ClientSubmitter(Integer id){
+        this.id=id;
+    }    
+    
+    public ClientSubmitter(JsonObject submitterAsJson){
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
@@ -31,52 +30,52 @@ public class ClientClinic implements IClinic {
     }
 
     @Override
-    public String getName() {
+    public String getSurname() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getZipCode() {
+    public String getForename() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getCity() {
+    public String getTitle() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public String getStreet() {
+    public String getLogin() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setId(int id) {
+    public String getPassword() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setName(String name) {
+    public void setSurname(String surname) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setZipCode(String zipcode) {
+    public void setForename(String forename) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setCity(String city) {
+    public void setTitle(String title) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void setStreet(String street) {
+    public void setLogin(String loginName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<IContactForClinic> getContactsForClinicList() {
+    public void setPassword(String pwd) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.entities.pool;
+package net.rehkind_mag.entities.pool;
 
 import java.util.HashMap;
 import javafx.application.Platform;
@@ -13,8 +13,8 @@ import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
-import net.rehkindmag.entities.ClientCase;
-import net.rehkindmag.http.HTTP_ENDPOINT_TEMPLATES;
+import net.rehkind_mag.entities.ClientCase;
+import net.rehkind_mag.http.HTTP_ENDPOINT_TEMPLATES;
 import net.rehkind_mag.utils.HTTP_STATUS;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
@@ -61,7 +61,7 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         
         HashMap<String,Object> param = new HashMap<>();
         param.put("case_id", caseId);
-        fireHTTPRequest(templateEP, HTTP_REQUEST_TYPE.GET_ALL, param);
+        fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
         
         return (returnCase==null) ? defaultCase.getLocalClone() : returnCase;
     }
@@ -101,36 +101,38 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         Platform.runLater(new Runnable() {
             @Override
                 public void run() {
-                printPendingRequests();
-                PendingRequest requestToFinish;
-                if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
-                    requestToFinish = getPendingRequest(response.getRequestId());
-                }else{
-                    requestToFinish = finishPendingRequest(response.getRequestId());
-                }
-                Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
-                Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
-
-                if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
-                    Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local case list");
-                    JsonArray casesAsJsonArray = (JsonArray)response.getContent();
-
-                    casesAsJsonArray.forEach((curCase) -> {
-                        JsonObject theCase=(JsonObject)curCase;
-                        Logger.getLogger(getClass()).info("Processing JsonObject case: {0}", new String[]{ theCase.toString() });
-
-                        cachedCaseList.put(new ClientCase(theCase));
-                    });
-                } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
-                    Logger.getLogger(getClass().getName()).info("Case deleted successfully.");
-                } else{ // all other request result in a single case as JSON object
-                    Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
-                    JsonObject caseAsJsonObject = (JsonObject)response.getContent();
-
-                    cachedCaseList.put(new ClientCase( caseAsJsonObject) );
-                }
             }
         });
+                
+        printPendingRequests();
+        PendingRequest requestToFinish;
+        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
+            requestToFinish = getPendingRequest(response.getRequestId());
+        }else{
+            requestToFinish = finishPendingRequest(response.getRequestId());
+        }
+        Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
+        Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
+
+        if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
+            Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local case list");
+            JsonArray casesAsJsonArray = (JsonArray)response.getContent();
+
+            casesAsJsonArray.forEach((curCase) -> {
+                JsonObject theCase=(JsonObject)curCase;
+                Logger.getLogger(getClass()).info("Processing JsonObject case: {0}", new String[]{ theCase.toString() });
+
+                cachedCaseList.put(new ClientCase(theCase));
+            });
+        } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
+            Logger.getLogger(getClass().getName()).info("Case deleted successfully.");
+        } else{ // all other request result in a single case as JSON object
+            Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
+            JsonObject caseAsJsonObject = (JsonObject)response.getContent();
+
+            cachedCaseList.put(new ClientCase( caseAsJsonObject) );
+        }
+
     }
     
     private void handleHttpResponseError(Integer requestID, IHttpResponse response){

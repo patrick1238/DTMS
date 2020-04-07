@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.http;
+package net.rehkind_mag.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,8 +25,8 @@ import net.rehkind_mag.utils.HttpAccessRequest;
 import net.rehkind_mag.utils.JsonObjectHttpResponse;
 import net.rehkind_mag.utils.RegisteredHttpAccessRequest;
 import net.rehkind_mag.utils.ServerSettings;
-import net.rehkindmag.entities.ClientCase;
-import net.rehkindmag.http.IBufferedEndpoint;
+import net.rehkind_mag.entities.ClientCase;
+import net.rehkind_mag.http.IBufferedEndpoint;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -44,32 +44,25 @@ public class BufferedEndpointFactory {
             case HTTP_ENDPOINT_TEMPLATES.UPDATE_CASE:
             case HTTP_ENDPOINT_TEMPLATES.DELETE_CASE:
                 if(endpoints.get("CASES:"+serverSettings.serverAddress)==null){
-                    endpoints.put("CASES:"+serverSettings.serverAddress, CREATE_CASES_ENDPOINT(serverSettings.serverAddress));
+                    endpoints.put("CASES:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
                 }
                 return endpoints.get("CASES:"+serverSettings.serverAddress);
-            case HTTP_ENDPOINT_TEMPLATES.GET_CLINIC:
-                
-                //break;
+            case HTTP_ENDPOINT_TEMPLATES.GET_CLINIC:;
             case HTTP_ENDPOINT_TEMPLATES.GET_CLINICS:
-                
-                //break;
             case HTTP_ENDPOINT_TEMPLATES.CREATE_CLINIC:
-                
-                //break;
             case HTTP_ENDPOINT_TEMPLATES.UPDATE_CLINIC:
-                
-                //break;
             case HTTP_ENDPOINT_TEMPLATES.DELETE_CLINIC:
-                
-                //break;
-                throw new NotImplementedException();
+                if(endpoints.get("CLINICS:"+serverSettings.serverAddress)==null){
+                    endpoints.put("CLINICS:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
+                }
+                return endpoints.get("CLINICS:"+serverSettings.serverAddress);
             default:
                 Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.SEVERE, "An unknown endpoint was requested: ''{0}''\n Returning ''null'': may result in crashing everything.", endpoint);
                 return null;
         }
     }
-
-    private static IBufferedEndpoint CREATE_CASES_ENDPOINT(String serverAddress) {
+    
+    private static IBufferedEndpoint CREATE_ENDPOINT(String serverAddress) {
         IBufferedEndpoint endpoint = new BufferedEndpoint() {
             HashMap<String, IHttpResponse> cachedResponses = new HashMap<>();
             HashMap<Integer, HttpAccessRequest> cachedRequests = new HashMap<>();

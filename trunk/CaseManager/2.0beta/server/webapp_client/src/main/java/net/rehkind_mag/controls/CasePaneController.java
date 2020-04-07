@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.controls;
+package net.rehkind_mag.controls;
 
-import net.rehkindmag.entities.ClientCase;
+import net.rehkind_mag.entities.ClientCase;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -16,6 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.util.converter.NumberStringConverter;
+import net.rehkind_mag.entities.ClientClinic;
+import net.rehkind_mag.entities.pool.ClinicPool;
 import org.jboss.logging.Logger;
 
 /**
@@ -43,6 +45,9 @@ public class CasePaneController extends ClientObjectController implements Initia
     @FXML TextField editClinic;
     @FXML TextField editEntryDate;
     
+    ChangeListener clinicNameChangedListener;
+    ChangeListener clinicChangedListener;
+    
     /**
      * Initializes the controller class.
      */
@@ -52,6 +57,15 @@ public class CasePaneController extends ClientObjectController implements Initia
     }
     
     public void setCase( ClientCase theCase ){
+        if ( myCase!=null ){
+            try{ 
+                Logger.getLogger(getClass()).info("setCase() will replace earlier setCase - calling dispose to unbind GUI properties and eventhandlers");
+                dispose();
+            }catch( Exception ex ){
+                Logger.getLogger(getClass()).warn("Error during dispose() call.");
+            }
+        }
+        
         myCase=theCase;
         if( theCase==null ){
             try{
@@ -74,14 +88,14 @@ public class CasePaneController extends ClientObjectController implements Initia
         viewCaseNumber.textProperty().bindBidirectional(myCase.getCaseNumberProperty());
         viewDiagnosis.textProperty().bindBidirectional(myCase.getDiagnosisProperty());
         viewSubmitter.textProperty().bindBidirectional(myCase.getSubmitterIDProperty(), new NumberStringConverter());
-        viewClinic.textProperty().bindBidirectional(myCase.getClinicIDProperty(), new NumberStringConverter());
+        
         viewEntryDate.textProperty().bindBidirectional(myCase.getEntryDateProperty());
         
         editCaseId.textProperty().bindBidirectional(myCase.getIdProperty(), new NumberStringConverter());
         editCaseNumber.textProperty().bindBidirectional(myCase.getCaseNumberProperty());
         editDiagnosis.textProperty().bindBidirectional(myCase.getDiagnosisProperty());
         editSubmitter.textProperty().bindBidirectional(myCase.getSubmitterIDProperty(), new NumberStringConverter());
-        editClinic.textProperty().bindBidirectional(myCase.getClinicIDProperty(), new NumberStringConverter());
+        
         editEntryDate.textProperty().bindBidirectional(myCase.getEntryDateProperty());
         
         statusChangedListener = new ChangeListener() {
@@ -96,6 +110,9 @@ public class CasePaneController extends ClientObjectController implements Initia
         editSubmitter.textProperty().addListener(statusChangedListener);
         editClinic.textProperty().addListener(statusChangedListener);
         editEntryDate.textProperty().addListener(statusChangedListener);
+        
+        bindClinicName();
+        bindClinic();
     }
     
     @Override
@@ -122,6 +139,9 @@ public class CasePaneController extends ClientObjectController implements Initia
         editSubmitter.textProperty().removeListener(statusChangedListener);
         editClinic.textProperty().removeListener(statusChangedListener);
         editEntryDate.textProperty().removeListener(statusChangedListener);
+        
+        myCase.getClinic().removeListener(clinicNameChangedListener);
+        myCase.removeListener(clinicChangedListener);
     }
     
     protected void onStatusChanged(){
@@ -132,5 +152,31 @@ public class CasePaneController extends ClientObjectController implements Initia
             viewStatus.setImage( null );
             editStatus.setImage( null );
         }
+    }
+    
+    private void bindClinicName(){
+        this.clinicNameChangedListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                ClientClinic clinic = myCase.getClinic();
+                if(viewClinic.textProperty().getValue() != clinic.getName()){ 
+                    viewClinic.textProperty().setValue(clinic.getName());
+                }
+                if(editClinic.textProperty().getValue() != clinic.getName()){ 
+                    editClinic.textProperty().setValue(clinic.getName());
+                }
+            }
+        };
+    }
+    
+    private void bindClinic(){
+        this.clinicChangedListener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                ClinicPool.createPool().getEntity((Integer)oldValue).removeListener(clinicNameChangedListener);
+                myCase.getClinic().addListener(clinicNameChangedListener);
+            }
+        };
+        clinicNameChangedListener.changed(null, null, null);
     }
 }

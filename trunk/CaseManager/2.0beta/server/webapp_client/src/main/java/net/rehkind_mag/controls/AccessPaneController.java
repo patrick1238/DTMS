@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.rehkindmag.controls;
+package net.rehkind_mag.controls;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,8 @@ public abstract class AccessPaneController {
     
     public void onMethodSelected(){
         String newSelectedMethod=cbMethod.getSelectionModel().getSelectedItem();
-        if( newSelectedMethod.equals( this.selectedMethod ) ){
+        if( !newSelectedMethod.equals( this.selectedMethod ) ){
+            selectedMethod = newSelectedMethod;
             Logger.getLogger(getClass().getName()).log(Level.INFO, "New http method selected: {0}", new String[]{ newSelectedMethod });
         }
         hbHTTPResponseStatus.setVisible(false);
