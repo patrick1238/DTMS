@@ -116,7 +116,10 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
     @Override
     public void setClinic( IClinic newClinic ){  clinicID.setValue( newClinic.getId() ); }
     @Override
-    public void setSubmitter(ISubmitter submitter) { submitterID.setValue(submitter.getId()); }
+    public void setSubmitter(ISubmitter submitter) { 
+        System.out.println("SETTING SUBMITTER TO: "+submitter.getId());
+        System.out.println("submitter: "+submitter.toString());
+        submitterID.setValue(submitter.getId()); }
     /**
      * sets all attribute back to initial data stored in the caseOriginal attribute 
      * 

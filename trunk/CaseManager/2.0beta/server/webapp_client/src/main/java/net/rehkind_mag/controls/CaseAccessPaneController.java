@@ -5,17 +5,14 @@
  */
 package net.rehkind_mag.controls;
 
-import net.rehkind_mag.entities.ClientCase;
 import com.sun.javafx.collections.ObservableListWrapper;
 import com.sun.scenario.Settings;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,14 +23,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import net.rehkind_mag.entities.ClientCase;
 import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
-import net.rehkind_mag.utils.HTTP_STATUS;
 import net.rehkind_mag.entities.pool.CasePool;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
@@ -241,7 +235,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
         Logger.getLogger(getClass()).info("Creating views for {0} ClientCases.", new Object[]{observeCaseList.size()});
         bResponseCases.getChildren().clear();
         Collection<ClientCase> cases = this.observeCaseList.getAll();
-        cases.forEach( (theCase) -> {
+        cases.forEach((theCase) -> {
             try {
                 ClientCase clientCase = (ClientCase)theCase;
                 Logger.getLogger(getClass()).info("creating view for: {0}", new String[]{clientCase.toString()});

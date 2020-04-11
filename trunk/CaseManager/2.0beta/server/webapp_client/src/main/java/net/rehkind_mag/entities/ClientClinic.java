@@ -27,7 +27,7 @@ import org.jboss.logging.Logger;
  */
 public class ClientClinic extends ClientObjectBase<ClientClinic> implements IClinic {
 
-    public static ClientClinic NOPEgetClinicTemplate() {
+    public static ClientClinic getClinicTemplate() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("id", -1);
         builder.add("name", "");
@@ -122,8 +122,14 @@ public class ClientClinic extends ClientObjectBase<ClientClinic> implements ICli
 
     @Override
     public ClientClinic getLocalClone() {
-        //return new ClientClinic( getOriginalJson() );
-        return null;
+        ClientClinic clone = new ClientClinic( Json.createObjectBuilder().build() );
+        clone.ID.setValue(getId());
+        clone.name.setValue(getName());
+        clone.zipCode.setValue(getZipCode());
+        clone.city.setValue(getCity());
+        clone.street.setValue(getStreet());
+        
+        return clone;
     }
 
     @Override

@@ -25,7 +25,7 @@ import net.rehkind_mag.utils.HttpAccessRequest;
 import net.rehkind_mag.utils.JsonObjectHttpResponse;
 import net.rehkind_mag.utils.RegisteredHttpAccessRequest;
 import net.rehkind_mag.utils.ServerSettings;
-import net.rehkind_mag.entities.ClientCase;
+import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.http.IBufferedEndpoint;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -141,6 +141,7 @@ public class BufferedEndpointFactory {
                     try(OutputStream os = con.getOutputStream()) {
                         JsonWriter writer = Json.createWriter(os);
                         JsonStructure struct = request.toJsonStructure();
+                        Logger.getLogger(getClass().getName()).info("HTTP_BODY: "+struct.toString());
                         switch( struct.getValueType() ){
                             case OBJECT:
                                 writer.writeObject((JsonObject)struct);
@@ -159,7 +160,7 @@ public class BufferedEndpointFactory {
                     receiver.receiveHttpResponse(response);
                 }
             }catch(IOException ex){
-                org.jboss.logging.Logger.getLogger("global").warn("URL malformed, skipping request...");
+                org.jboss.logging.Logger.getLogger("global").warn("URL malformed or problem with response, skipping request...");
                 ex.printStackTrace();
             }finally{
                 try{

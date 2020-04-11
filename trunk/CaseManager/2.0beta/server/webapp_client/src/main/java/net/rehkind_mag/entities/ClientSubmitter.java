@@ -5,78 +5,121 @@
  */
 package net.rehkind_mag.entities;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import net.rehkind_mag.interfaces.ISubmitter;
 
 /**
  *
  * @author rehkind
  */
-public class ClientSubmitter implements ISubmitter{
+public class ClientSubmitter extends ClientObjectBase<ClientSubmitter> implements ISubmitter{
+    StringProperty surname=new SimpleStringProperty();
+    StringProperty forename=new SimpleStringProperty();
+    StringProperty title=new SimpleStringProperty();
+    StringProperty login=new SimpleStringProperty();
+    StringProperty password=new SimpleStringProperty();
     
-    int id;
     
     public ClientSubmitter(Integer id){
-        this.id=id;
+        this.ID.setValue(id);
     }    
     
     public ClientSubmitter(JsonObject submitterAsJson){
-        throw new UnsupportedOperationException("Not supported yet.");
+        ID.setValue( submitterAsJson.getInt("id") );
+        forename.setValue( submitterAsJson.getString("forename") );
+        surname.setValue( submitterAsJson.getString("surname") );
+        title.setValue( submitterAsJson.getString("title") );
+        login.setValue( submitterAsJson.getString("login") );
+        password.setValue( submitterAsJson.getString("password") );
+        
+        // TODO: create and add listener here
     }
     
     @Override
     public int getId() {
-        return id;
+        return ID.getValue();
     }
 
     @Override
     public String getSurname() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return surname.getValue();
     }
 
     @Override
     public String getForename() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return forename.getValue();
     }
 
     @Override
     public String getTitle() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return title.getValue();
     }
 
     @Override
     public String getLogin() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return login.getValue();
     }
 
     @Override
     public String getPassword() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return password.getValue();
     }
 
     @Override
     public void setSurname(String surname) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.surname.setValue(surname);
     }
 
     @Override
     public void setForename(String forename) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.forename.setValue(forename);
     }
 
     @Override
     public void setTitle(String title) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.title.setValue(title);
     }
 
     @Override
     public void setLogin(String loginName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.login.setValue(loginName);
     }
 
     @Override
     public void setPassword(String pwd) {
+        this.password.setValue(pwd);
+    }
+
+    @Override
+    public boolean hasLocalChanges() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ClientSubmitter getLocalClone() {
+        ClientSubmitter clone = new ClientSubmitter( getId() );
+        clone.setForename( getForename() );
+        clone.setSurname( getSurname() );
+        clone.setTitle( getTitle() );
+        clone.setLogin( getLogin() );
+        clone.setPassword( getPassword() );
+        return clone;
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("id", getId())
+            .add("forename", getForename())
+            .add("surname", getSurname())
+            .add("title", getTitle())
+            .add("login", getLogin())
+            .add("password", getPassword());
+        return builder.build();
     }
     
 }

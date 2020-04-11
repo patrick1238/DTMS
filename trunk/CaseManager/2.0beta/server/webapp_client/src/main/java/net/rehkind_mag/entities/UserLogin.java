@@ -32,7 +32,8 @@ public class UserLogin {
     
     private static void updateJsonLogin(){
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add(login, UserLogin.login);
-        builder.add(pwd, UserLogin.pwd);
+        builder.add("login", UserLogin.login);
+        builder.add("password", UserLogin.pwd);
+        jsonLogin = builder.build();
     }
 }

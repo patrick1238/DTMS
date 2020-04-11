@@ -44,7 +44,7 @@ public class HTTP_ENDPOINT_TEMPLATES {
             case UPDATE_CLINIC:
             case CREATE_SERVICE:
             case UPDATE_SERVICE:
-                return "POST";
+                return "PUT";
             case DELETE_CASE:
             case DELETE_CLINIC:
             case DELETE_SERVICE:

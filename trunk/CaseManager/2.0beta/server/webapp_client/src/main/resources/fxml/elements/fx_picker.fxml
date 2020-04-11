@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="250.0" minHeight="100.0" minWidth="250.0" prefHeight="300.0" prefWidth="250.0" styleClass="style-dark" stylesheets="@../../styles/application_style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="net.rehkind_mag.controls.elements.PickerController">
+   <children>
+      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="14.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <content>
+            <VBox maxWidth="230.0" minWidth="230.0" prefHeight="200.0" prefWidth="230.0">
+               <children>
+                  <TextField fx:id="txtFilter" onAction="#filterUpdate" promptText="Enter filter criteria here..." styleClass="edit-dark" />
+                  <ListView fx:id="lstList" styleClass="edit-dark" />
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

@@ -14,7 +14,7 @@ import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
-import net.rehkind_mag.entities.ClientClinic;
+import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.http.HTTP_ENDPOINT_TEMPLATES;
 import net.rehkind_mag.http.NotSignedInException;
 import net.rehkind_mag.utils.HTTP_STATUS;
@@ -25,64 +25,63 @@ import org.jboss.logging.Logger.Level;
  *
  * @author rehkind
  */
-public class ClinicPool extends AClientObjectPool<ClientClinic> {
+public class ServicePool extends AClientObjectPool<ClientService> {
     
-    private static ClinicPool singletonPool;
+    private static ServicePool singletonPool;
     
-    private static ClientClinic defaultClinic;
+    private static ClientService defaultService;
     
     
-    ClientObjectList<ClientClinic> cachedClinicList=new ClientObjectList();
+    ClientObjectList<ClientService> cachedServiceList=new ClientObjectList();
     
-    private ClinicPool(){
-        defaultClinic = ClientClinic.getClinicTemplate();
+    private ServicePool(){
+        defaultService = ClientService.getServiceTemplate(-1, -1);
     }
     
-    static public ClinicPool createPool() {
-        if (ClinicPool.singletonPool == null){ ClinicPool.singletonPool=new ClinicPool(); }
+    static public ServicePool createPool() {
+        if (ServicePool.singletonPool == null){ ServicePool.singletonPool=new ServicePool(); }
         
-        return ClinicPool.singletonPool;
+        return ServicePool.singletonPool;
     }
     
     @Override
     public ReadOnlyClientObjectList getAllEntities(){
-        try{    
-            fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_CLINICS, HTTP_REQUEST_TYPE.GET_ALL);
+        try {
+            fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_SERVICES, HTTP_REQUEST_TYPE.GET_ALL);
         } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load clinics", ex);
+            Logger.getLogger(getClass()).log(Level.WARN, "could not load services", ex);
         }
-        return cachedClinicList;
+        return cachedServiceList;
     }
     
     @Override
-    public ClientClinic getEntity(int clinicId) {
-        if(clinicId<1){ return null; }
-        ClientClinic returnClinic = this.cachedClinicList.getByID(clinicId);
-        String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_CLINIC;
-        String buildEP = templateEP.replace("{ID}", ""+clinicId);
+    public ClientService getEntity(int serviceId) {
+        ClientService returnService = this.cachedServiceList.getByID(serviceId);
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_SERVICE;
+        String buildEP = templateEP.replace("{ID}", ""+serviceId);
         
         HashMap<String,Object> param = new HashMap<>();
-        param.put("clinic_id", clinicId);
+        param.put("service_id", serviceId);
         try{
             fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
         } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load clinic", ex);
+            Logger.getLogger(getClass()).log(Level.WARN, "could not load service", ex);
         }
-        return (returnClinic==null) ? (ClientClinic)defaultClinic.getLocalClone() : returnClinic;
+        return (returnService==null) ? defaultService.getLocalClone() : returnService;
     }
 
     @Override
-    public int createEntity(ClientClinic c)  throws TimeoutException {
+    public int createEntity(ClientService s) throws TimeoutException{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean deleteEntity(ClientClinic entity) {
+    public boolean deleteEntity(ClientService entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean persistEntity(ClientClinic entity) {
+    public boolean persistEntity(ClientService entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -103,6 +102,12 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
             return;
         }
         
+        Platform.runLater(new Runnable() {
+            @Override
+                public void run() {
+            }
+        });
+                
         printPendingRequests();
         PendingRequest requestToFinish;
         if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
@@ -110,36 +115,28 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
         }else{
             requestToFinish = finishPendingRequest(response.getRequestId());
         }
-        
-
-                
         Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
         Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
 
         if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
-            Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local clinic list");
-            JsonArray casesAsJsonArray = (JsonArray)response.getContent();
+            Logger.getLogger(getClass()).info("Received JsonArray for services, updating local service list");
+            JsonArray servicesAsJsonArray = (JsonArray)response.getContent();
 
-            casesAsJsonArray.forEach((clinic) -> {
-                JsonObject joClinic=(JsonObject)clinic;
-                Logger.getLogger(getClass()).info("Processing JsonObject clinic: {0}", new String[]{ joClinic.toString() });
+            servicesAsJsonArray.forEach((curService) -> {
+                JsonObject theService=(JsonObject)curService;
+                Logger.getLogger(getClass()).info("Processing JsonObject service: {0}", new String[]{ theService.toString() });
 
-                cachedClinicList.put(new ClientClinic(joClinic));
+                cachedServiceList.put(new ClientService(theService));
             });
-        } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
-            Logger.getLogger(getClass().getName()).info("Clinic deleted successfully.");
-        } else{ // all other request result in a single clinic as JSON object
-            Logger.getLogger(getClass().getName()).info("Received JsonObject for single clinic, creating view...");
-            JsonObject clinicAsJsonObject = (JsonObject)response.getContent();
+        } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no service as response (deleted)
+            Logger.getLogger(getClass().getName()).info("Service deleted successfully.");
+        } else{ // all other request result in a single service as JSON object
+            Logger.getLogger(getClass().getName()).info("Received JsonObject for single service, creating view...");
+            JsonObject serviceAsJsonObject = (JsonObject)response.getContent();
 
-            cachedClinicList.put(new ClientClinic( clinicAsJsonObject) );
+            cachedServiceList.put(new ClientService( serviceAsJsonObject) );
         }
-            Platform.runLater(
-            new Runnable() {
-                @Override
-                public void run() {}
 
-            });
     }
     
     private void handleHttpResponseError(Integer requestID, IHttpResponse response){

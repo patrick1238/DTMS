@@ -19,6 +19,7 @@ import net.rehkind_mag.utils.HttpAccessRequest;
 import net.rehkind_mag.utils.UUIDGenerator;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.http.HttpRequestManager;
+import net.rehkind_mag.http.NotSignedInException;
 import org.jboss.logging.Logger;
 
 /**
@@ -32,31 +33,33 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     
     abstract public T getEntity(int ID);
     abstract public List<T> getAllEntities();
-    abstract public T createEntity();
+    abstract public int createEntity(T toCreate) throws TimeoutException ;
     abstract public boolean deleteEntity(T entity);
-    abstract public boolean persistEntity(T entity);
+    abstract public boolean persistEntity(T entity) throws TimeoutException;
     
-    protected void fireHTTPRequest(String endpointCompiled, String type){
+    protected void fireHTTPRequest(String endpointCompiled, String type) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, Json.createObjectBuilder().build(), null);
     }
-    protected void fireHTTPRequest(String endpointCompiled, String type, HashMap<String,Object> param){
+    protected void fireHTTPRequest(String endpointCompiled, String type, HashMap<String,Object> param) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, Json.createObjectBuilder().build(), param);
     }
-    protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody){
+    protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, httpBody, null);
     }
-    protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody, HashMap<String,Object> param){
+    protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody, HashMap<String,Object> param) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, httpBody, param);
     }
-    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, HashMap<String, Object> param){
+    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, HashMap<String, Object> param) throws NotSignedInException{
         fireHTTPRequest(endpointTemplate, endpointCompiled, type, Json.createObjectBuilder().build(), param);
     }
-    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, JsonObject httpBody, HashMap<String, Object> additionalParameters){
+    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, JsonObject httpBody, HashMap<String, Object> additionalParameters) throws NotSignedInException{
         HttpRequestManager manager = HttpRequestManager.createHttpRequestManager(Settings.get("server.address"), HttpRequestManager.CONTANT_TYPE_JSON);
         String uuid = ""; // get request don't need uuid
         if( type.equals( HTTP_REQUEST_TYPE.CREATE ) ||
             type.equals( HTTP_REQUEST_TYPE.UPDATE ) ||
             type.equals( HTTP_REQUEST_TYPE.DELETE )    ) { uuid = AClientObjectPool.uuidGen.getRandomUUIDString(); } // uuid is required for request
+        
+        if( UserLogin.getLoginAsJson()==null ){ throw new NotSignedInException( getClass().getSimpleName()+": can not fire HTTPRequest, user is not logged in." ); }
         
         HttpAccessRequest request = new HttpAccessRequest( endpointTemplate, endpointCompiled, uuid, UserLogin.getLoginAsJson(), httpBody );
         IHttpResponse cachedResponse = manager.fireJsonHttpRequest(request, this);
@@ -110,6 +113,28 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
             try {
                 if( loopCounter%10 == 0 ){
                     Logger.getLogger(getClass()).info( "{0} still waitFor() - pending requests {1}", new Object[]{getClass().getName(), pendingHttpRequests.size()});
+                }
+                Thread.sleep(200);
+            } catch (Exception e) {
+            }
+        }
+    }
+    
+    public void waitForRequest(Integer requestId) throws TimeoutException{
+        long start = System.currentTimeMillis();
+        int loopCounter=0;
+        while( pendingHttpRequests.keySet().contains(requestId) ){
+            loopCounter++;
+            if( (System.currentTimeMillis()-start)>100000 ){
+                throw new TimeoutException( String.format( "[%s] HTTP requests pending to long ( > %d ms )...and are timed out.", new Object[]{getClass().getName(), 100000}) );
+            }
+            try {
+                if( loopCounter%10 == 0 ){
+                    StringBuilder builder=new StringBuilder();
+                    for( Integer i : pendingHttpRequests.keySet() ){
+                        builder.append(i).append("|");
+                    }
+                    Logger.getLogger(getClass()).info( "{0} still waitForRequest() - pending request {1} / {2}", new Object[]{getClass().getName(), requestId, builder.toString()});
                 }
                 Thread.sleep(200);
             } catch (Exception e) {

@@ -5,17 +5,26 @@
  */
 package net.rehkind_mag.controls;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import net.rehkind_mag.gui.ClientPopup;
+import net.rehkind_mag.interfaces.client.IClientObject;
+import org.jboss.logging.Logger;
 
 /**
  *
  * @author rehkind
  */
-abstract class ClientObjectController {
+abstract class ClientObjectController<T extends IClientObject> {
     boolean editable;
+    
+    T item;
     
     @FXML Pane editPane;
     @FXML Pane viewPane;
@@ -53,4 +62,23 @@ abstract class ClientObjectController {
     
     abstract void bindGUIElements();
     abstract void dispose();
+    
+    
+    @FXML
+    public void copyToClipboard(  ) throws InterruptedException{
+        StringSelection toCopy = new StringSelection(item.toJson().toString());
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(toCopy, null);
+        
+        try{
+            ClientPopup popup = new ClientPopup(String.format("ClientObject copy to ClipBoard.", new Object[]{}), "The ClientObject can now be instered in any TextField using Strg+V...");
+            popup.setAutoHide(true);
+            popup.show(editPane.getScene().getWindow());
+        }catch(IOException ioEx){
+            Logger.getLogger(getClass()).warn("Could not create PopUp to inform user that ClientObject was copied to ClipBoard.");
+            ioEx.printStackTrace();
+        }
+        
+       
+    }
 }
