@@ -8,7 +8,7 @@
     <security-constraint>
     <display-name>Deny all HTTP methods except GET/PUT/POST/DELETE</display-name>
     <web-resource-collection>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/*</url-pattern>
         <http-method-omission>GET</http-method-omission>
         <http-method-omission>POST</http-method-omission>
         <http-method-omission>PUT</http-method-omission>

@@ -5,7 +5,6 @@
  */
 package net.rehkind_mag.boundary;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -208,12 +207,21 @@ public class CasesResource {
     @Path(CASE_CREATE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCase(JsonArray input) {
-        JsonObject createCase=input.getJsonObject(0);
-        JsonObject submitter=input.getJsonObject(1);
-        
+    public Response createCase(JsonObject input) {
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject createCase = request.getBody();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         Logger.getLogger("global").log(Logger.Level.INFO, "Create for case requested.");
+
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
+            JsonObject err;
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update case with id="+createCase.getInt("id"), uuidManager);
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
         
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
         boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
         if( !hasAccess ){
             JsonObject err;
@@ -260,7 +268,10 @@ public class CasesResource {
         }catch(EJBException ejbEx){
             Exception cEx = ejbEx.getCausedByException();
             if (cEx.getClass().equals(DefaultValidationException.class)){
-                return DefaultResponse.createUnprocessableEntityResponse(ErrorRepository.createValidationContraintsViolatedError(CasesURLResource.getURL(caseToCreate.getId(), uriInfo), "updating case id="+caseToCreate.getId(), ((DefaultValidationException)cEx).getViolations()));
+                Response r = DefaultResponse.createUnprocessableEntityResponse(ErrorRepository.createValidationContraintsViolatedError(CasesURLResource.getURL(caseToCreate.getId(), uriInfo), "updating case id="+caseToCreate.getId(), ((DefaultValidationException)cEx).getViolations()));
+                DefaultValidationException castEx = (DefaultValidationException)cEx;
+                castEx.getViolations().forEach( (violation) -> { System.out.println("[VIOLATION]: "+ violation.getMessage()); } );
+                return r;
             }
         }
         JsonObject returnValue=buildCaseJson(caseToCreate);
@@ -331,6 +342,7 @@ public class CasesResource {
     
     public String toString(JsonObject aCase) {
         StringBuilder sb=new StringBuilder("Case[");
+        System.out.println("toString(): "+aCase.toString());
         sb.append(aCase.getInt("id")).append("]=");
         //values
         sb.append("\tcase number: ").append(aCase.getString("caseNumber"));
@@ -339,8 +351,7 @@ public class CasesResource {
                 (aCase.getString("entryDate")!=null) ? aCase.getString("entryDate") : " - " );
         sb.append("\tdiagnosis: ").append(
                 (aCase.getString("diagnose")!=null) ? aCase.getString("diagnose") : "-" );
-        sb.append("\tsubmitter: ").append(
-                (aCase.getString("submitterId")!=null) ? aCase.getString("diagnose") : "-" );
+        sb.append("\tsubmitter: ").append( aCase.getInt("submitterId"));
         
         return sb.toString();
     }

@@ -25,7 +25,6 @@ public class DefaultResponse {
         ResponseBuilder rb;
  
         rb = Response.status(422).entity(responseEntity).header("Access-Control-Allow-Origin", "*");
-        
         //System.out.println("@RESPONSE: "+responseEntity.toString());
         Response r = rb.build();
         //System.out.println("@BUILD_RESPONSE: "+r.getEntity().toString());

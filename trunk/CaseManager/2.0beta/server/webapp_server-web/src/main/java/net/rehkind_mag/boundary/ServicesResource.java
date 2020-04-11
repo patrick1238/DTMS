@@ -59,6 +59,7 @@ public class ServicesResource {
     static final String SERVICES_FOR_DEFINITION_URL="/services/fordef/{DEFINITIONID}";
     static final String SERVICES_URL="services";
     static final String SERVICE_UPDATE_METADATA_URL="/service/{SERVICEID}/metadata/update";
+    
     @Context
     UriInfo uriInfo;
     
@@ -101,7 +102,7 @@ public class ServicesResource {
         }
         return DefaultResponse.createOKResponse( arrayBuilder.build() );
     }
-    
+  
     @GET
     @Path(SERVICES_URL)
     public Response getServices() {
