@@ -18,7 +18,11 @@ public class ReadOnlyClientObjectList<T extends IClientObject> extends Observabl
     
     @Override
     public T get(int index) {
-        return (T)cachedObjects.get(index);
+        return (T)cachedObjects.get(cachedObjects.keySet().toArray(new Integer[]{})[index]);
+    }
+    
+    public T getByID(int id) {
+        return (T)cachedObjects.get(id);
     }
 
     public Collection<T> getAll() {

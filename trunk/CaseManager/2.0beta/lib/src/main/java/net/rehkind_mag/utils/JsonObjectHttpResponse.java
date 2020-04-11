@@ -36,13 +36,26 @@ public class JsonObjectHttpResponse implements IHttpResponse<JsonStructure> {
     }
     
     public JsonObjectHttpResponse( HttpURLConnection con, Integer requestId ) throws IOException{
-        status = con.getResponseCode();
-        message = con.getResponseMessage();
-        
         headerFields = IHttpResponse.parseHeader(con);
-        content = parseContent(con);
+        String header_msg=null;
+        try{ status = con.getResponseCode(); }catch (IOException ex){
+            for(String entry : headerFields){
+                if(entry.startsWith("null: ")){
+                    status=IHttpResponse.parseStatusFromHeaderLine(entry);
+                    header_msg=entry.replace("null: ", "");
+                    
+                }
+            }
+        }
+        try{ message = con.getResponseMessage(); }catch(IOException ioEx){
+            message=header_msg;
+        }
+        try{ content = parseContent(con); }catch(IOException ioEx){
+            content = Json.createObjectBuilder().build();
+        }
         this.requestId=requestId;
     }
+    
     
     @Override
     public List<String> getHeaderFields() {

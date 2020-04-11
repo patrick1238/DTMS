@@ -11,7 +11,7 @@ package net.rehkind_mag.utils;
  */
 public class HTTP_STATUS {
     public static final int OK=200;
-    
+    public static final int CONSTRAINTS_VIOLATED=422;
     
     // custom stati:
     public static final int NOT_CACHED=-345;

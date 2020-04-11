@@ -6,10 +6,8 @@
 package net.rehkind_mag.interfaces.client;
 
 import java.util.Collection;
-import java.util.HashMap;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableListBase;
 import org.jboss.logging.Logger;
 
 /**
@@ -48,7 +46,7 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
         if( id<=0 ){
             throw new IndexOutOfBoundsException("addOrMerge called for object with invalid ID '"+id+"'");
         }
-        IClientObject alreadyInList = get(id);
+        IClientObject alreadyInList = getByID(id);
         if( alreadyInList==null ){
             object.addListener(this);
             this.cachedObjects.put(id, object);
@@ -60,8 +58,7 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
 
     @Override
     public void changed(ObservableValue<? extends IClientObject> observable, IClientObject oldValue, IClientObject newValue) {
-        System.out.println("[ClientObjectList]: one of my objects changed: "+((IClientObject)observable).getId());
-        
+        System.out.println("["+getClass().getName()+"]: one of my objects changed: "+((IClientObject)observable).getId());
     }
     
     

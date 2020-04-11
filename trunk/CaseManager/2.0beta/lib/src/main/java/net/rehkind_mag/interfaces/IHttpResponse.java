@@ -5,6 +5,7 @@
  */
 package net.rehkind_mag.interfaces;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,4 +46,11 @@ public interface IHttpResponse<T> {
         return headerFieldList;
     }
     
+    static public int parseStatusFromHeaderLine(String line) throws IOException{
+        if(line.endsWith("422 Unprocessable Entity")){
+            return 422;
+        }
+        System.out.println("HEADER_LINE: "+line);
+        throw new IOException("Could not parse status from header line: update ´IHttpResponse.parseStatusFromHeader");
+    }
 }

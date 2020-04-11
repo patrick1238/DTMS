@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author HS
  */
-public interface ICase {
+public interface ICase extends IClinicReceiver{
     public int getId();
     
     public String getCaseNumber();
@@ -24,6 +24,7 @@ public interface ICase {
     public ISubmitter getSubmitter();
     
     public void setCaseNumber(String caseNumber);
+    @Override
     public void setClinic(IClinic clinic);
     
     public void setDiagnose(String diagnose);
