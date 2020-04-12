@@ -7,6 +7,7 @@ package net.rehkind_mag.interfaces.client;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 import javafx.collections.ObservableListBase;
 
 /**
@@ -27,6 +28,10 @@ public class ReadOnlyClientObjectList<T extends IClientObject> extends Observabl
 
     public Collection<T> getAll() {
         return (Collection<T>)cachedObjects.values();
+    }
+    
+    public Set<Integer> getAllIDs() {
+        return cachedObjects.keySet();
     }
     
     @Override

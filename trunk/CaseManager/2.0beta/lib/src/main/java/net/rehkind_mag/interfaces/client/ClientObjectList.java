@@ -62,5 +62,7 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
     }
     
     
-    
+    public void removeById(int entityId){
+        this.cachedObjects.remove(entityId);
+    }
 }
