@@ -72,18 +72,74 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
     }
 
     @Override
-    public int createEntity(ClientClinic c)  throws TimeoutException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int createEntity(ClientClinic toCreate)  throws TimeoutException {
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.CREATE_CLINIC;
+        String buildEP = templateEP;
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("case_name", toCreate.getName());
+        
+        JsonObject httpBody = toCreate.toJson();
+        
+        try{
+            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.CREATE, httpBody, param);
+        } catch (NotSignedInException ex) {
+            Logger.getLogger(getClass()).log(Level.WARN, "could not create clinic", ex);
+        }
+        
+        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+        
+        Integer requestId = requestIDs[requestIDs.length-1];
+        waitForRequest(requestId);
+        return requestId;
     }
 
     @Override
-    public boolean deleteEntity(ClientClinic entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int deleteEntity(ClientClinic toDelete) throws TimeoutException{
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.DELETE_CLINIC;
+        String buildEP = templateEP;
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("clinic_id", toDelete.getId());
+        param.put("clinic_name", toDelete.getName());
+        
+        JsonObject httpBody = toDelete.toJson();
+        
+        try{
+            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.DELETE, httpBody, param);
+        } catch (NotSignedInException ex) {
+            Logger.getLogger(getClass()).log(Level.WARN, "could not delete clinic", ex);
+        }
+
+        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+        Integer requestId = requestIDs[requestIDs.length-1];
+        waitForRequest(requestId);
+
+        this.cachedClinicList.removeById( toDelete.getId() );
+        return requestId;
     }
 
     @Override
-    public boolean persistEntity(ClientClinic entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int persistEntity(ClientClinic entity) throws TimeoutException{
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_CLINIC;
+        String buildEP = templateEP;
+        
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("clinic_id", entity.getId());
+        
+        JsonObject httpBody = entity.toJson();
+        try{
+            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
+        } catch (NotSignedInException ex) {
+            Logger.getLogger(getClass()).log(Level.WARN, "could not update clinic", ex);
+        }
+
+        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+        Integer requestId = requestIDs[requestIDs.length-1];
+        
+        waitForRequest(requestId);
+        getAllEntities();
+        waitFor();
+        
+        return requestId;
     }
 
     @Override
@@ -104,14 +160,7 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
         }
         
         printPendingRequests();
-        PendingRequest requestToFinish;
-        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
-            requestToFinish = getPendingRequest(response.getRequestId());
-        }else{
-            requestToFinish = finishPendingRequest(response.getRequestId());
-        }
-        
-
+        PendingRequest requestToFinish = getPendingRequest(response.getRequestId());;
                 
         Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
         Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
@@ -134,20 +183,26 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
 
             cachedClinicList.put(new ClientClinic( clinicAsJsonObject) );
         }
-            Platform.runLater(
-            new Runnable() {
-                @Override
-                public void run() {}
 
-            });
+        if(! (response.getResponseStatus()==HTTP_STATUS.CACHED) ){ finishPendingRequest(response.getRequestId()); }
     }
     
     private void handleHttpResponseError(Integer requestID, IHttpResponse response){
         switch( response.getResponseStatus() ){
-            
+            case HTTP_STATUS.CONSTRAINTS_VIOLATED:
+                System.out.println( "\n[CONSTRAINTS_VIOLATED_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            case HTTP_STATUS.BAD_REQUEST:
+                System.out.println( "\n[BAD_REQUEST_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            case HTTP_STATUS.INTERNAL_SERVER_ERROR:
+                System.out.println( "\n[INTERNAL_SERVER_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
             default:
                 Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
         }
-        
     }
 }

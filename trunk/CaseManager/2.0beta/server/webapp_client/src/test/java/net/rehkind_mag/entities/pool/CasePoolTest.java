@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 public class CasePoolTest {
     static CasePool CASE_POOL;
-    
+    static int TIMEOUT=10000;
     public CasePoolTest() throws Exception{
         CasePoolTest.setUpClass();
     }
@@ -48,20 +48,26 @@ public class CasePoolTest {
         
         CASE_POOL=CasePool.createPool();
         CASE_POOL.getAllEntities();
-        CASE_POOL.waitFor(30000);
+        CASE_POOL.waitFor(TIMEOUT*3);
         System.out.println("ALL_POOL: "+CASE_POOL);
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
     @BeforeEach
     public void setUp() {
+        try {
+            System.out.println("WAITING FOR POOL");
+            CASE_POOL.waitFor(TIMEOUT);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @AfterEach
     public void tearDown() {
         try {
             System.out.println("WAITING FOR POOL");
-            CASE_POOL.waitFor(30000);
+            CASE_POOL.waitFor(TIMEOUT);
         } catch (TimeoutException ex) {
             Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,7 +80,7 @@ public class CasePoolTest {
     public void testCreatePool() {
         System.out.println("\n\n########################## createPool ###################>>>>>\n\n");
         CasePool result = CasePool.createPool();
-        System.out.println("Pool: "+result);
+        System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Pool: "+result+"\n");
         assertEquals(result, CasePoolTest.CASE_POOL );
         assertNotNull( result );
         System.out.println("\n\n<<<<<##################### createPool #########################\n\n");
@@ -95,7 +101,7 @@ public class CasePoolTest {
         
         try {
             System.out.println("WAITING FOR POOL");
-            CASE_POOL.waitFor(30000);
+            CASE_POOL.waitFor(TIMEOUT);
         } catch (TimeoutException ex) {
             Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -115,7 +121,7 @@ public class CasePoolTest {
         
         try {
             System.out.println("WAITING FOR POOL");
-            CASE_POOL.waitFor(30000);
+            CASE_POOL.waitFor(TIMEOUT);
         } catch (TimeoutException ex) {
             Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -126,12 +132,14 @@ public class CasePoolTest {
      * Test of createEntity method, of class CasePool.
      */
     @Test
-    public void testCreateEntity() {
-        System.out.println("\n\n########################## createEntity ###################>>>>>\n\n");
+    public void testCreateAndDeleteEntity() throws TimeoutException{
+        System.out.println("\n\n########################## create&deleteEntity ###################>>>>>\n\n");
         CasePool pool = CasePoolTest.CASE_POOL;
-
+        System.out.println("[BEFORE_CREATE] _________________________________"+new Date().toGMTString());
         Integer caseCountBefore = pool.getAllEntities().size();
-
+        
+        
+        System.out.println("[CREATE] _________________________________"+new Date().toGMTString());
         ClientCase caseToCreate = ClientCase.getCaseTemplate();
         caseToCreate.setCaseNumber("TT_2020-TEST");
 
@@ -144,11 +152,12 @@ public class CasePoolTest {
         caseToCreate.setSubmitter(mockupSubmitter);
         try {    
             int requestId=pool.createEntity( caseToCreate );
-            pool.waitForRequest(requestId);
         } catch (TimeoutException ex) {
-            Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+            Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, "Waiting for CREATE CASE failed somehow.", ex);
+        }
         
+        System.out.println("[AFTER_CREATE] _________________________________ "+new Date().toGMTString());
+        System.out.println("PENDING IN POOL: "+pool.pendingHttpRequests.size());
         ReadOnlyClientObjectList<ClientCase> entities = pool.getAllEntities();
         ClientCase newCase=null;
         for(Object c : entities){
@@ -159,30 +168,20 @@ public class CasePoolTest {
             }
         }
         
-        Integer caseCountAfter = entities.size();
-        assertEquals((int)caseCountBefore, (int)caseCountAfter-1);
-        System.out.println("\n\n<<<<<##################### createEntity[CLEANUP] #########################\n\n");
-        System.out.println("Cleaning created case: "+newCase.toString());
+        Integer caseCountAfterCreate = entities.size();
+        assertEquals((int)caseCountBefore+1, (int)caseCountAfterCreate);
+        System.out.println("[BEFORE_DELETE] _________________________________ "+new Date().toGMTString());
+        System.out.println("\n\n<<<<<##################### create&deleteEntity[CLEANUP] #########################\n\n");
+        System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Cleaning created case: "+newCase.toString()+"\n");
         pool.deleteEntity(newCase);
-        try { pool.waitFor(30000); }catch (TimeoutException ex) { Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex); } 
-        System.out.println("\n\n<<<<<##################### createEntity #########################\n\n");
+        Integer caseCountAfterDelete = entities.size();
+        
+        assertEquals( (int)caseCountAfterCreate-1, (int)(caseCountAfterDelete) );
+        System.out.println("[AFTER_DELETE] _________________________________ "+new Date().toGMTString());
+        System.out.println("\n\n<<<<<##################### create&deleteEntity #########################\n\n");
        
     }
 
-    /**
-     * Test of deleteEntity method, of class CasePool.
-     */
-    @Test
-    public void testDeleteEntity() {
-        System.out.println("\n\n########################## deleteEntity ###################>>>>>\n\n");
-        ClientCase entity = null;
-        CasePool instance = null;
-        boolean expResult = false;
-        boolean result = instance.deleteEntity(entity);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        System.out.println("\n\n<<<<<##################### deleteEntity #########################\n\n");
-    }
 
     /**
      * Test of persistEntity method, of class CasePool.
@@ -193,30 +192,34 @@ public class CasePoolTest {
         
         CasePool pool = CasePoolTest.CASE_POOL;
         ClientCase entity = pool.getEntity(1);
-        System.out.println("entity: "+entity.toString());
-        boolean result = false;
+        System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ entity: "+entity.toString()+"\n");
+        
         String caseNumber=entity.getCaseNumber();
-        System.out.println("old number: "+caseNumber);
+        System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ old number: "+caseNumber+"\n");
         String newCaseNumber= caseNumber.split("_T")[0];
         newCaseNumber=newCaseNumber+"_T"+new Random().nextInt(300);
         entity.setCaseNumber(newCaseNumber);
         
-        System.out.println("new number: "+newCaseNumber);
+        System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ new number: "+newCaseNumber+"\n");
+        int requestId=-1;
         try{
-            result = pool.persistEntity(entity);
+            requestId = pool.persistEntity(entity);
         }catch( TimeoutException toEx ){
             System.out.println("TIMEOUT_EXCEPTION");
             toEx.printStackTrace();
         }
-        assertTrue( result );
-        
-        try {
-            System.out.println("WAITING FOR POOL");
-            CASE_POOL.waitFor(30000);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+        assertTrue( requestId > 0 );
+        if(CASE_POOL.pendingHttpRequests.keySet().contains( requestId )){
+            System.out.println("UPDATE REQUEST STILL PENDING");
+            try {
+                System.out.println("WAITING FOR POOL");
+                CASE_POOL.waitFor(TIMEOUT);
+            } catch (TimeoutException ex) {
+                Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        System.out.println("for assert: "+pool.getEntity(1).getCaseNumber());
+        
+        System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ for assert: "+pool.getEntity(1).getCaseNumber()+"\n");
         assertTrue(pool.getEntity(1).getCaseNumber().equals(newCaseNumber),"Test if caseNumber is now set to new value");
         
         System.out.println("\n\n<<<<###################### persistEntity ######################\n\n");

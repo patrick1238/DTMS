@@ -76,12 +76,12 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
 
     @Override
-    public boolean deleteEntity(ClientService entity) {
+    public int deleteEntity(ClientService entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public boolean persistEntity(ClientService entity) {
+    public int persistEntity(ClientService entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

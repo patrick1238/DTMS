@@ -6,7 +6,9 @@
 package net.rehkind_mag.entities.pool;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import javafx.application.Platform;
 import javax.json.JsonArray;
@@ -83,22 +85,42 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         try{
             fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.CREATE, httpBody, param);
         } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not reate case", ex);
+            Logger.getLogger(getClass()).log(Level.WARN, "could not create case", ex);
         }
 
         Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
         
         Integer requestId = requestIDs[requestIDs.length-1];
+        waitForRequest(requestId);
         return requestId;
     }
 
     @Override
-    public boolean deleteEntity(ClientCase entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int deleteEntity(ClientCase toDelete) throws TimeoutException{
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.DELETE_CASE;
+        String buildEP = templateEP;
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("case_id", toDelete.getId());
+        param.put("case_number", toDelete.getCaseNumber());
+        
+        JsonObject httpBody = toDelete.toJson();
+        
+        try{
+            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.DELETE, httpBody, param);
+        } catch (NotSignedInException ex) {
+            Logger.getLogger(getClass()).log(Level.WARN, "could not load case", ex);
+        }
+
+        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+        Integer requestId = requestIDs[requestIDs.length-1];
+        waitForRequest(requestId);
+
+        this.cachedCaseList.removeById( toDelete.getId() );
+        return requestId;
     }
 
     @Override
-    public boolean persistEntity(ClientCase entity) throws TimeoutException {
+    public int persistEntity(ClientCase entity) throws TimeoutException {
         String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_CASE;
         String buildEP = templateEP;
         
@@ -113,10 +135,13 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         }
 
         Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
-        
         Integer requestId = requestIDs[requestIDs.length-1];
+        
         waitForRequest(requestId);
-        return true;
+        getAllEntities();
+        waitFor();
+        
+        return requestId;
     }
 
     @Override
@@ -137,40 +162,72 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         }
                 
         printPendingRequests();
-        PendingRequest requestToFinish;
-        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
-            requestToFinish = getPendingRequest(response.getRequestId());
-        }else{
-            requestToFinish = finishPendingRequest(response.getRequestId());
-        }
+        PendingRequest requestToFinish = getPendingRequest(response.getRequestId());
+        
         Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
         Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
 
         if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
             Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local case list");
             JsonArray casesAsJsonArray = (JsonArray)response.getContent();
-
+            Set<Integer> cachedIds= new HashSet<>();
+            cachedIds.addAll( cachedCaseList.getAllIDs() );
+            Set<Integer> loadedIds=new HashSet<>();
             casesAsJsonArray.forEach((curCase) -> {
                 JsonObject theCase=(JsonObject)curCase;
                 Logger.getLogger(getClass()).info("Processing JsonObject case: {0}", new String[]{ theCase.toString() });
-
-                cachedCaseList.put(new ClientCase(theCase));
+                ClientCase newCase = new ClientCase(theCase);
+                loadedIds.add(newCase.getId());
+                System.out.println("\t[ALL]: adding ID "+newCase.getId());
+                cachedCaseList.put(newCase);
             });
+            cachedIds.removeAll(loadedIds);
+            
+            System.out.println("[ALL] JSON LIST SIZE: "+casesAsJsonArray.size());
+            System.out.println("[ALL] REMOVING "+cachedIds.size()+" IDs");
+            for( Integer idToRemove : cachedIds){
+                System.out.println("[ALL] REMOVING CASE WITH ID: "+idToRemove);
+                cachedCaseList.removeById(idToRemove);
+            }
+            System.out.println("[ALL] CACHED LIST SIZE NOW "+cachedCaseList.size()+" IDs");
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
+            int deletedId = (Integer)requestToFinish.getParameters().get("case_id");
+            cachedCaseList.removeById(deletedId);
             Logger.getLogger(getClass().getName()).info("Case deleted successfully.");
-        } else{ // all other request result in a single case as JSON object
+            
+        } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.CREATE)){
+            Logger.getLogger(getClass().getName()).info("Received created JsonObject adding to cached objects...");
+            JsonObject caseAsJsonObject = (JsonObject)response.getContent();
+            ClientCase newCase = new ClientCase( caseAsJsonObject);
+            cachedCaseList.put( newCase );
+            System.out.println("[CREATE] CACHED LIST SIZE NOW "+cachedCaseList.size()+" IDs");
+            System.out.println("[CREATE] NEW ID "+newCase.getId());
+        }else{ // all other request result in a single case as JSON object
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
             JsonObject caseAsJsonObject = (JsonObject)response.getContent();
 
             cachedCaseList.put(new ClientCase( caseAsJsonObject) );
         }
-
+        
+        if( response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            finishPendingRequest(response.getRequestId());
+        }
     }
     
     private void handleHttpResponseError(Integer requestID, IHttpResponse response){
         switch( response.getResponseStatus() ){
             case HTTP_STATUS.CONSTRAINTS_VIOLATED:
                 System.out.println( "\n[CONSTRAINTS_VIOLATED_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            case HTTP_STATUS.BAD_REQUEST:
+                System.out.println( "\n[BAD_REQUEST_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            case HTTP_STATUS.INTERNAL_SERVER_ERROR:
+                System.out.println( "\n[INTERNAL_SERVER_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
             default:
                 Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
         }

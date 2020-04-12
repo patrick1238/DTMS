@@ -34,8 +34,8 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     abstract public T getEntity(int ID);
     abstract public List<T> getAllEntities();
     abstract public int createEntity(T toCreate) throws TimeoutException ;
-    abstract public boolean deleteEntity(T entity);
-    abstract public boolean persistEntity(T entity) throws TimeoutException;
+    abstract public int deleteEntity(T entity) throws TimeoutException;
+    abstract public int persistEntity(T entity) throws TimeoutException;
     
     protected void fireHTTPRequest(String endpointCompiled, String type) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, Json.createObjectBuilder().build(), null);
@@ -62,6 +62,9 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
         if( UserLogin.getLoginAsJson()==null ){ throw new NotSignedInException( getClass().getSimpleName()+": can not fire HTTPRequest, user is not logged in." ); }
         
         HttpAccessRequest request = new HttpAccessRequest( endpointTemplate, endpointCompiled, uuid, UserLogin.getLoginAsJson(), httpBody );
+        Logger.getLogger(getClass()).info("About to fire HTTPRequest: ");
+        Logger.getLogger(getClass()).info("\tendpoint: {0}",new Object[]{endpointCompiled});
+        Logger.getLogger(getClass()).info("\tbody: {0}",new Object[]{httpBody});
         IHttpResponse cachedResponse = manager.fireJsonHttpRequest(request, this);
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("http_type", type);
@@ -77,7 +80,7 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
         pendingHttpRequests.put( cachedResponse.getRequestId(), pr );
         Logger.getLogger(getClass()).info("New pending request added: "+pr.toString());
         
-        if( cachedResponse.responseSucceeded() ){ this.receiveHttpResponse(cachedResponse); }
+        //if( cachedResponse.responseSucceeded() ){ this.receiveHttpResponse(cachedResponse); }
     }
     
     protected PendingRequest finishPendingRequest(int id){
