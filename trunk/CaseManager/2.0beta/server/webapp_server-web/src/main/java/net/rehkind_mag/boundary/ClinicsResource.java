@@ -38,6 +38,8 @@ import net.rehkind_mag.entity.validation.DefaultValidationException;
 import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IContactForClinic;
 import net.rehkind_mag.interfaces.IContactPerson;
+import net.rehkind_mag.utils.HttpAccessRequest;
+import net.rehkind_mag.utils.LocalUUIDManager;
 
 /**
  *
@@ -59,6 +61,8 @@ public class ClinicsResource {
     LocalSubmitterRepository submitterRepo;
     @EJB
     LocalContactPersonRepository contactRepo;
+    @EJB
+    LocalUUIDManager uuidManager;
     
     @Context
     UriInfo uriInfo;
@@ -90,13 +94,23 @@ public class ClinicsResource {
     @Path(CLINIC_UPDATE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateClinic(JsonArray input){
-        JsonObject updatedClinic=input.getJsonObject(0);
-        JsonObject submitter=input.getJsonObject(1);
+    public Response updateClinic(JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject updatedClinic = request.getBody();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         
         Logger.getLogger("global").log(Logger.Level.INFO, "update for clinic requested.");
         Logger.getLogger("global").log(Logger.Level.INFO, "updated object is "+toString(updatedClinic));
         
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
+            JsonObject err;
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update clinic with id="+updatedClinic.getInt("id"), uuidManager);
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
+        
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
         boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
         if( !hasAccess ){
             JsonObject err;
@@ -156,16 +170,19 @@ public class ClinicsResource {
     @Path(CLINIC_CREATE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createClinic(JsonArray input){
-        JsonObject createClinic=input.getJsonObject(0);
-        JsonObject submitter=input.getJsonObject(1);
+    public Response createClinic(JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject createClinic = request.getBody();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         
-        Logger.getLogger("global").log(Logger.Level.INFO, "Create for Clinic requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "creating new clinic requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "created object is "+toString(createClinic));
         
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new clinic");
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "creating clinic with id="+createClinic.getInt("id"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
         
@@ -299,7 +316,7 @@ public class ClinicsResource {
     
     public String toString(JsonObject clinic) {
         StringBuilder sb=new StringBuilder("Clinic[");
-        sb.append(clinic.getInt("clinicId")).append("]=");
+        sb.append(clinic.getInt("id")).append("]=");
         //values
         sb.append( "\tname: " ).append( clinic.getString( "name" ));
         sb.append( "\tstreet " ).append( clinic.getString( "street" ));
