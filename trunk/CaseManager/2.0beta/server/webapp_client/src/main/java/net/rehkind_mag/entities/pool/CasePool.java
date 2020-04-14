@@ -213,24 +213,4 @@ public class CasePool extends AClientObjectPool<ClientCase> {
             finishPendingRequest(response.getRequestId());
         }
     }
-    
-    private void handleHttpResponseError(Integer requestID, IHttpResponse response){
-        switch( response.getResponseStatus() ){
-            case HTTP_STATUS.CONSTRAINTS_VIOLATED:
-                System.out.println( "\n[CONSTRAINTS_VIOLATED_ERROR]:\n"+response.getMessage());
-                finishPendingRequest(requestID);
-                break;
-            case HTTP_STATUS.BAD_REQUEST:
-                System.out.println( "\n[BAD_REQUEST_ERROR]:\n"+response.getMessage());
-                finishPendingRequest(requestID);
-                break;
-            case HTTP_STATUS.INTERNAL_SERVER_ERROR:
-                System.out.println( "\n[INTERNAL_SERVER_ERROR]:\n"+response.getMessage());
-                finishPendingRequest(requestID);
-                break;
-            default:
-                Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
-        }
-        
-    }
 }

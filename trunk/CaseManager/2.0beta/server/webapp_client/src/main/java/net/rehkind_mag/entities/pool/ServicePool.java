@@ -34,13 +34,11 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     
     ClientObjectList<ClientService> cachedServiceList=new ClientObjectList();
     
-    private ServicePool(){
-        defaultService = ClientService.getServiceTemplate(-1, -1);
-    }
+    private ServicePool(){ }
     
     static public ServicePool createPool() {
         if (ServicePool.singletonPool == null){ ServicePool.singletonPool=new ServicePool(); }
-        
+        defaultService = ClientService.getServiceTemplate(1, -1);
         return ServicePool.singletonPool;
     }
     
@@ -71,18 +69,37 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
 
     @Override
-    public int createEntity(ClientService s) throws TimeoutException{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int createEntity(ClientService toCreate) throws TimeoutException {
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.CREATE_SERVICE;
+        String buildEP = templateEP;
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("service_definition", toCreate.getServiceDefinition().getId());
+        
+        JsonObject httpBody = toCreate.toJson();
+        
+        try{
+            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.CREATE, httpBody, param);
+        } catch (NotSignedInException ex) {
+            Logger.getLogger(getClass()).log(Level.WARN, "could not create service", ex);
+        }
+
+        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+        
+        Integer requestId = requestIDs[requestIDs.length-1];
+        waitForRequest(requestId);
+        return requestId;
     }
 
     @Override
-    public int deleteEntity(ClientService entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int deleteEntity(ClientService entity) throws TimeoutException {
+        System.out.println("DELETE");
+        return -1;
     }
 
     @Override
-    public int persistEntity(ClientService entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int persistEntity(ClientService entity) throws TimeoutException {
+        System.out.println("UPDATE");
+        return -1;
     }
 
     @Override
@@ -101,20 +118,10 @@ public class ServicePool extends AClientObjectPool<ClientService> {
             handleHttpResponseError(response.getRequestId(), response);
             return;
         }
-        
-        Platform.runLater(new Runnable() {
-            @Override
-                public void run() {
-            }
-        });
-                
+           
         printPendingRequests();
-        PendingRequest requestToFinish;
-        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
-            requestToFinish = getPendingRequest(response.getRequestId());
-        }else{
-            requestToFinish = finishPendingRequest(response.getRequestId());
-        }
+        PendingRequest requestToFinish = getPendingRequest(response.getRequestId());
+
         Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
         Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
 
@@ -136,15 +143,10 @@ public class ServicePool extends AClientObjectPool<ClientService> {
 
             cachedServiceList.put(new ClientService( serviceAsJsonObject) );
         }
-
+        
+        if( response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            finishPendingRequest(response.getRequestId());
+        }
     }
     
-    private void handleHttpResponseError(Integer requestID, IHttpResponse response){
-        switch( response.getResponseStatus() ){
-            
-            default:
-                Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
-        }
-        
-    }
 }

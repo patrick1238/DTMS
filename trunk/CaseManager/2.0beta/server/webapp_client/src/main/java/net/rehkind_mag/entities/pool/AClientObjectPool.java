@@ -20,6 +20,7 @@ import net.rehkind_mag.utils.UUIDGenerator;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.http.HttpRequestManager;
 import net.rehkind_mag.http.NotSignedInException;
+import net.rehkind_mag.utils.HTTP_STATUS;
 import org.jboss.logging.Logger;
 
 /**
@@ -145,6 +146,25 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
         }
     }
     
+    protected void handleHttpResponseError(Integer requestID, IHttpResponse response){
+        switch( response.getResponseStatus() ){
+            case HTTP_STATUS.CONSTRAINTS_VIOLATED:
+                System.out.println( "\n[CONSTRAINTS_VIOLATED_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            case HTTP_STATUS.BAD_REQUEST:
+                System.out.println( "\n[BAD_REQUEST_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            case HTTP_STATUS.INTERNAL_SERVER_ERROR:
+                System.out.println( "\n[INTERNAL_SERVER_ERROR]:\n"+response.getMessage());
+                finishPendingRequest(requestID);
+                break;
+            default:
+                Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
+        }
+    }
+    
     protected class PendingRequest{
         int requestId;
         String requestType;
@@ -172,5 +192,6 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
         @Override public String toString(){
             return String.format("PendingRequest[%d]: type=%s parameter.size()=%d", new Object[]{ requestId, requestType, parameters.size()});
         }
+        
     }
 }
