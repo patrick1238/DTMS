@@ -59,4 +59,31 @@ public class ServicesURLResource {
     static private void addServiceURL(IService serviceToAdd, JsonObjectBuilder builder, UriInfo uriInfo){
         builder.add("service:id="+serviceToAdd.getId(), getURL(serviceToAdd,uriInfo));
     }
+
+    static String getUpdateURL(UriInfo uriInfo) {
+        URI serviceUri = uriInfo.getBaseUriBuilder()
+            .path(ServicesResource.class)
+            .path(ServicesResource.class, "updateService")
+            .build();
+        
+        return serviceUri.getRawPath();
+    }
+
+    static String getUpdateMetadataURL(Integer id, UriInfo uriInfo) {
+        URI serviceUri = uriInfo.getBaseUriBuilder()
+            .path(ServicesResource.class)
+            .path(ServicesResource.class, "updateServiceMetadata")
+            .build(id);
+        
+        return serviceUri.getRawPath();
+    }
+
+    static String getCreateURL(UriInfo uriInfo) {
+        URI serviceUri = uriInfo.getBaseUriBuilder()
+            .path(ServicesResource.class)
+            .path(ServicesResource.class, "createService")
+            .build();
+        
+        return serviceUri.getRawPath();
+    }
 }

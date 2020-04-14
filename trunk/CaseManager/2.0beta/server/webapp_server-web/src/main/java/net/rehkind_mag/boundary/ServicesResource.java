@@ -102,7 +102,15 @@ public class ServicesResource {
     public Response getServicesForCase(@PathParam("CASEID") Integer id) {
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         
-        for(IService s : serviceRepo.getServicesForCase(id)){
+        List<IService> services=null;
+        try{ services = serviceRepo.getServicesForCase(id); }catch(NullPointerException nullEx){ /* handled by services==null */ }
+        if( services==null ){
+            JsonObject response = ErrorRepository.createNotFoundError(SERVICES_FOR_CASE_URL.replace("{CASEID}", ""+id), "@GET Services for Case with id="+id);
+            Logger.getLogger(getClass()).info( String.format( "Case[%d] does not exist...returning NOT_FOUND_ERROR (404)", new Object[]{id}) );
+            return DefaultResponse.createNotFoundResponse(response);
+        }
+        
+        for(IService s : services){
             arrayBuilder.add( getServiceBuilderJson(s) );
         }
         return DefaultResponse.createOKResponse( arrayBuilder.build() );
@@ -121,7 +129,16 @@ public class ServicesResource {
     
     @GET
     @Path(SERVICE_URL)
-    public Response getService(@PathParam("SERVICEID") Integer id) {
+    public Response getService(@PathParam("SERVICEID") Integer id, JsonObject input) {
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject submitter = request.getSubmitter();
+        
+        // ACCESS CHECK:
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get service with id="+id );
+        }
+        
         IService serviceToBuild = serviceRepo.getService(id);
         if(serviceToBuild==null){
             JsonObject response = ErrorRepository.createNotFoundError(ServicesURLResource.getURL(id, uriInfo), "@GET Service with id="+id);
@@ -137,27 +154,27 @@ public class ServicesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateService(JsonObject input){
         HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject updatedService = request.getBody();
+        JsonObject updatedService = request.getBodyObject();
         JsonObject submitter = request.getSubmitter();
         String uuid = request.getUUID();
         
         Logger.getLogger("global").log(Logger.Level.INFO, "update for service requested.");
         Logger.getLogger("global").log(Logger.Level.INFO, "updated object is "+toString(updatedService));
         
+        // ACCESS CHECK:
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update service with id="+updatedService.getInt("id") );
+        }
+        
+        // UUID CHECK
         boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
         if( !isAvailableUUID ){
             JsonObject err;
             err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update case with id="+updatedService.getInt("id"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
-        
         try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update case with id="+updatedService.getInt("id"));
-            return DefaultResponse.createNoPermissionResponse(err);
-        }
         
         Integer serviceId=updatedService.getInt("id");
         Integer caseId=updatedService.getInt("case");
@@ -194,14 +211,16 @@ public class ServicesResource {
     @Path(SERVICE_UPDATE_METADATA_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateServiceMetadata(@PathParam("SERVICEID") Integer id, JsonArray updateRequest){
-        JsonArray updatedMetadata=updateRequest.getJsonArray(0);
-        JsonObject submitter=updateRequest.getJsonObject(1);
-        Logger.getLogger("global").log(Logger.Level.INFO, "Trying to update metadata for service with id="+id);
-        if (!submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"))){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new service");
-            return DefaultResponse.createNoPermissionResponse(err);
+    public Response updateServiceMetadata(@PathParam("SERVICEID") Integer id, JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonArray updatedMetadata = request.getBodyArray();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
+        
+        // ACCESS CHECK:
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getUpdateMetadataURL(id, uriInfo), submitter.getString("login"), "update service metadata with id="+id );
         }
         IService service = serviceRepo.getService(id);
         if( service==null ){
@@ -255,13 +274,16 @@ public class ServicesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createService(JsonObject input){
         HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject createService = request.getBody();
+        JsonObject createService = request.getBodyObject();
         JsonObject submitter = request.getSubmitter();
         String uuid = request.getUUID();
         
         Logger.getLogger("global").log(Logger.Level.INFO, "create for service requested.");
         Logger.getLogger("global").log(Logger.Level.INFO, "create object is "+toString(createService));
-        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getCreateURL(uriInfo), submitter.getString("login"), "create service with id="+createService.getInt("id"));
+        }
         boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
         if( !isAvailableUUID ){
             JsonObject err;
@@ -270,12 +292,6 @@ public class ServicesResource {
         }
         
         try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create service with id="+createService.getInt("id"));
-            return DefaultResponse.createNoPermissionResponse(err);
-        }
         Integer caseId=createService.getInt("case");
         Integer serviceDefId=createService.getJsonObject("serviceDefinition").getInt("id");
         
@@ -381,12 +397,27 @@ public class ServicesResource {
     @Path(SERVICE_DELETE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteService(JsonObject deleteService){
-        Integer id = deleteService.getInt("id");
-        Logger.getLogger("global").log(Logger.Level.INFO, "Delete for service[id="+id+"] requested.");
+    public Response deleteService(JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject deleteService = request.getBodyObject();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         
+        Logger.getLogger("global").log(Logger.Level.INFO, "Delete for service requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "Delete object is "+toString(deleteService));
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getCreateURL(uriInfo), submitter.getString("login"), "create service with id="+deleteService.getInt("id"));
+        }
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
+            JsonObject err;
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "create service with id="+deleteService.getInt("id"), uuidManager);
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
         
-        IService serviceToDelete = serviceRepo.getService(id);
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
+        IService serviceToDelete = serviceRepo.getService(deleteService.getInt("id"));
         
         try{
             Logger.getLogger("global").log(Logger.Level.INFO, "serviceRepo.deleteService(serviceToDelete);");
