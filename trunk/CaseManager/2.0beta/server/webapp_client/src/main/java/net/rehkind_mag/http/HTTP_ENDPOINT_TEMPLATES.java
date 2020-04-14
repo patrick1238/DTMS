@@ -28,6 +28,8 @@ public class HTTP_ENDPOINT_TEMPLATES {
     static final public String UPDATE_SERVICE="servicepool/service/update";
     static final public String DELETE_SERVICE="servicepool/service/delete";
     
+    static final public String GET_SERVICE_DEFINITION="servicedefinitionpool/servicedefinitions/{ID}";
+    static final public String GET_SERVICE_DEFINITIONS="servicedefinitionpool/servicedefinitions";
     
     static public String get_HTTP_METHOD_FOR_ENDPOINT(String endpoint) throws Exception{
         switch(endpoint){
@@ -37,6 +39,8 @@ public class HTTP_ENDPOINT_TEMPLATES {
             case GET_CLINICS:
             case GET_SERVICE:
             case GET_SERVICES:
+            case GET_SERVICE_DEFINITION:
+            case GET_SERVICE_DEFINITIONS:
                 return "GET";
             case CREATE_CASE:
             case UPDATE_CASE:

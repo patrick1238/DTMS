@@ -25,9 +25,7 @@ import net.rehkind_mag.utils.HttpAccessRequest;
 import net.rehkind_mag.utils.JsonObjectHttpResponse;
 import net.rehkind_mag.utils.RegisteredHttpAccessRequest;
 import net.rehkind_mag.utils.ServerSettings;
-import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.http.IBufferedEndpoint;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -43,19 +41,38 @@ public class BufferedEndpointFactory {
             case HTTP_ENDPOINT_TEMPLATES.CREATE_CASE:
             case HTTP_ENDPOINT_TEMPLATES.UPDATE_CASE:
             case HTTP_ENDPOINT_TEMPLATES.DELETE_CASE:
-                if(endpoints.get("CASES:"+serverSettings.serverAddress)==null){
-                    endpoints.put("CASES:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
-                }
-                return endpoints.get("CASES:"+serverSettings.serverAddress);
+            if(endpoints.get("CASES:"+serverSettings.serverAddress)==null){
+                endpoints.put("CASES:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
+            }
+            return endpoints.get("CASES:"+serverSettings.serverAddress);
+            
             case HTTP_ENDPOINT_TEMPLATES.GET_CLINIC:;
             case HTTP_ENDPOINT_TEMPLATES.GET_CLINICS:
             case HTTP_ENDPOINT_TEMPLATES.CREATE_CLINIC:
             case HTTP_ENDPOINT_TEMPLATES.UPDATE_CLINIC:
             case HTTP_ENDPOINT_TEMPLATES.DELETE_CLINIC:
-                if(endpoints.get("CLINICS:"+serverSettings.serverAddress)==null){
-                    endpoints.put("CLINICS:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
-                }
-                return endpoints.get("CLINICS:"+serverSettings.serverAddress);
+            if(endpoints.get("CLINICS:"+serverSettings.serverAddress)==null){
+                endpoints.put("CLINICS:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
+            }
+            return endpoints.get("CLINICS:"+serverSettings.serverAddress);
+            
+            case HTTP_ENDPOINT_TEMPLATES.GET_SERVICE:
+            case HTTP_ENDPOINT_TEMPLATES.GET_SERVICES:
+            case HTTP_ENDPOINT_TEMPLATES.CREATE_SERVICE:
+            case HTTP_ENDPOINT_TEMPLATES.UPDATE_SERVICE:
+            case HTTP_ENDPOINT_TEMPLATES.DELETE_SERVICE:
+            if(endpoints.get("SERVICES:"+serverSettings.serverAddress)==null){
+                endpoints.put("SERVICES:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
+            }
+            return endpoints.get("SERVICES:"+serverSettings.serverAddress);
+            
+            case HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITION:
+            case HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITIONS:
+            if(endpoints.get("SERVICE_DEFINITIONS:"+serverSettings.serverAddress)==null){
+                endpoints.put("SERVICE_DEFINITIONS:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
+            }
+            return endpoints.get("SERVICE_DEFINITIONS:"+serverSettings.serverAddress);
+            
             default:
                 Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.SEVERE, "An unknown endpoint was requested: ''{0}''\n Returning ''null'': may result in crashing everything.", endpoint);
                 return null;
