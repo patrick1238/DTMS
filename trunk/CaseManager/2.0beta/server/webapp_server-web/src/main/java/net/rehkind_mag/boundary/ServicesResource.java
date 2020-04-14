@@ -17,6 +17,7 @@ import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -42,6 +43,8 @@ import net.rehkind_mag.interfaces.IServiceDefinition;
 import net.rehkind_mag.control.LocalSubmitterRepository;
 import net.rehkind_mag.entity.ServiceEntity;
 import net.rehkind_mag.entity.validation.DefaultValidationException;
+import net.rehkind_mag.utils.HttpAccessRequest;
+import net.rehkind_mag.utils.LocalUUIDManager;
 import org.jboss.logging.Logger;
 
 /**
@@ -73,6 +76,8 @@ public class ServicesResource {
     LocalServiceDefinitionRepository serviceDefRepo;
     @EJB
     LocalMetadataRepository metadataRepo;
+    @EJB
+    LocalUUIDManager uuidManager;
     
     public ServicesResource(){
     }
@@ -130,13 +135,27 @@ public class ServicesResource {
     @Path(SERVICE_UPDATE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateService(JsonArray updateRequest){
-        JsonObject updatedService=updateRequest.getJsonObject(0);
-        JsonObject submitter=updateRequest.getJsonObject(1);
-        org.jboss.logging.Logger.getLogger("global").log(org.jboss.logging.Logger.Level.INFO, "Trying to update service, new values="+updatedService.getInt("serviceId")+" / "+updatedService.getInt("caseId")+" / "+updatedService.getInt("supplierId")+" / "+updatedService.getInt("serviceDefId"));
-        if (!submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"))){
+    public Response updateService(JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject updatedService = request.getBody();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
+        
+        Logger.getLogger("global").log(Logger.Level.INFO, "update for service requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "updated object is "+toString(updatedService));
+        
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new service");
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update case with id="+updatedService.getInt("id"), uuidManager);
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
+        
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            JsonObject err;
+            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update case with id="+updatedService.getInt("id"));
             return DefaultResponse.createNoPermissionResponse(err);
         }
         
@@ -234,18 +253,29 @@ public class ServicesResource {
     @Path(SERVICE_CREATE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createService(JsonArray createRequest){
-        org.jboss.logging.Logger.getLogger("global").log(org.jboss.logging.Logger.Level.INFO, "trying to create service");
+    public Response createService(JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject createService = request.getBody();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         
-        JsonObject createService = createRequest.getJsonObject(0);
-        JsonObject submitter = createRequest.getJsonObject(1);
+        Logger.getLogger("global").log(Logger.Level.INFO, "create for service requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "create object is "+toString(createService));
         
-        if (!submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"))){
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new service");
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "create service with id="+createService.getInt("id"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
         
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            JsonObject err;
+            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create service with id="+createService.getInt("id"));
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
         Integer caseId=createService.getInt("case");
         Integer serviceDefId=createService.getJsonObject("serviceDefinition").getInt("id");
         
@@ -270,7 +300,18 @@ public class ServicesResource {
                     ));
             }
         }
-        JsonArray meta=createService.getJsonArray("ServiceMetadata");
+        
+        
+        Logger.getLogger("DEBUG").warn( "whole service: "+createService.toString() );
+        if(createService.containsKey("serviceMetadata")){
+            Logger.getLogger("DEBUG").warn( "serviceMetadata is present in createService" );
+        }else{
+            Logger.getLogger("DEBUG").warn( "serviceMetadata MISSING in createService" );
+        }
+        //if(createService.isNull("serviceMetadata")){
+            //Logger.getLogger("DEBUG").warn( "serviceMetadata is NULL");
+        //}
+        JsonArray meta=createService.getJsonArray("serviceMetadata");
         HashMap<String, Object> setValues=new HashMap<>();
         for( int i=0; i<meta.size(); i++){
             JsonObject obj = meta.getJsonObject(i);
@@ -390,29 +431,7 @@ public class ServicesResource {
     public JsonObjectBuilder getServiceDefinitionBuilderForService(IService service){
         IServiceDefinition def = service.getServiceDefinition();
         
-        return getServiceDefinitionBuilder(def);
-    }
-    
-    public JsonObjectBuilder getServiceDefinitionBuilder(IServiceDefinition serviceDef){
-        IServiceDefinition parentServiceDef=serviceDef.getParentDefinition();
-        JsonObjectBuilder parentBuilder;
-        if( parentServiceDef==null ){
-            parentBuilder=null;
-        }else{
-            parentBuilder=getServiceDefinitionBuilder(parentServiceDef);
-        }
-        
-        JsonObjectBuilder serviceDefBuilder = Json.createObjectBuilder();
-        serviceDefBuilder.add("id", serviceDef.getId())
-                .add("name", serviceDef.getName())
-                .add("description", serviceDef.getDescription());
-        if(parentBuilder==null){
-            serviceDefBuilder.add("parentDefinition", "");
-        }else{
-            serviceDefBuilder.add("parentDefinition", parentBuilder);
-        }
-        
-        return serviceDefBuilder;
+        return ServiceDefinitionsResource.getServiceDefinitionBuilder(def);
     }
     
 //    public JsonArrayBuilder getServiceMetadataBuilderForService(IService service){
@@ -479,5 +498,9 @@ public class ServicesResource {
         
         
         return metadataArrayBuilder;
+    }
+    
+    public String toString(JsonValue serviceAsJson){
+        return serviceAsJson.toString();
     }
 }
