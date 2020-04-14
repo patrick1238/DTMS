@@ -25,4 +25,24 @@ public class ClinicsURLResource {
             .build(clinicId);
         return uri.getRawPath();
     }
+
+    static String getCreateURL(UriInfo uriInfo) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    static String getUpdateURL(UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(ClinicsResource.class)
+            .path(ClinicsResource.class, "updateClinic")
+            .build();
+        return uri.getRawPath();
+    }
+
+    static String getDeleteURL(UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(ClinicsResource.class)
+            .path(ClinicsResource.class, "deleteClinic")
+            .build();
+        return uri.getRawPath();
+    }
 }

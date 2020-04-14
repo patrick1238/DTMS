@@ -32,8 +32,6 @@ import net.rehkind_mag.control.LocalClinicRepository;
 import net.rehkind_mag.control.LocalContactPersonRepository;
 import net.rehkind_mag.control.LocalSubmitterRepository;
 import net.rehkind_mag.entity.ClinicEntity;
-import net.rehkind_mag.entity.ContactForClinicEntity;
-import net.rehkind_mag.entity.ContactForClinicEntityPK;
 import net.rehkind_mag.entity.validation.DefaultValidationException;
 import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IContactForClinic;
@@ -80,8 +78,16 @@ public class ClinicsResource {
     }
     
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path(CLINIC_URL)
-    public Response getClinic(@PathParam("CLINICID") Integer id) {
+    public Response getClinic(@PathParam("CLINICID") Integer id, JsonObject input) {
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject submitter = request.getSubmitter();
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getURL(id, uriInfo), submitter.getString("login"), "get clinic with id="+id);
+        }
         IClinic clinicToBuild = clinicRepo.getClinic(id);
         if(clinicToBuild==null){
             System.out.println("clinic is NULL");
@@ -96,29 +102,26 @@ public class ClinicsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateClinic(JsonObject input){
         HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject updatedClinic = request.getBody();
+        JsonObject updateClinic = request.getBodyObject();
         JsonObject submitter = request.getSubmitter();
         String uuid = request.getUUID();
         
-        Logger.getLogger("global").log(Logger.Level.INFO, "update for clinic requested.");
-        Logger.getLogger("global").log(Logger.Level.INFO, "updated object is "+toString(updatedClinic));
-        
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "update for clinic requested.");
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "update object is "+toString(updateClinic));
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update clinic with id="+updateClinic.getInt("id"));
+        }
         boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
         if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update clinic with id="+updatedClinic.getInt("id"), uuidManager);
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update clinic with id="+updateClinic.getInt("id"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
         
         try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update clinic with id="+updatedClinic.getInt("id"));
-            return DefaultResponse.createNoPermissionResponse(err);
-        }
         
-        Integer clinicId=updatedClinic.getInt("id");
+        Integer clinicId=updateClinic.getInt("id");
         IClinic clinicToUpdate = clinicRepo.getClinic(clinicId);
         if(clinicToUpdate==null){
             Logger.getLogger("global").log(Logger.Level.WARN, "Update requested for non-existing clinic.");
@@ -128,10 +131,10 @@ public class ClinicsResource {
         
         Logger.getLogger("global").log(Logger.Level.INFO, "old object is "+toString(clinicToUpdate));
         
-        clinicToUpdate.setName(updatedClinic.getString("name"));
-        clinicToUpdate.setStreet(updatedClinic.getString("street"));
-        clinicToUpdate.setZipCode(updatedClinic.getString("zipCode"));
-        clinicToUpdate.setCity(updatedClinic.getString("city"));
+        clinicToUpdate.setName(updateClinic.getString("name"));
+        clinicToUpdate.setStreet(updateClinic.getString("street"));
+        clinicToUpdate.setZipCode(updateClinic.getString("zipCode"));
+        clinicToUpdate.setCity(updateClinic.getString("city"));
         
         try{
             clinicRepo.updateClinic(clinicToUpdate);
@@ -142,13 +145,13 @@ public class ClinicsResource {
             }
         }
         
-        if(updatedClinic.getJsonArray("contacts")!=null){
-            for(JsonValue contactValue : updatedClinic.getJsonArray("contacts")){
+        if(updateClinic.getJsonArray("contacts")!=null){
+            for(JsonValue contactValue : updateClinic.getJsonArray("contacts")){
                 JsonObject contactObj = (JsonObject)contactValue;
                 JsonObject contact = contactObj.getJsonObject("contactPerson");
                 
                 if( !contact.keySet().contains("contacId") ){
-                    Logger.getLogger("global").info("Creating new contact for clinic "+updatedClinic.getString("name"));
+                    Logger.getLogger("global").info("Creating new contact for clinic "+updateClinic.getString("name"));
                     Response res=contactResource.createContactPerson(contact);
                     if( res.getStatus()!=202 ){ 
                         Logger.getLogger("global").warn("Could not create contact '"+contact.getString("forename")+" "+contact.getString("surname")+"'");
@@ -172,19 +175,24 @@ public class ClinicsResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createClinic(JsonObject input){
         HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject createClinic = request.getBody();
+        JsonObject createClinic = request.getBodyObject();
         JsonObject submitter = request.getSubmitter();
         String uuid = request.getUUID();
         
-        Logger.getLogger("global").log(Logger.Level.INFO, "creating new clinic requested.");
-        Logger.getLogger("global").log(Logger.Level.INFO, "created object is "+toString(createClinic));
-        
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "create for clinic requested.");
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "create object is "+toString(createClinic));
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getCreateURL(uriInfo), submitter.getString("login"), "create clinic with name="+createClinic.getString("name"));
+        }
         boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
         if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "creating clinic with id="+createClinic.getInt("id"), uuidManager);
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "create clinic with name="+createClinic.getString("name"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
+        
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
         
         Integer clinicId=null;
         try{ clinicId=createClinic.getInt("clinicId"); }catch(NullPointerException ex){  }
@@ -233,20 +241,28 @@ public class ClinicsResource {
     @Path(CLINIC_DELETE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteClinic(JsonArray input){
-        JsonObject deleteClinic=input.getJsonObject(0);
-        JsonObject submitter=input.getJsonObject(1);
+    public Response deleteClinic(JsonObject input){
+       HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject deleteClinic = request.getBodyObject();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         
-        Integer id = deleteClinic.getInt("id");
-        Logger.getLogger("global").log(Logger.Level.INFO, "Delete for clinic[id="+id+"] requested.");
-        
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "delete for clinic requested.");
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "delete object is "+toString(deleteClinic));
         boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
         if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getDeleteURL(uriInfo), submitter.getString("login"), "create clinic with name="+deleteClinic.getInt("id"));
+        }
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new clinic");
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "create clinic with name="+deleteClinic.getInt("id"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
         
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
+        
+        Integer id = deleteClinic.getInt("id");
         IClinic clinicToDelete = clinicRepo.getClinic(id);
         
         try{
