@@ -13,13 +13,11 @@ import java.util.logging.Logger;
 import net.rehkind_mag.entities.ClientClinic;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
-import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -31,11 +29,11 @@ public class ClinicPoolTest {
     static ClinicPool CLINIC_POOL;
     
     public ClinicPoolTest() throws Exception{
-        ClinicPoolTest.setUpClass();
+        setUpClass();
     }
 
-    @BeforeAll
-    public static void setUpClass() throws Exception {
+    @Before
+    public void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
         Settings.set("client.password", "123456");
@@ -48,11 +46,9 @@ public class ClinicPoolTest {
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-    @BeforeEach
-    public void setUp() {
-    }
+
     
-    @AfterEach
+    @After
     public void tearDown() {
         try {
             System.out.println("WAITING FOR POOL");
@@ -63,7 +59,7 @@ public class ClinicPoolTest {
     }
 
     /**
-     * Test of createPool method, of class CasePool.
+     * Test of createPool method, of class ClinicPool.
      */
     @Test
     public void testCreatePool() {
@@ -76,7 +72,7 @@ public class ClinicPoolTest {
     }
 
     /**
-     * Test of getAllEntities method, of class CasePool.
+     * Test of getAllEntities method, of class ClinicPool.
      */
     @Test
     public void testGetAllEntities() {
@@ -86,7 +82,7 @@ public class ClinicPoolTest {
         ClinicPool pool = ClinicPoolTest.CLINIC_POOL;
         
         ReadOnlyClientObjectList result = pool.getAllEntities();
-        assertTrue(result.size()>0);
+        assertEquals(true, (result.size()>0));
         
         try {
             System.out.println("WAITING FOR POOL");
@@ -98,7 +94,7 @@ public class ClinicPoolTest {
     }
 
     /**
-     * Test of getEntity method, of class CasePool.
+     * Test of getEntity method, of class ClinicPool.
      */
     @Test
     public void testGetEntity() {
@@ -118,7 +114,7 @@ public class ClinicPoolTest {
     }
 
     /**
-     * Test of createEntity method, of class CasePool.
+     * Test of createEntity method, of class ClinicPool.
      */
     @Test
     public void testCreateAndDeleteEntity() {
@@ -165,7 +161,7 @@ public class ClinicPoolTest {
     }
 
     /**
-     * Test of persistEntity method, of class CasePool.
+     * Test of persistEntity method, of class ClinicPool.
      */
     @Test
     public void testPersistEntity() {
@@ -189,10 +185,10 @@ public class ClinicPoolTest {
             System.out.println("TIMEOUT_EXCEPTION");
             toEx.printStackTrace();
         }
-        assertTrue( requestId > 0 );
+        assertEquals( true, requestId > 0 );
         
         System.out.println("for assert: "+pool.getEntity(1).getName());
-        assertTrue(pool.getEntity(1).getName().equals(newClinicName),"Test if clinicName is now set to new value");
+        assertEquals( pool.getEntity(1).getName(), newClinicName);
         
         System.out.println("\n\n<<<<###################### persistEntity ######################\n\n");
     }

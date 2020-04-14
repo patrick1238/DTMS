@@ -12,11 +12,13 @@ import java.util.logging.Logger;
 import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
-import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
 
 
 /**
@@ -29,11 +31,11 @@ public class ServicePoolTest {
     static CasePool CASE_POOL;
     
     public ServicePoolTest() throws Exception{
-        ServicePoolTest.setUpClass();
+        if(SERVICE_POOL==null){ setUpClass(); }
     }
 
-    @BeforeAll
-    public static void setUpClass() throws Exception {
+    @Before
+    public final void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
         Settings.set("client.password", "123456");
@@ -52,11 +54,7 @@ public class ServicePoolTest {
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
+    @After
     public void tearDown() {
         try {
             System.out.println("WAITING FOR POOL");
@@ -66,104 +64,104 @@ public class ServicePoolTest {
         }
     }
 
-//    /**
-//     * Test of createPool method, of class ServicePool.
-//     */
-//    @Test
-//    public void testCreatePool() {
-//        System.out.println("\n\n########################## createPool ###################>>>>>\n\n");
-//        ClinicPool result = ClinicPool.createPool();
-//        System.out.println("Pool: "+result);
-//        assertEquals(result, ServicePoolTest.SERVICE_POOL );
-//        assertNotNull( result );
-//        System.out.println("\n\n<<<<<##################### createPool #########################\n\n");
-//    }
-//
-//    /**
-//     * Test of getAllEntities method, of class ServicePool.
-//     */
-//    @Test
-//    public void testGetAllEntities() {
-//        System.out.println("\n\n########################## getAllEntities ###################>>>>>\n\n");
-//        
-//        UserLogin.getLoginAsJson();
-//        ServicePool pool = ServicePoolTest.SERVICE_POOL;
-//        
-//        ReadOnlyClientObjectList result = pool.getAllEntities();
-//        assertTrue(result.size()>0);
-//        
-//        try {
-//            System.out.println("WAITING FOR POOL");
-//            SERVICE_POOL.waitFor(30000);
-//        } catch (TimeoutException ex) {
-//            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        System.out.println("\n\n<<<<<##################### getAllEntities #########################\n\n");
-//    }
+    /**
+     * Test of createPool method, of class ServicePool.
+     */
+    @Test
+    public void testCreatePool() {
+        System.out.println("\n\n########################## createPool ###################>>>>>\n\n");
+        ServicePool result = ServicePool.createPool();
+        System.out.println("Pool: "+result);
+        assertEquals(result, ServicePoolTest.SERVICE_POOL );
+        assertNotNull( result );
+        System.out.println("\n\n<<<<<##################### createPool #########################\n\n");
+    }
+
+    /**
+     * Test of getAllEntities method, of class ServicePool.
+     */
+    @Test
+    public void testGetAllEntities() {
+        System.out.println("\n\n########################## getAllEntities ###################>>>>>\n\n");
+        
+        UserLogin.getLoginAsJson();
+        ServicePool pool = ServicePoolTest.SERVICE_POOL;
+        
+        ReadOnlyClientObjectList result = pool.getAllEntities();
+        assertTrue(result.size()>0);
+        
+        try {
+            System.out.println("WAITING FOR POOL");
+            SERVICE_POOL.waitFor(30000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("\n\n<<<<<##################### getAllEntities #########################\n\n");
+    }
 
     /**
      * Test of getEntity method, of class ServicePool.
      */
-//    @Test
-//    public void testGetEntity() {
-//        System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-//        int serviceId = 1;
-//        ServicePool pool = ServicePoolTest.SERVICE_POOL;
-//        ClientService result = pool.getEntity(serviceId);
-//        assertEquals(serviceId, result.getId());
-//        
-//        try {
-//            System.out.println("WAITING FOR POOL");
-//            SERVICE_POOL.waitFor(30000);
-//        } catch (TimeoutException ex) {
-//            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        System.out.println("\n\n<<<<<##################### getEntity #########################\n\n");
-//    }
+    @Test
+    public void testGetEntity() {
+        System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
+        int serviceId = 1;
+        ServicePool pool = ServicePoolTest.SERVICE_POOL;
+        ClientService result = pool.getEntity(serviceId);
+        assertEquals(serviceId, result.getId());
+        
+        try {
+            System.out.println("WAITING FOR POOL");
+            SERVICE_POOL.waitFor(30000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("\n\n<<<<<##################### getEntity #########################\n\n");
+    }
 
     /**
      * Test of createEntity method, of class ServicePool.
      */
-    @Test
-    public void testCreateAndDeleteEntity() {
-        System.out.println("\n\n########################## create&deleteEntity ###################>>>>>\n\n");
-        ServicePool pool = ServicePoolTest.SERVICE_POOL;
-
-        Integer clinicCountBeforeCreate = pool.getAllEntities().size();
-
-        ClientService serviceToCreate = ClientService.getServiceTemplate(1, 2);
-        
-        System.out.println("[CREATE] ClientService: "+serviceToCreate.toString());
-        try {    
-            int requestId=pool.createEntity( serviceToCreate );
-        } catch (TimeoutException ex) {
-            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, "Timed out while waiting for CREATE SERVICE", ex);
-        }    
-        
-        ReadOnlyClientObjectList<ClientService> entities = pool.getAllEntities();
-        ClientService newService=null;
-        for(Object c : entities){
-            ClientService castC=(ClientService)c;
-            if(newService==null){ newService = castC; }
-            else if (newService.getId()<castC.getId()) {
-                newService = castC;
-            }
-        }
-        
-        Integer clinicCountAfterCreate = entities.size();
-        assertEquals((int)clinicCountBeforeCreate, (int)clinicCountAfterCreate-1);
-        System.out.println("\n\n<<<<<##################### create&deleteEntity[CLEANUP] #########################\n\n");
-        System.out.println("Cleaning created service: "+newService.toString());
-        try {
-            pool.deleteEntity(newService);
-        } catch (TimeoutException ex) { 
-                Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, "Timed out whlie waiting for DELETE SERVICE", ex);
-        }
-        Integer clinicCountAfterDelete=pool.getAllEntities().size();
-        assertEquals((int)clinicCountAfterCreate, (int)clinicCountAfterDelete+1);
-        System.out.println("\n\n<<<<<##################### create&deleteEntity #########################\n\n");
-       
-    }
+//    @Test
+//    public void testCreateAndDeleteEntity() {
+//        System.out.println("\n\n########################## create&deleteEntity ###################>>>>>\n\n");
+//        ServicePool pool = ServicePoolTest.SERVICE_POOL;
+//
+//        Integer clinicCountBeforeCreate = pool.getAllEntities().size();
+//
+//        ClientService serviceToCreate = ClientService.getServiceTemplate(1, 2);
+//        
+//        System.out.println("[CREATE] ClientService: "+serviceToCreate.toString());
+//        try {    
+//            int requestId=pool.createEntity( serviceToCreate );
+//        } catch (TimeoutException ex) {
+//            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, "Timed out while waiting for CREATE SERVICE", ex);
+//        }    
+//        
+//        ReadOnlyClientObjectList<ClientService> entities = pool.getAllEntities();
+//        ClientService newService=null;
+//        for(Object c : entities){
+//            ClientService castC=(ClientService)c;
+//            if(newService==null){ newService = castC; }
+//            else if (newService.getId()<castC.getId()) {
+//                newService = castC;
+//            }
+//        }
+//        
+//        Integer clinicCountAfterCreate = entities.size();
+//        assertEquals((int)clinicCountBeforeCreate, (int)clinicCountAfterCreate-1);
+//        System.out.println("\n\n<<<<<##################### create&deleteEntity[CLEANUP] #########################\n\n");
+//        System.out.println("Cleaning created service: "+newService.toString());
+//        try {
+//            pool.deleteEntity(newService);
+//        } catch (TimeoutException ex) { 
+//                Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, "Timed out whlie waiting for DELETE SERVICE", ex);
+//        }
+//        Integer clinicCountAfterDelete=pool.getAllEntities().size();
+//        assertEquals((int)clinicCountAfterCreate, (int)clinicCountAfterDelete+1);
+//        System.out.println("\n\n<<<<<##################### create&deleteEntity #########################\n\n");
+//       
+//    }
 
     /**
      * Test of persistEntity method, of class ServicePool.

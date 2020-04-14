@@ -8,6 +8,8 @@ package net.rehkind_mag.entities.pool;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import net.rehkind_mag.entities.ClientServiceDefinition;
 import net.rehkind_mag.http.HTTP_ENDPOINT_TEMPLATES;
 import net.rehkind_mag.http.NotSignedInException;
@@ -15,6 +17,7 @@ import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
+import net.rehkind_mag.utils.HTTP_STATUS;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
@@ -48,13 +51,14 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
     }
     
     @Override
-    public ClientServiceDefinition getEntity(int serviceId) {
-        ClientServiceDefinition returnService = this.cachedServiceDefinitionList.getByID(serviceId);
+    public ClientServiceDefinition getEntity(int serviceDefId) {
+        ClientServiceDefinition returnService = this.cachedServiceDefinitionList.getByID(serviceDefId);
+        System.out.println("ServiceDef["+serviceDefId+"] requested...returning cached object: "+returnService+ " (original: "+((returnService!=null)?returnService.getOriginalJson():"<NOT_DEFINED>")+")");
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITION;
-        String buildEP = templateEP.replace("{ID}", ""+serviceId);
+        String buildEP = templateEP.replace("{ID}", ""+serviceDefId);
         
         HashMap<String,Object> param = new HashMap<>();
-        param.put("service_id", serviceId);
+        param.put("service_id", serviceDefId);
         try{
             fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
         } catch (NotSignedInException ex) {
@@ -81,7 +85,49 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
 
     @Override
     public void receiveHttpResponse(IHttpResponse response) {
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{response.getRequestId(), response.getResponseStatus(), response.getMessage()});
+        long timeMS=-1;
+        Boolean isCached=false;
+        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[CACHED] HttpResponse {0} ms.", new Object[]{timeMS});
+            isCached=true;
+        }else{
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[HTTP] HttpResponse {0} ms.", new Object[]{timeMS});
+        }
         
+        if( response.getResponseStatus()!=HTTP_STATUS.OK && response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            handleHttpResponseError(response.getRequestId(), response);
+            return;
+        }
+           
+        printPendingRequests();
+        PendingRequest requestToFinish = getPendingRequest(response.getRequestId());
+
+        Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
+        Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
+
+        if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
+            Logger.getLogger(getClass()).info("Received JsonArray for service_definitions, updating local service_definition list");
+            JsonArray service_definitionsAsJsonArray = (JsonArray)response.getContent();
+
+            service_definitionsAsJsonArray.forEach((curDefinition) -> {
+                JsonObject theDefinition=(JsonObject)curDefinition;
+                Logger.getLogger(getClass()).info("Processing JsonObject service_definition: {0}", new String[]{ theDefinition.toString() });
+
+                cachedServiceDefinitionList.put(new ClientServiceDefinition(theDefinition));
+            });
+        } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no service as response (deleted)
+            Logger.getLogger(getClass().getName()).info("Service deleted successfully.");
+        } else{ // all other request result in a single service as JSON object
+            Logger.getLogger(getClass().getName()).info("Received JsonObject for single service_definition, creating ClientServiceDefinition...");
+            JsonObject serviceDefAsJsonObject = (JsonObject)response.getContent();
+
+            cachedServiceDefinitionList.put(new ClientServiceDefinition( serviceDefAsJsonObject) );
+        }
+        
+        if( response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            finishPendingRequest(response.getRequestId());
+        }
     }
     
 }

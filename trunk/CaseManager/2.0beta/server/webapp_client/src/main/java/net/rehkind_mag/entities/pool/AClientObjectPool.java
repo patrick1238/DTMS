@@ -160,8 +160,14 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
                 System.out.println( "\n[INTERNAL_SERVER_ERROR]:\n"+response.getMessage());
                 finishPendingRequest(requestID);
                 break;
+            case HTTP_STATUS.NOT_FOUND:
+                System.out.println( "\n[NOT_FOUND_ERROR]:\n"+response.getMessage()+"\n --- "+response.getContent().toString() );
+                finishPendingRequest(requestID);
+                
+                break;
             default:
                 Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
+                finishPendingRequest(requestID);
         }
     }
     

@@ -5,26 +5,25 @@
  */
 package net.rehkind_mag.entities.pool;
 
+import net.rehkind_mag.entities.Mockups;
 import com.sun.scenario.Settings;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.json.Json;
+import static junit.framework.Assert.assertNotNull;
 import net.rehkind_mag.entities.ClientCase;
 import net.rehkind_mag.entities.ClientClinic;
 import net.rehkind_mag.entities.ClientSubmitter;
 import net.rehkind_mag.entities.UserLogin;
-import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
-import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
+
 
 
 /**
@@ -36,11 +35,11 @@ public class CasePoolTest {
     static CasePool CASE_POOL;
     static int TIMEOUT=10000;
     public CasePoolTest() throws Exception{
-        CasePoolTest.setUpClass();
+        if(CASE_POOL==null){ setUpClass(); }
     }
 
-    @BeforeAll
-    public static void setUpClass() throws Exception {
+    @Before
+    final public void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
         Settings.set("client.password", "123456");
@@ -53,7 +52,7 @@ public class CasePoolTest {
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-    @BeforeEach
+    @Before
     public void setUp() {
         try {
             System.out.println("WAITING FOR POOL");
@@ -63,7 +62,7 @@ public class CasePoolTest {
         }
     }
     
-    @AfterEach
+    @After
     public void tearDown() {
         try {
             System.out.println("WAITING FOR POOL");
@@ -220,7 +219,7 @@ public class CasePoolTest {
         }
         
         System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ for assert: "+pool.getEntity(1).getCaseNumber()+"\n");
-        assertTrue(pool.getEntity(1).getCaseNumber().equals(newCaseNumber),"Test if caseNumber is now set to new value");
+        assertTrue(pool.getEntity(1).getCaseNumber().equals(newCaseNumber));
         
         System.out.println("\n\n<<<<###################### persistEntity ######################\n\n");
     }

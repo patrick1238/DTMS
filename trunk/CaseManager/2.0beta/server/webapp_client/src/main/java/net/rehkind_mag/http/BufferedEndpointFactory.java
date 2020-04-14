@@ -12,8 +12,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -26,6 +24,8 @@ import net.rehkind_mag.utils.JsonObjectHttpResponse;
 import net.rehkind_mag.utils.RegisteredHttpAccessRequest;
 import net.rehkind_mag.utils.ServerSettings;
 import net.rehkind_mag.http.IBufferedEndpoint;
+import org.jboss.logging.Logger;
+import org.jboss.logging.Logger.Level;
 
 /**
  *
@@ -74,7 +74,7 @@ public class BufferedEndpointFactory {
             return endpoints.get("SERVICE_DEFINITIONS:"+serverSettings.serverAddress);
             
             default:
-                Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.SEVERE, "An unknown endpoint was requested: ''{0}''\n Returning ''null'': may result in crashing everything.", endpoint);
+                Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.FATAL, String.format( "An unknown endpoint was requested: '%s'\n Returning 'null': may result in crashing everything.", endpoint));
                 return null;
         }
     }
@@ -95,7 +95,7 @@ public class BufferedEndpointFactory {
                 try {
                     httpMethod=HTTP_ENDPOINT_TEMPLATES.get_HTTP_METHOD_FOR_ENDPOINT(registeredHttpAccessRequest.getEndpoint());
                 } catch (Exception ex) {
-                    Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.SEVERE, "Cannot start HttpRequest worker, endpoint not supported: '"+registeredHttpAccessRequest.getEndpoint()+"'", ex);
+                    Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.FATAL, "Cannot start HttpRequest worker, endpoint not supported: '"+registeredHttpAccessRequest.getEndpoint()+"'", ex);
                     cachedRequests.remove(registeredHttpAccessRequest.getId());
                     return null;
                 }
@@ -152,8 +152,7 @@ public class BufferedEndpointFactory {
                 
                 // send http request body:
                 if( "POST".equals( httpMethod ) || "PUT".equals( httpMethod ) ){
-                    org.jboss.logging.Logger.getLogger("global").info( "Writing HTTP-body in Json-format to HttpURLConnection output stream.");
-                    
+                    Logger.getLogger(getClass()).info( "Writing HTTP-body in Json-format to HttpURLConnection output stream.");
                     con.setDoOutput(true);
                     try(OutputStream os = con.getOutputStream()) {
                         JsonWriter writer = Json.createWriter(os);
@@ -171,7 +170,6 @@ public class BufferedEndpointFactory {
                         }
                     }
                 }
-                
                 JsonObjectHttpResponse response = new JsonObjectHttpResponse( con, this.ID );
                 for(IHttpResponseReceiver receiver : receivers){
                     receiver.receiveHttpResponse(response);

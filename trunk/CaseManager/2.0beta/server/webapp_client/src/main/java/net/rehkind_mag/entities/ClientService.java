@@ -5,49 +5,40 @@
  */
 package net.rehkind_mag.entities;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 
 import javax.json.Json;
 import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
+import net.rehkind_mag.entities.pool.CasePool;
 import net.rehkind_mag.interfaces.ICase;
-import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IService;
-import net.rehkind_mag.interfaces.ISubmitter;
-import net.rehkind_mag.entities.pool.ClinicPool;
 import net.rehkind_mag.interfaces.IMetadata;
 import net.rehkind_mag.interfaces.IServiceDefinition;
+import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.IClientObject;
 import org.jboss.logging.Logger;
-import org.jboss.logging.Logger.Level;
 
 /**
  *
  * @author rehkind
  */
 public class ClientService extends ClientObjectBase<ClientService> implements IService{
-    ArrayList<ClientMetadata> metadata = new ArrayList<>();
+    ClientObjectList<ClientMetadata> metadata = new ClientObjectList<>();
     IntegerProperty caseId = new SimpleIntegerProperty();
     IntegerProperty definitionId = new SimpleIntegerProperty();
     
     public ClientService(JsonObject caseAsJson){
         original.setValue( caseAsJson );
+        System.out.println("creating ClientService from: "+original.getValue().toString());
         ClientService self=this;
         ChangeListener listener = new ChangeListener() {
             @Override
@@ -67,7 +58,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("id", -1)
             .add("case", caseId)
-            .add("serviceDefinition", definitionId)
+            .add("serviceDefinition", Mockups.getServiceDefinitionMockup( definitionId ).toJson() )
             .add("serviceMetadata", Json.createArrayBuilder().build() );
         return new ClientService( builder.build() );
     }
@@ -76,27 +67,29 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
     
     @Override
     public IServiceDefinition getServiceDefinition() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Logger.getLogger("TODO").warn("metadataToJsonArray(): returning an mockup service definition");
+        IServiceDefinition mockupDef = Mockups.getServiceDefinitionMockup( this.definitionId.getValue() );
+        return mockupDef;
     }
 
     @Override
     public ICase getCase() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return CasePool.createPool().getEntity(caseId.getValue());
     }
 
     @Override
     public void setCase(ICase caseValue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.caseId.setValue( caseValue.getId() );
     }
 
     @Override
     public void setServiceDefinition(IServiceDefinition serviceDef) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.definitionId.setValue(serviceDef.getId());
     }
 
     @Override
     public List<IMetadata> getMetadata() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.metadata;
     }
     
     /**
@@ -104,9 +97,10 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
      * 
      */
     final public void resetService(){
+        System.out.println("ORIGINAL: "+original.getValue().toString());
         ID.setValue( getOriginalJson().getInt("id") );
         caseId.setValue( getOriginalJson().getInt("case") );
-        definitionId.setValue(getOriginalJson().getInt("serviceDefinition") );
+        definitionId.setValue(getOriginalJson().getJsonObject("serviceDefinition").getInt("id") );
         loadMetadata( getOriginalJson().getJsonArray("serviceMetadata"));
         
         Logger.getLogger("global").info("------------ resetService() called -------------");
@@ -115,7 +109,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
     }
 
     private void loadMetadata(JsonArray metadataJson){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.metadata.clear();
     }
     
     @Override
@@ -134,7 +128,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("id", getId());
         builder.add("case", getCase().getId());
-        builder.add("serviceDefinition", getServiceDefinition().getId());
+        builder.add("serviceDefinition", ((ClientServiceDefinition)getServiceDefinition()).toJson());
         builder.add("serviceMetadata", metadataToJsonArray());
         return builder.build(); 
     }
@@ -187,12 +181,9 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         invalListener.remove(il);
     }
 
-    public Property<String> getCaseNumberProperty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     private JsonValue metadataToJsonArray() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Logger.getLogger("TODO").warn("metadataToJsonArray(): returning an empty list needs replacement with actual metadata list");
+        return Json.createArrayBuilder().build();
     }
     
 }

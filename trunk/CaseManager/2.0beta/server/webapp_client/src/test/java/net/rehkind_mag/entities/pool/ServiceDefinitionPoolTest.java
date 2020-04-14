@@ -9,17 +9,15 @@ import com.sun.scenario.Settings;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.entities.ClientServiceDefinition;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
-import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -31,11 +29,11 @@ public class ServiceDefinitionPoolTest {
     static ServiceDefinitionPool SERVICE_DEF_POOL;
     
     public ServiceDefinitionPoolTest() throws Exception{
-        ServiceDefinitionPoolTest.setUpClass();
+        if(SERVICE_DEF_POOL==null){ setUpClass(); }
     }
 
-    @BeforeAll
-    public static void setUpClass() throws Exception {
+    @Before
+    public final void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
         Settings.set("client.password", "123456");
@@ -50,11 +48,7 @@ public class ServiceDefinitionPoolTest {
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-    @BeforeEach
-    public void setUp() {
-    }
-    
-    @AfterEach
+    @After
     public void tearDown() {
         try {
             System.out.println("WAITING FOR POOL");
@@ -90,6 +84,9 @@ public class ServiceDefinitionPoolTest {
         ReadOnlyClientObjectList result = pool.getAllEntities();
         assertTrue(result.size()>0);
         
+        for(int i=0; i<result.size(); i++){
+            System.out.println("loaded ServiceDefinition["+i+"]: "+result.get(i));
+        }
         try {
             System.out.println("WAITING FOR POOL");
             SERVICE_DEF_POOL.waitFor(30000);
@@ -105,17 +102,24 @@ public class ServiceDefinitionPoolTest {
     @Test
     public void testGetEntity() {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-        int serviceId = 1;
+        int serviceDefId = 0;
         ServiceDefinitionPool pool = ServiceDefinitionPoolTest.SERVICE_DEF_POOL;
-        ClientServiceDefinition result = pool.getEntity(serviceId);
-        assertEquals(serviceId, result.getId());
+        ClientServiceDefinition nonExistingResult = pool.getEntity(serviceDefId);
+        assertTrue(serviceDefId != nonExistingResult.getId());
+        
+        System.out.println("non-existing result: "+nonExistingResult.toString());
         
         try {
             System.out.println("WAITING FOR POOL");
-            pool.waitFor(30000);
+            pool.waitFor(5000);
         } catch (TimeoutException ex) {
             Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        serviceDefId = 1;
+        ClientServiceDefinition existingResult = pool.getEntity(serviceDefId);
+        assertEquals(serviceDefId, existingResult.getId());
+        System.out.println("existing result: "+existingResult.toString());
+        
         System.out.println("\n\n<<<<<##################### getEntity #########################\n\n");
     }
 

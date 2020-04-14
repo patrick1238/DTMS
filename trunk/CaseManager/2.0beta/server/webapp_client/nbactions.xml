@@ -12,6 +12,7 @@
             <properties>
                 <exec.args>-classpath %classpath net.rehkind_mag.webapp_client.WebappClientFXML</exec.args>
                 <exec.executable>java</exec.executable>
+                <skipTests>true</skipTests>
             </properties>
         </action>
         <action>
