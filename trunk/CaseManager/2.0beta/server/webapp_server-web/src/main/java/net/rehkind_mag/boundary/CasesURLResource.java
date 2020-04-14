@@ -34,4 +34,30 @@ public class CasesURLResource {
             .build();
         return uri.getRawPath();
     }
+
+    static String getCasesForClinicURL(int id, UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(CasesResource.class)
+            .path(CasesResource.class, "getCasesForClinic")
+            .build(id);
+        return uri.getRawPath();
+    }
+
+    static String getCreateURL(UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(CasesResource.class)
+            .path(CasesResource.class, "createCase")
+            .build();
+        return uri.getRawPath();
+    }
+
+    static String getDeleteURL(UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(CasesResource.class)
+            .path(CasesResource.class, "deleteCase")
+            .build();
+        return uri.getRawPath();
+    }
+
+
 }

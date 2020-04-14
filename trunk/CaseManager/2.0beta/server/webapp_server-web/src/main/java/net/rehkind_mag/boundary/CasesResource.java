@@ -84,8 +84,18 @@ public class CasesResource {
         df.setTimeZone(TimeZone.getTimeZone("MEZ"));
     }
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path(CASES_FOR_CLINIC_URL)
-    public Response getCases(@PathParam("CLINICID") int id) {
+    public Response getCasesForClinic(@PathParam("CLINICID") int id, JsonObject input) {
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject submitter = request.getSubmitter();
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( CasesURLResource.getCasesForClinicURL(id, uriInfo), submitter.getString("login"), "get cases for clinic with id="+id);
+        }
+        
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         
         List<ICase> filteredCases = caseRepo.getCasesForClinic(id);
@@ -97,10 +107,19 @@ public class CasesResource {
     }
     
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path(CASES_URL)
-    public Response getCases() {
+    public Response getCases(JsonObject input) {
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject submitter = request.getSubmitter();
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getCasesURL(uriInfo), submitter.getString("login"), "get cases");
+        }
+        
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
-        System.out.println("caserepo: "+caseRepo);
         for(ICase c : caseRepo.getCases()){
             arrayBuilder.add( getCaseBuilderJson(c) );
         }
@@ -110,8 +129,16 @@ public class CasesResource {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path(CASE_URL)
-    public Response getCase(@PathParam("CASEID") Integer id) {
+    public Response getCase(@PathParam("CASEID") Integer id, JsonObject input) {
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject submitter = request.getSubmitter();
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse( CasesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get cases");
+        }
         ICase caseToBuild = caseRepo.getCase(id);
         if(caseToBuild==null){
             JsonObject response = ErrorRepository.createNotFoundError(CasesURLResource.getURL(id, uriInfo), "@GET Case with id="+id);
@@ -127,12 +154,17 @@ public class CasesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCase(JsonObject input){
         HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject updatedCase = request.getBody();
+        JsonObject updatedCase = request.getBodyObject();
         JsonObject submitter = request.getSubmitter();
         String uuid = request.getUUID();
         
         Logger.getLogger("global").log(Logger.Level.INFO, "update for case requested.");
         Logger.getLogger("global").log(Logger.Level.INFO, "updated object is "+toString(updatedCase));
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update case with id="+updatedCase.getInt("id"));
+        }
         
         boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
         if( !isAvailableUUID ){
@@ -142,12 +174,7 @@ public class CasesResource {
         }
         
         try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "update case with id="+updatedCase.getInt("id"));
-            return DefaultResponse.createNoPermissionResponse(err);
-        }
+        
         
         Integer caseId=Integer.MIN_VALUE;
         try{ caseId=updatedCase.getInt("id"); }catch(NullPointerException ex){  }
@@ -209,25 +236,25 @@ public class CasesResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCase(JsonObject input) {
         HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject createCase = request.getBody();
+        JsonObject createCase = request.getBodyObject();
         JsonObject submitter = request.getSubmitter();
         String uuid = request.getUUID();
-        Logger.getLogger("global").log(Logger.Level.INFO, "Create for case requested.");
-
+        
+        Logger.getLogger("global").log(Logger.Level.INFO, "create for case requested.");
+        Logger.getLogger("global").log(Logger.Level.INFO, "create object is "+toString(createCase));
+        
+        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+        if( !hasAccess ){
+            return submitterRepo.createNoPermissionResponse(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create case with case number="+createCase.getString("caseNumber"));
+        }
+        
         boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
         if( !isAvailableUUID ){
             JsonObject err;
-            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getUpdateURL(uriInfo), uuid, "update case with id="+createCase.getInt("id"), uuidManager);
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getCreateURL(uriInfo), uuid, "create case with case number="+createCase.getString("caseNumber"), uuidManager);
             return DefaultResponse.createNoPermissionResponse(err);
         }
-        
         try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new case");
-            return DefaultResponse.createNoPermissionResponse(err);
-        }
         
         Integer clinicId=null;
         try{ clinicId=createCase.getInt("clinicId"); }catch(NullPointerException ex){  }
@@ -283,20 +310,29 @@ public class CasesResource {
     @Path(CASE_DELETE_URL)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteCase(JsonArray input){
-        JsonObject deleteCase=input.getJsonObject(0);
-        JsonObject submitter=input.getJsonObject(1);
+    public Response deleteCase(JsonObject input){
+        HttpAccessRequest request = new HttpAccessRequest(input);
+        JsonObject deleteCase = request.getBodyObject();
+        JsonObject submitter = request.getSubmitter();
+        String uuid = request.getUUID();
         
-        Integer id = deleteCase.getInt("id");
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "delete for case requested.");
+        Logger.getLogger(getClass()).log(Logger.Level.INFO, "delete object is "+toString(deleteCase));
         
         boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
         if( !hasAccess ){
-            JsonObject err;
-            err = ErrorRepository.createNoPermissionError(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create new case");
-            return DefaultResponse.createNoPermissionResponse(err);
+            return submitterRepo.createNoPermissionResponse(CasesURLResource.getDeleteURL(uriInfo), submitter.getString("login"), "delete case with id="+deleteCase.getInt("id"));
         }
         
-        Logger.getLogger("global").log(Logger.Level.INFO, "Delete for case[id="+id+"] requested.");
+        boolean isAvailableUUID = uuidManager.isAvailableUUID(uuid);
+        if( !isAvailableUUID ){
+            JsonObject err;
+            err = ErrorRepository.createDuplicatedRequestError(CasesURLResource.getCreateURL(uriInfo), uuid, "delete case with case number="+deleteCase.getInt("id"), uuidManager);
+            return DefaultResponse.createNoPermissionResponse(err);
+        }
+        try{ uuidManager.updateUUIDState(uuid, LocalUUIDManager.UUID_PROCESSING); }catch(Exception ex){ ex.printStackTrace(); }
+        
+        Integer id = deleteCase.getInt("id");
         
         ICase caseToDelete = caseRepo.getCase(id);
         
