@@ -41,6 +41,7 @@ public class BufferedEndpointFactory {
             case HTTP_ENDPOINT_TEMPLATES.CREATE_CASE:
             case HTTP_ENDPOINT_TEMPLATES.UPDATE_CASE:
             case HTTP_ENDPOINT_TEMPLATES.DELETE_CASE:
+            case HTTP_ENDPOINT_TEMPLATES.GET_CASE_BY_CASE_NUMBER:
             if(endpoints.get("CASES:"+serverSettings.serverAddress)==null){
                 endpoints.put("CASES:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
             }

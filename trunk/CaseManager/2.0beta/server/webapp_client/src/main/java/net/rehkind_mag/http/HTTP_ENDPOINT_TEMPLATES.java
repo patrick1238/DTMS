@@ -16,6 +16,8 @@ public class HTTP_ENDPOINT_TEMPLATES {
     static final public String UPDATE_CASE="casepool/case/update";
     static final public String DELETE_CASE="casepool/case/delete";
     
+    static final public String GET_CASE_BY_CASE_NUMBER="casepool/case/casenumber/{CASE_NUMBER}";
+    
     static final public String GET_CLINIC="clinicpool/clinic/{ID}";
     static final public String GET_CLINICS="clinicpool/clinics";
     static final public String CREATE_CLINIC="clinicpool/clinic/create";
