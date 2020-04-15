@@ -48,31 +48,56 @@ public class CasePool extends AClientObjectPool<ClientCase> {
     }
     
     @Override
-    public ReadOnlyClientObjectList getAllEntities(){
-        try{
-            fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_CASES, HTTP_REQUEST_TYPE.GET_ALL);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load cases", ex);
+    public ReadOnlyClientObjectList getAllEntities(Boolean updatePool){
+        if(updatePool){
+            try{
+                fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_CASES, HTTP_REQUEST_TYPE.GET_ALL);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load cases", ex);
+            }
         }
         return cachedCaseList;
     }
-    
+     
     @Override
-    public ClientCase getEntity(int caseId) {
+    public ClientCase getEntity(int caseId, Boolean updatePool) {
         ClientCase returnCase = this.cachedCaseList.getByID(caseId);
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_CASE;
         String buildEP = templateEP.replace("{ID}", ""+caseId);
         
         HashMap<String,Object> param = new HashMap<>();
         param.put("case_id", caseId);
+        if(updatePool){
         try{
             fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
         } catch (NotSignedInException ex) {
             Logger.getLogger(getClass()).log(Level.WARN, "could not load case", ex);
         }
+        }
         return (returnCase==null) ? defaultCase.getLocalClone() : returnCase;
     }
-
+    
+    public ClientCase getEntityByCaseNumber(String caseNumber, Boolean updatePool) {
+        ClientCase returnCase = null;
+        
+        for( ClientCase testCase : (ClientCase[])this.cachedCaseList.toArray(new ClientCase[]{})){
+            if( testCase.getCaseNumber().equals(caseNumber) ){ returnCase=testCase; }
+        }
+        String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_CASE_BY_CASE_NUMBER;
+        String buildEP = templateEP.replace("{CASE_NUMBER}", ""+caseNumber);
+        
+        HashMap<String,Object> param = new HashMap<>();
+        param.put("case_number", caseNumber);
+        if(updatePool){
+        try{
+            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
+        } catch (NotSignedInException ex) {
+            Logger.getLogger(getClass()).log(Level.WARN, "could not load case", ex);
+        }
+        }
+        return (returnCase==null) ? defaultCase.getLocalClone() : returnCase;
+    }
+    
     @Override
     public int createEntity(ClientCase toCreate)  throws TimeoutException {
         String templateEP = HTTP_ENDPOINT_TEMPLATES.CREATE_CASE;
@@ -92,6 +117,8 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         
         Integer requestId = requestIDs[requestIDs.length-1];
         waitForRequest(requestId);
+        
+        getEntityByCaseNumber(toCreate.getCaseNumber(), true);
         return requestId;
     }
 

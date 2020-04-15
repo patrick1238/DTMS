@@ -39,19 +39,21 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
         defaultServiceDefinition = ClientServiceDefinition.getServiceDefinitionTemplate();
         return ServiceDefinitionPool.singletonPool;
     }
-    
+     
     @Override
-    public ReadOnlyClientObjectList getAllEntities(){
-        try {
-            fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITIONS, HTTP_REQUEST_TYPE.GET_ALL);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load service_definitions", ex);
+    public ReadOnlyClientObjectList getAllEntities(Boolean updatePool){
+        if(updatePool){
+            try {
+                fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITIONS, HTTP_REQUEST_TYPE.GET_ALL);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load service_definitions", ex);
+            }
         }
         return cachedServiceDefinitionList;
     }
     
     @Override
-    public ClientServiceDefinition getEntity(int serviceDefId) {
+    public ClientServiceDefinition getEntity(int serviceDefId, Boolean updatePool) {
         ClientServiceDefinition returnService = this.cachedServiceDefinitionList.getByID(serviceDefId);
         System.out.println("ServiceDef["+serviceDefId+"] requested...returning cached object: "+returnService+ " (original: "+((returnService!=null)?returnService.getOriginalJson():"<NOT_DEFINED>")+")");
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITION;
@@ -59,10 +61,12 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
         
         HashMap<String,Object> param = new HashMap<>();
         param.put("service_id", serviceDefId);
-        try{
-            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load service", ex);
+        if( updatePool ){
+            try{
+                fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load service", ex);
+            }
         }
         return (returnService==null) ? defaultServiceDefinition.getLocalClone() : returnService;
     }

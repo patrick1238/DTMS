@@ -32,8 +32,10 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     HashMap<Integer, PendingRequest> pendingHttpRequests=new HashMap<>();
     
     
-    abstract public T getEntity(int ID);
-    abstract public List<T> getAllEntities();
+    public T getEntity(int ID){ return getEntity(ID, Boolean.FALSE); }
+    abstract public T getEntity(int ID, Boolean updatePool);
+    public List<T> getAllEntities(){ return getAllEntities(Boolean.FALSE); }
+    abstract public List<T> getAllEntities(Boolean updatePool);
     abstract public int createEntity(T toCreate) throws TimeoutException ;
     abstract public int deleteEntity(T entity) throws TimeoutException;
     abstract public int persistEntity(T entity) throws TimeoutException;

@@ -7,7 +7,6 @@ package net.rehkind_mag.entities.pool;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
-import javafx.application.Platform;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.rehkind_mag.interfaces.IHttpResponse;
@@ -45,17 +44,19 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
     }
     
     @Override
-    public ReadOnlyClientObjectList getAllEntities(){
-        try{    
-            fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_CLINICS, HTTP_REQUEST_TYPE.GET_ALL);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load clinics", ex);
+    public ReadOnlyClientObjectList getAllEntities(Boolean updatePool){
+        if(updatePool){
+            try{    
+                fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_CLINICS, HTTP_REQUEST_TYPE.GET_ALL);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load clinics", ex);
+            }
         }
         return cachedClinicList;
     }
     
     @Override
-    public ClientClinic getEntity(int clinicId) {
+    public ClientClinic getEntity(int clinicId, Boolean updatePool) {
         if(clinicId<1){ return null; }
         ClientClinic returnClinic = this.cachedClinicList.getByID(clinicId);
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_CLINIC;
@@ -63,11 +64,12 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
         
         HashMap<String,Object> param = new HashMap<>();
         param.put("clinic_id", clinicId);
+        if(updatePool){
         try{
             fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
         } catch (NotSignedInException ex) {
             Logger.getLogger(getClass()).log(Level.WARN, "could not load clinic", ex);
-        }
+        }}
         return (returnClinic==null) ? (ClientClinic)defaultClinic.getLocalClone() : returnClinic;
     }
 

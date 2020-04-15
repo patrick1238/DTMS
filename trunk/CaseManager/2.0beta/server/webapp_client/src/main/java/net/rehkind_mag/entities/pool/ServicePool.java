@@ -43,27 +43,31 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
     
     @Override
-    public ReadOnlyClientObjectList getAllEntities(){
-        try {
-            fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_SERVICES, HTTP_REQUEST_TYPE.GET_ALL);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load services", ex);
+    public ReadOnlyClientObjectList getAllEntities( Boolean updatePool ){
+        if(updatePool){
+            try {
+                fireHTTPRequest(HTTP_ENDPOINT_TEMPLATES.GET_SERVICES, HTTP_REQUEST_TYPE.GET_ALL);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load services", ex);
+            }
         }
         return cachedServiceList;
     }
     
     @Override
-    public ClientService getEntity(int serviceId) {
+    public ClientService getEntity(int serviceId, Boolean updatePool) {
         ClientService returnService = this.cachedServiceList.getByID(serviceId);
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_SERVICE;
         String buildEP = templateEP.replace("{ID}", ""+serviceId);
         
         HashMap<String,Object> param = new HashMap<>();
         param.put("service_id", serviceId);
-        try{
-            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load service", ex);
+        if(updatePool){
+            try{
+                fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load service", ex);
+            }
         }
         return (returnService==null) ? defaultService.getLocalClone() : returnService;
     }
