@@ -40,7 +40,7 @@ public class ClinicPoolTest {
         UserLogin.setLogin("guest", "123456");
         
         CLINIC_POOL=ClinicPool.createPool();
-        CLINIC_POOL.getAllEntities();
+        CLINIC_POOL.getAllEntities(true);
         CLINIC_POOL.waitFor(30000);
         System.out.println("ALL_POOL: "+CLINIC_POOL);
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
@@ -81,7 +81,7 @@ public class ClinicPoolTest {
         UserLogin.getLoginAsJson();
         ClinicPool pool = ClinicPoolTest.CLINIC_POOL;
         
-        ReadOnlyClientObjectList result = pool.getAllEntities();
+        ReadOnlyClientObjectList<ClientClinic> result = pool.getAllEntities();
         assertEquals(true, (result.size()>0));
         
         try {

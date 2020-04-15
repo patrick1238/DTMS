@@ -33,8 +33,7 @@ public class ServicePoolTest {
     public ServicePoolTest() throws Exception{
         if(SERVICE_POOL==null){ setUpClass(); }
     }
-
-    @Before
+    
     public final void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
@@ -42,27 +41,18 @@ public class ServicePoolTest {
         UserLogin.setLogin("guest", "123456");
         
         CASE_POOL=CasePool.createPool();
-        CASE_POOL.getAllEntities();
+        CASE_POOL.getAllEntities(true);
         CASE_POOL.waitFor(30000);
         
         
         SERVICE_POOL=ServicePool.createPool();
-        SERVICE_POOL.getAllEntities();
+        SERVICE_POOL.getAllEntities(true);
         SERVICE_POOL.waitFor(30000);
         
         System.out.println("ALL_POOL: "+SERVICE_POOL);
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-    @After
-    public void tearDown() {
-        try {
-            System.out.println("WAITING FOR POOL");
-            SERVICE_POOL.waitFor(30000);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * Test of createPool method, of class ServicePool.

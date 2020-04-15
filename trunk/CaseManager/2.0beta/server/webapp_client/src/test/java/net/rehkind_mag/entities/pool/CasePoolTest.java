@@ -38,7 +38,7 @@ public class CasePoolTest {
         if(CASE_POOL==null){ setUpClass(); }
     }
 
-    @Before
+    
     final public void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
@@ -46,32 +46,14 @@ public class CasePoolTest {
         UserLogin.setLogin("guest", "123456");
         
         CASE_POOL=CasePool.createPool();
-        CASE_POOL.getAllEntities();
+        CASE_POOL.getAllEntities(true);
         CASE_POOL.waitFor(TIMEOUT*3);
         System.out.println("ALL_POOL: "+CASE_POOL);
+        System.out.println("ALL_POOL_ITEMS: "+CASE_POOL.getAllEntities().size());
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-    @Before
-    public void setUp() {
-        try {
-            System.out.println("WAITING FOR POOL");
-            CASE_POOL.waitFor(TIMEOUT);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
-    @After
-    public void tearDown() {
-        try {
-            System.out.println("WAITING FOR POOL");
-            CASE_POOL.waitFor(TIMEOUT);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     /**
      * Test of createPool method, of class CasePool.
      */
@@ -95,7 +77,7 @@ public class CasePoolTest {
         UserLogin.getLoginAsJson();
         CasePool instance = CasePoolTest.CASE_POOL;
         
-        ReadOnlyClientObjectList result = instance.getAllEntities();
+        ReadOnlyClientObjectList result = instance.getAllEntities(false);
         assertTrue(result.size()>0);
         
         try {
@@ -115,7 +97,7 @@ public class CasePoolTest {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
         int caseId = 1;
         CasePool instance = CasePoolTest.CASE_POOL;
-        ClientCase result = instance.getEntity(caseId);
+        ClientCase result = instance.getEntity(caseId, false);
         assertEquals(caseId, result.getId());
         
         try {
@@ -135,12 +117,14 @@ public class CasePoolTest {
         System.out.println("\n\n########################## create&deleteEntity ###################>>>>>\n\n");
         CasePool pool = CasePoolTest.CASE_POOL;
         System.out.println("[BEFORE_CREATE] _________________________________"+new Date().toGMTString());
-        Integer caseCountBefore = pool.getAllEntities().size();
+        Integer caseCountBefore = pool.getAllEntities(false).size();
         
         
         System.out.println("[CREATE] _________________________________"+new Date().toGMTString());
         ClientCase caseToCreate = ClientCase.getCaseTemplate();
-        caseToCreate.setCaseNumber("TT_2020-TEST");
+        Random rnd = new Random();
+        String caseNumber = "TT_2020-"+rnd.nextInt(9999);
+        caseToCreate.setCaseNumber(caseNumber);
 
         ClientClinic mockupClinic = Mockups.getClinicMockup(1);
         ClientSubmitter mockupSubmitter = Mockups.getSubmitterMockup(1);
@@ -150,14 +134,14 @@ public class CasePoolTest {
         caseToCreate.setEntryDate(new Date());
         caseToCreate.setSubmitter(mockupSubmitter);
         try {    
-            int requestId=pool.createEntity( caseToCreate );
+            pool.createEntity( caseToCreate );
         } catch (TimeoutException ex) {
             Logger.getLogger(CasePoolTest.class.getName()).log(Level.SEVERE, "Waiting for CREATE CASE failed somehow.", ex);
         }
         
         System.out.println("[AFTER_CREATE] _________________________________ "+new Date().toGMTString());
         System.out.println("PENDING IN POOL: "+pool.pendingHttpRequests.size());
-        ReadOnlyClientObjectList<ClientCase> entities = pool.getAllEntities();
+        ReadOnlyClientObjectList<ClientCase> entities = pool.getAllEntities(false);
         ClientCase newCase=null;
         for(Object c : entities){
             ClientCase castC=(ClientCase)c;

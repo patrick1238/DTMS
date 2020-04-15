@@ -32,7 +32,6 @@ public class ServiceDefinitionPoolTest {
         if(SERVICE_DEF_POOL==null){ setUpClass(); }
     }
 
-    @Before
     public final void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
@@ -41,21 +40,11 @@ public class ServiceDefinitionPoolTest {
         
         
         SERVICE_DEF_POOL=ServiceDefinitionPool.createPool();
-        SERVICE_DEF_POOL.getAllEntities();
+        SERVICE_DEF_POOL.getAllEntities(true);
         SERVICE_DEF_POOL.waitFor(30000);
         
         System.out.println("ALL_POOL: "+SERVICE_DEF_POOL);
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
-    }
-    
-    @After
-    public void tearDown() {
-        try {
-            System.out.println("WAITING FOR POOL");
-            SERVICE_DEF_POOL.waitFor(30000);
-        } catch (TimeoutException ex) {
-            Logger.getLogger(ServiceDefinitionPoolTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
