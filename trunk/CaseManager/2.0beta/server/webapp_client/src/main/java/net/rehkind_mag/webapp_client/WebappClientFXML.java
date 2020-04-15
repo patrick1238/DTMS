@@ -13,14 +13,19 @@ import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import net.rehkind_mag.controls.StatusWindowController;
 import net.rehkind_mag.entities.pool.CasePool;
 import net.rehkind_mag.entities.pool.ClinicPool;
+import net.rehkind_mag.entities.pool.ServiceDefinitionPool;
+import net.rehkind_mag.entities.pool.ServicePool;
 
 /**
  *
@@ -75,9 +80,8 @@ public class WebappClientFXML extends Application {
             line="   "+name+": "+Settings.get(name);
             Logger.getGlobal().info(line);
         }
-        
-        preloadClientObjectPools();
-        
+
+                
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_main_pane.fxml"));
         
         Scene scene = new Scene(root, 1200, 900);
@@ -85,13 +89,40 @@ public class WebappClientFXML extends Application {
         primaryStage.setTitle("TestClient for HTTPRequests - LINFO");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_status_window.fxml"));
+        Parent rootStatus = loader.load();
+        StatusWindowController statusControl = loader.getController();
+        
+        Thread preloadThread = new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            preloadClientObjectPools(statusControl);
+                        }catch(IOException ioEx){}
+                    }
+                }
+        );
+        
+
+        Stage rootStage = new Stage();
+        Scene statusScene = new Scene(rootStatus);
+        rootStage.setScene(statusScene);
+        rootStage.setAlwaysOnTop(true);
+        rootStage.show();
+        
+        preloadThread.start();
+        
+
     }
     
-    private void preloadClientObjectPools(){
+    private void preloadClientObjectPools(StatusWindowController wndControl) throws IOException{
         // calls @GET_ALL for all entity_pools for intitial caching
+        Platform.runLater( new StatusUpdate(wndControl, "Loading clinics...", 5));
         ClinicPool.createPool().getAllEntities();
         try{
-            ClinicPool.createPool().waitFor(6000);
+            ClinicPool.createPool().waitFor(30000);
         }
         catch(TimeoutException ex){
             Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
@@ -108,9 +139,44 @@ public class WebappClientFXML extends Application {
         //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(1).toString() );
         //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(2).toString() );
         
+        Platform.runLater( new StatusUpdate(wndControl, "Loading service definitions...", 24));
+        ServiceDefinitionPool.createPool().getAllEntities();
+        try{
+            ServiceDefinitionPool.createPool().waitFor(30000);
+        }
+        catch(TimeoutException ex){
+            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
+            ex.printStackTrace();
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Timeout during start-up");
+            alert.setHeaderText("Connection to wildfly server could not be established.");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
+
+            System.exit(1);
+        }
+        Platform.runLater( new StatusUpdate(wndControl, "Loading services...", 56));
+        ServicePool.createPool().getAllEntities();
+        try{
+            ServicePool.createPool().waitFor(30000);
+        }
+        catch(TimeoutException ex){
+            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
+            ex.printStackTrace();
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Timeout during start-up");
+            alert.setHeaderText("Connection to wildfly server could not be established.");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
+
+            System.exit(1);
+        }
+        Platform.runLater( new StatusUpdate(wndControl, "Loading cases...", 69));
         CasePool.createPool().getAllEntities();
         try{
-            CasePool.createPool().waitFor(6000);
+            CasePool.createPool().waitFor(30000);
         }
         catch(TimeoutException ex){
             Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
@@ -125,6 +191,7 @@ public class WebappClientFXML extends Application {
             System.exit(1);
         }
         
+        Platform.runLater( new StatusUpdate(wndControl, "Launching...", 100));
     }
 
     /**
@@ -134,4 +201,19 @@ public class WebappClientFXML extends Application {
         launch(args);
     }
     
+    private class StatusUpdate implements Runnable{
+        String job;
+        Integer status;
+        StatusWindowController control;
+        private StatusUpdate(StatusWindowController wndControl,String job, Integer status){
+            control = wndControl;
+            this.job=job;
+            this.status=status;
+        }
+        @Override
+        public void run() {
+            control.setStatus(job, status);
+        }
+    
+    }
 }
