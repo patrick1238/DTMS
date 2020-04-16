@@ -14,7 +14,7 @@ import javafx.collections.ObservableListBase;
  *
  * @author rehkind
  */
-public class ReadOnlyClientObjectList<T extends IClientObject> extends ObservableListBase {
+public class ReadOnlyClientObjectList<T extends IClientObject> extends ObservableListBase<T> {
     HashMap<Integer, IClientObject> cachedObjects = new HashMap<>();
     
     @Override

@@ -6,6 +6,7 @@
 package net.rehkind_mag.interfaces.client;
 
 import java.util.Collection;
+import java.util.HashSet;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.jboss.logging.Logger;
@@ -16,29 +17,34 @@ import org.jboss.logging.Logger;
  */
 public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObjectList<T> implements ChangeListener<IClientObject>{
     
-    public void put(T object){
+    @Override
+    public boolean add(T object){
         beginChange();
         try{
             internalPut(object);
+            return true;
         }catch(IndexOutOfBoundsException ex){
             Logger.getLogger(getClass()).warn(ex.getMessage());
             Logger.getLogger(getClass()).warn(String.format( "caused by object: {0}", new Object[]{ object }) );
+            return false;
         }finally{
             endChange();
         }
     }
     
-    public void putAll(Collection<T> objects){
+    @Override
+    public boolean addAll(T... objects){
         beginChange();
-        objects.forEach((object) -> {
+        for( T object: objects) {
             try{
                 internalPut(object);
             }catch(IndexOutOfBoundsException ex){
                 Logger.getLogger(getClass()).warn(ex.getMessage());
                 Logger.getLogger(getClass()).warn(String.format( "caused by object: {0}", new Object[]{ object }));
             }
-        });
+        }
         endChange();
+        return true;
     }
     
     private void internalPut(T object) throws IndexOutOfBoundsException{
