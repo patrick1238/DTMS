@@ -8,6 +8,7 @@ package net.rehkind_mag.control;
 import java.util.List;
 import javax.ejb.Local;
 import javax.validation.ValidationException;
+import javax.ws.rs.core.Response;
 import net.rehkind_mag.interfaces.ISubmitter;
 
 /**
@@ -23,4 +24,6 @@ public interface LocalSubmitterRepository {
     public void updateSubmitter(ISubmitter submitterToUpdate) throws ValidationException ;
     
     public boolean submitterHasAccess(String login, String pwd);
+    
+    public Response createNoPermissionResponse(String url, String login, String operation);
 }

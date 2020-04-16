@@ -104,5 +104,14 @@ public class CaseRepository extends AbstractFacade<CaseEntity> implements LocalC
         
         return true;
     }
+
+    @Override
+    public ICase getCaseByCaseNumber(String caseNumber) {
+        Query caseForClinicQuery = em.createNamedQuery("CaseEntity.findByCaseNumber", ICase.class);
+        caseForClinicQuery.setParameter("caseNumber", caseNumber);
+        ICase foundCase = null;
+        try{ foundCase = (ICase)caseForClinicQuery.getSingleResult(); }catch(NullPointerException nullEx){ /* not found so return null */ }
+        return foundCase;
+    }
     
 }

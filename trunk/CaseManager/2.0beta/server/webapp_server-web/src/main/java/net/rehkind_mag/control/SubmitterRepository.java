@@ -7,10 +7,12 @@ package net.rehkind_mag.control;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.validation.ValidationException;
+import javax.ws.rs.core.Response;
+import net.rehkind_mag.boundary.utils.DefaultResponse;
 import net.rehkind_mag.entity.SubmitterEntity;
 import org.netbeans.rest.application.config.AppPersistenceManager;
 import net.rehkind_mag.interfaces.ISubmitter;
@@ -64,5 +66,12 @@ public class SubmitterRepository extends AbstractFacade<SubmitterEntity> impleme
             if( s.getLogin().equals(login) && s.getPassword().equals(pwd) ){ return true; }
         }
         return false;
+    }
+
+    @Override
+    public Response createNoPermissionResponse(String url, String login, String operation) {
+        JsonObject err;
+        err = ErrorRepository.createNoPermissionError(url, login, operation);
+        return DefaultResponse.createNoPermissionResponse(err);
     }
 }

@@ -17,6 +17,7 @@ import net.rehkind_mag.interfaces.ICase;
 @Local
 public interface LocalCaseRepository {
     public ICase getCase(int caseId);
+    public ICase getCaseByCaseNumber(String caseNumber);
     public List<ICase> getCases();
     public List<ICase> getCasesByServiceType(int serviceDefId);
 

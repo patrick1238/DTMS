@@ -5,6 +5,7 @@
  */
 package net.rehkind_mag.control;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -46,6 +47,6 @@ public class ServiceDefinitionRepository extends AbstractFacade<ServiceDefinitio
 
     @Override
     public IServiceDefinition getServiceDefinition(int serviceDefId) {
-        return (IServiceDefinition)find(serviceDefId);
+        return find(serviceDefId);
     }
 }
