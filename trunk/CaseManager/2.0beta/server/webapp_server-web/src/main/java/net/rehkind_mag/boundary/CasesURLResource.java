@@ -59,5 +59,13 @@ public class CasesURLResource {
         return uri.getRawPath();
     }
 
+    static String getCaseNumberURL(String caseNumber, UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(CasesResource.class)
+            .path(CasesResource.class, "getCaseByCaseNumber")
+            .build(caseNumber);
+        return uri.getRawPath();
+    }
+
 
 }

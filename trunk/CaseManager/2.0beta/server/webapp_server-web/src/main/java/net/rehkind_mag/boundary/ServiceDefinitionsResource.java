@@ -42,10 +42,12 @@ public class ServiceDefinitionsResource {
     UriInfo uriInfo;
     
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path(ALL_SERVICE_DEFINITIONS_URL)
     public Response getServiceDefinitions() {
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         System.out.println("definition_repo: "+definitionRepo);
+        Logger.getLogger(getClass()).warn( "searching ALL ServiceDefinitions " );
         for(IServiceDefinition c : definitionRepo.getServiceDefinitions()){
             arrayBuilder.add( getServiceDefinitionBuilder(c) );
         }
@@ -57,12 +59,16 @@ public class ServiceDefinitionsResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path(SERVICE_DEFINITION_URL)
     public Response getServiceDefinition(@PathParam("DEFINITION_ID") Integer id) {
-        IServiceDefinition serviceDefToBuild = definitionRepo.getServiceDefinition(id);
-        if(serviceDefToBuild==null){
-            JsonObject response = ErrorRepository.createNotFoundError(ServiceDefinitionsURLResource.getURL(id, uriInfo), "@GET ServiceDefinition with id="+id);
-            DefaultResponse.createNotFoundResponse(response);
-        }
+        Logger.getLogger(getClass()).info( "[getServiceDefinition] searching ServiceDefinition: "+id );
+        IServiceDefinition serviceDefToBuild = null;
         
+        try{ serviceDefToBuild=definitionRepo.getServiceDefinition(id); }catch(NullPointerException ex){ /* handled in next if */ }
+
+        if( serviceDefToBuild==null ){
+            JsonObject response = ErrorRepository.createNotFoundError(ServiceDefinitionsURLResource.getURL(id, uriInfo), "@GET ServiceDefinition with id="+id);
+            Logger.getLogger(getClass()).info( String.format( "ServiceDefinition[%d] does not exist...returning NOT_FOUND_ERROR (404)", new Object[]{id}) );
+            return DefaultResponse.createNotFoundResponse(response);
+        }
         return DefaultResponse.createOKResponse( getServiceDefinitionBuilder(serviceDefToBuild).build() );
     }
     
@@ -80,7 +86,7 @@ public class ServiceDefinitionsResource {
                 .add("name", serviceDef.getName())
                 .add("description", serviceDef.getDescription());
         if(parentBuilder==null){
-            serviceDefBuilder.add("parentDefinition", "");
+            serviceDefBuilder.add("parentDefinition", -1);
         }else{
             serviceDefBuilder.add("parentDefinition", parentBuilder);
         }

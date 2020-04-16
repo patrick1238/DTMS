@@ -45,4 +45,12 @@ public class ClinicsURLResource {
             .build();
         return uri.getRawPath();
     }
+
+    static String getCasesURL(UriInfo uriInfo) {
+        URI uri = uriInfo.getBaseUriBuilder()
+            .path(ClinicsResource.class)
+            .path(ClinicsResource.class, "getCases")
+            .build();
+        return uri.getRawPath();
+    }
 }

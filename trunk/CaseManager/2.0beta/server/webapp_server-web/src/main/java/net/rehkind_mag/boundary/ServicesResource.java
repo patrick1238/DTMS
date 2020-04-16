@@ -129,15 +129,15 @@ public class ServicesResource {
     
     @GET
     @Path(SERVICE_URL)
-    public Response getService(@PathParam("SERVICEID") Integer id, JsonObject input) {
-        HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject submitter = request.getSubmitter();
-        
-        // ACCESS CHECK:
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get service with id="+id );
-        }
+    public Response getService(@PathParam("SERVICEID") Integer id) {
+//        HttpAccessRequest request = new HttpAccessRequest(input);
+//        JsonObject submitter = request.getSubmitter();
+//        
+//        // ACCESS CHECK:
+//        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+//        if( !hasAccess ){
+//            return submitterRepo.createNoPermissionResponse( ServicesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get service with id="+id );
+//        }
         
         IService serviceToBuild = serviceRepo.getService(id);
         if(serviceToBuild==null){

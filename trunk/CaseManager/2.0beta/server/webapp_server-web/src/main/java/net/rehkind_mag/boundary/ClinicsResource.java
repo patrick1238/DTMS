@@ -68,8 +68,16 @@ public class ClinicsResource {
     ContactPersonResource contactResource=new ContactPersonResource();
     
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path(CLINICS_URL)
     public Response getClinics() {
+//        HttpAccessRequest request = new HttpAccessRequest(input);
+//        JsonObject submitter = request.getSubmitter();
+//        
+//        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+//        if( !hasAccess ){
+//            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getURL(id, uriInfo), submitter.getString("login"), "get clinics with id="+id);
+//        }
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         for(IClinic c : clinicRepo.getClinics()){
             arrayBuilder.add( getClinicBuilderJson(c) );
@@ -78,16 +86,16 @@ public class ClinicsResource {
     }
     
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path(CLINIC_URL)
-    public Response getClinic(@PathParam("CLINICID") Integer id, JsonObject input) {
-        HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject submitter = request.getSubmitter();
-        
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getURL(id, uriInfo), submitter.getString("login"), "get clinic with id="+id);
-        }
+    public Response getClinic(@PathParam("CLINICID") Integer id) {
+//        HttpAccessRequest request = new HttpAccessRequest(input);
+//        JsonObject submitter = request.getSubmitter();
+//        
+//        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+//        if( !hasAccess ){
+//            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getURL(id, uriInfo), submitter.getString("login"), "get clinic with id="+id);
+//        }
         IClinic clinicToBuild = clinicRepo.getClinic(id);
         if(clinicToBuild==null){
             System.out.println("clinic is NULL");

@@ -55,6 +55,7 @@ public class CasesResource {
     final private String CASE_UPDATE_URL="/case/update";
     final private String CASE_CREATE_URL="/case/create";
     final private String CASE_DELETE_URL="/case/delete";
+    final private String CASE_GET_CASENUMBER_URL="casepool/case/casenumber/{CaseNumber}";
     
     final private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
     
@@ -110,14 +111,14 @@ public class CasesResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Path(CASES_URL)
-    public Response getCases(JsonObject input) {
-        HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject submitter = request.getSubmitter();
-        
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getCasesURL(uriInfo), submitter.getString("login"), "get cases");
-        }
+    public Response getCases() {
+//        HttpAccessRequest request = new HttpAccessRequest(input);
+//        JsonObject submitter = request.getSubmitter();
+//        
+//        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+//        if( !hasAccess ){
+//            return submitterRepo.createNoPermissionResponse( ClinicsURLResource.getCasesURL(uriInfo), submitter.getString("login"), "get cases");
+//        }
         
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         for(ICase c : caseRepo.getCases()){
@@ -129,19 +130,40 @@ public class CasesResource {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Path(CASE_URL)
-    public Response getCase(@PathParam("CASEID") Integer id, JsonObject input) {
-        HttpAccessRequest request = new HttpAccessRequest(input);
-        JsonObject submitter = request.getSubmitter();
-        
-        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
-        if( !hasAccess ){
-            return submitterRepo.createNoPermissionResponse( CasesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get cases");
-        }
+    public Response getCase(@PathParam("CASEID") Integer id) {
+        Logger.getLogger(getClass()).info("Get case id="+id+" called.");
+//        HttpAccessRequest request = new HttpAccessRequest(input);
+//        JsonObject submitter = request.getSubmitter();
+//        
+//        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+//        if( !hasAccess ){
+//            return submitterRepo.createNoPermissionResponse( CasesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get cases");
+//        }
         ICase caseToBuild = caseRepo.getCase(id);
         if(caseToBuild==null){
             JsonObject response = ErrorRepository.createNotFoundError(CasesURLResource.getURL(id, uriInfo), "@GET Case with id="+id);
+            DefaultResponse.createNotFoundResponse(response);
+        }
+        
+        return DefaultResponse.createOKResponse( buildCaseJson(caseToBuild) );
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path(CASE_GET_CASENUMBER_URL)
+    public Response getCaseByCaseNumber(@PathParam("CASE_NUMBER") String caseNumber) {
+        Logger.getLogger(getClass()).info("Get case case_number="+caseNumber+" called.");
+//        HttpAccessRequest request = new HttpAccessRequest(input);
+//        JsonObject submitter = request.getSubmitter();
+//        
+//        boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
+//        if( !hasAccess ){
+//            return submitterRepo.createNoPermissionResponse( CasesURLResource.getURL(id, uriInfo), submitter.getString("login"), "get cases");
+//        }
+        ICase caseToBuild = caseRepo.getCaseByCaseNumber(caseNumber);
+        if(caseToBuild==null){
+            JsonObject response = ErrorRepository.createNotFoundError(CasesURLResource.getCaseNumberURL(caseNumber, uriInfo), "@GET Case with caseNumber="+caseNumber);
             DefaultResponse.createNotFoundResponse(response);
         }
         
