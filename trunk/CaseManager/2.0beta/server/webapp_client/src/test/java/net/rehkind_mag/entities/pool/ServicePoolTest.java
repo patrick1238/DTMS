@@ -9,14 +9,14 @@ import com.sun.scenario.Settings;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.rehkind_mag.entities.ClientCase;
 import net.rehkind_mag.entities.ClientService;
+import net.rehkind_mag.entities.ClientServiceDefinition;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
-import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Test;
 
 
@@ -29,6 +29,7 @@ import org.junit.Test;
 public class ServicePoolTest {
     static ServicePool SERVICE_POOL;
     static CasePool CASE_POOL;
+    static ServiceDefinitionPool SERVICE_DEFINITION_POOL;
     
     public ServicePoolTest() throws Exception{
         if(SERVICE_POOL==null){ setUpClass(); }
@@ -44,6 +45,9 @@ public class ServicePoolTest {
         CASE_POOL.getAllEntities(true);
         CASE_POOL.waitFor(30000);
         
+        SERVICE_DEFINITION_POOL=ServiceDefinitionPool.createPool();
+        SERVICE_DEFINITION_POOL.getAllEntities(true);
+        SERVICE_DEFINITION_POOL.waitFor(30000);
         
         SERVICE_POOL=ServicePool.createPool();
         SERVICE_POOL.getAllEntities(true);
@@ -89,6 +93,62 @@ public class ServicePoolTest {
         System.out.println("\n\n<<<<<##################### getAllEntities #########################\n\n");
     }
 
+    /**
+     * Test of getAllEntitiesForCase method, of class ServicePool.
+     */
+    @Test
+    public void testGetAllEntitiesForCase() {
+        System.out.println("\n\n########################## testGetAllEntitiesForCase ###################>>>>>\n\n");
+        int CASE_ID=1;
+        UserLogin.getLoginAsJson();
+        ServicePool pool = ServicePoolTest.SERVICE_POOL;
+        Integer poolTotalSize=pool.getAllEntities().size();
+        ClientCase requestCase = CASE_POOL.getEntity(CASE_ID);
+        ReadOnlyClientObjectList<ClientService> result = pool.getAllEntitiesForCase(requestCase);
+        System.out.println(  String.format( "Found %d services for case[%d]...%d services in pool total.", new Object[]{result.size(), CASE_ID, poolTotalSize}) );
+        assertTrue(result.size()>0);
+        
+        for(ClientService service : result.getAll()){
+            assertTrue(service.getCase().getId()==CASE_ID);
+        }
+        try {
+            System.out.println("WAITING FOR POOL");
+            SERVICE_POOL.waitFor(30000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("\n\n<<<<<##################### testGetAllEntitiesForCase #########################\n\n");
+    }
+
+    /**
+     * Test of getAllEntitiesForDefinition method, of class ServicePool.
+     */
+    @Test
+    public void testGetAllEntitiesForDefinition() {
+        System.out.println("\n\n########################## testGetAllEntitiesForDefinition ###################>>>>>\n\n");
+        int DEFINITION_ID=4;
+        UserLogin.getLoginAsJson();
+        ServicePool pool = ServicePoolTest.SERVICE_POOL;
+        Integer poolTotalSize=pool.getAllEntities().size();
+        ClientServiceDefinition requestDefinition = SERVICE_DEFINITION_POOL.getEntity(DEFINITION_ID);
+        System.out.println("Searching for definition: "+requestDefinition.toString());
+        ReadOnlyClientObjectList<ClientService> result = pool.getAllEntitiesForDefinition(requestDefinition);
+        System.out.println(  String.format( "Found %d services for definition[%d]: %s...%d services in pool total.", new Object[]{result.size(), DEFINITION_ID, requestDefinition.getName() , poolTotalSize}) );
+        
+        assertTrue(result.size()>0);
+        System.out.println("SERVICES ARE:");
+        for(ClientService service : result.getAll()){
+            System.out.println("  --- "+service.toString());
+        }
+        try {
+            System.out.println("WAITING FOR POOL");
+            SERVICE_POOL.waitFor(30000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ServicePoolTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("\n\n<<<<<##################### testGetAllEntitiesForDefinition #########################\n\n");
+    }
+    
     /**
      * Test of getEntity method, of class ServicePool.
      */

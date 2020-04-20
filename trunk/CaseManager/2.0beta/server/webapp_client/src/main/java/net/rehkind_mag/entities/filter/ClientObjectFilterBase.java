@@ -5,8 +5,6 @@
  */
 package net.rehkind_mag.entities.filter;
 
-import java.util.ArrayList;
-import java.util.List;
 import net.rehkind_mag.entities.ClientObjectBase;
 import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.IClientObjectFilter;

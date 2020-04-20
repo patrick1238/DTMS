@@ -29,10 +29,9 @@ public class ClinicPoolTest {
     static ClinicPool CLINIC_POOL;
     
     public ClinicPoolTest() throws Exception{
-        setUpClass();
+        if(CLINIC_POOL==null){setUpClass();}
     }
-
-    @Before
+    
     public void setUpClass() throws Exception {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
@@ -46,9 +45,6 @@ public class ClinicPoolTest {
         System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
     }
     
-
-    
-    @After
     public void tearDown() {
         try {
             System.out.println("WAITING FOR POOL");

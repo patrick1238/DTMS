@@ -118,7 +118,7 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
                 JsonObject theDefinition=(JsonObject)curDefinition;
                 Logger.getLogger(getClass()).info("Processing JsonObject service_definition: {0}", new String[]{ theDefinition.toString() });
 
-                cachedServiceDefinitionList.put(new ClientServiceDefinition(theDefinition));
+                cachedServiceDefinitionList.add(new ClientServiceDefinition(theDefinition));
             });
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no service as response (deleted)
             Logger.getLogger(getClass().getName()).info("Service deleted successfully.");
@@ -126,7 +126,7 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single service_definition, creating ClientServiceDefinition...");
             JsonObject serviceDefAsJsonObject = (JsonObject)response.getContent();
 
-            cachedServiceDefinitionList.put(new ClientServiceDefinition( serviceDefAsJsonObject) );
+            cachedServiceDefinitionList.add(new ClientServiceDefinition( serviceDefAsJsonObject) );
         }
         
         if( response.getResponseStatus()!=HTTP_STATUS.CACHED ){

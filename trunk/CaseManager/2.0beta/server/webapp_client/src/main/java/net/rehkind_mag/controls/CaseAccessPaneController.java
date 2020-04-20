@@ -78,7 +78,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                 ClientCase resultCase=CasePool.createPool().getEntity(choosenId);
                 this.observeCaseList=new ClientObjectList<>();
                 if(resultCase!=null){
-                    ((ClientObjectList)this.observeCaseList).put(resultCase);
+                    ((ClientObjectList)this.observeCaseList).add(resultCase);
                 }else{
                     Logger.getLogger(getClass()).info("CasePool returned null pointer for case with id '{0}'", new String[]{choosenId.toString()});
                 }
@@ -88,7 +88,7 @@ public class CaseAccessPaneController extends AccessPaneController implements In
                 buildView();
                 break;
             case HTTP_REQUEST_TYPE.GET_ALL:
-                this.observeCaseList=CasePool.createPool().getAllEntities();
+                this.observeCaseList=CasePool.createPool().getAllEntities(true);
                 detachView();
                 this.showList=new ArrayList<>();
                 buildView();

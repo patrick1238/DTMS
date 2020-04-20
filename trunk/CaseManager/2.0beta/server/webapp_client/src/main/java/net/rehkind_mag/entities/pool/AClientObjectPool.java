@@ -20,6 +20,7 @@ import net.rehkind_mag.utils.UUIDGenerator;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.http.HttpRequestManager;
 import net.rehkind_mag.http.NotSignedInException;
+import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_STATUS;
 import org.jboss.logging.Logger;
 
@@ -34,8 +35,8 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     
     public T getEntity(int ID){ return getEntity(ID, Boolean.FALSE); }
     abstract public T getEntity(int ID, Boolean updatePool);
-    public List<T> getAllEntities(){ return getAllEntities(Boolean.FALSE); }
-    abstract public List<T> getAllEntities(Boolean updatePool);
+    public ReadOnlyClientObjectList<T> getAllEntities(){ return getAllEntities(Boolean.FALSE); }
+    abstract public ReadOnlyClientObjectList<T> getAllEntities(Boolean updatePool);
     abstract public int createEntity(T toCreate) throws TimeoutException ;
     abstract public int deleteEntity(T entity) throws TimeoutException;
     abstract public int persistEntity(T entity) throws TimeoutException;

@@ -7,10 +7,8 @@ package net.rehkind_mag.entities.pool;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
-import javafx.application.Platform;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.rehkind_mag.interfaces.IHttpResponse;
@@ -163,10 +161,10 @@ public class CasePool extends AClientObjectPool<ClientCase> {
 
         Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
         Integer requestId = requestIDs[requestIDs.length-1];
+        waitForRequest(requestId); // wait till update completed
         
-        waitForRequest(requestId);
-        getAllEntities();
-        waitFor();
+        getEntity(entity.getId(), Boolean.TRUE);
+        waitFor(); // wait till updated entity reloaded
         
         return requestId;
     }
@@ -206,7 +204,7 @@ public class CasePool extends AClientObjectPool<ClientCase> {
                 ClientCase newCase = new ClientCase(theCase);
                 loadedIds.add(newCase.getId());
                 System.out.println("\t[ALL]: adding ID "+newCase.getId());
-                cachedCaseList.put(newCase);
+                cachedCaseList.add(newCase);
             });
             cachedIds.removeAll(loadedIds);
             
@@ -226,14 +224,14 @@ public class CasePool extends AClientObjectPool<ClientCase> {
             Logger.getLogger(getClass().getName()).info("Received created JsonObject adding to cached objects...");
             JsonObject caseAsJsonObject = (JsonObject)response.getContent();
             ClientCase newCase = new ClientCase( caseAsJsonObject);
-            cachedCaseList.put( newCase );
+            cachedCaseList.add( newCase );
             System.out.println("[CREATE] CACHED LIST SIZE NOW "+cachedCaseList.size()+" IDs");
             System.out.println("[CREATE] NEW ID "+newCase.getId());
         }else{ // all other request result in a single case as JSON object
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
             JsonObject caseAsJsonObject = (JsonObject)response.getContent();
 
-            cachedCaseList.put(new ClientCase( caseAsJsonObject) );
+            cachedCaseList.add(new ClientCase( caseAsJsonObject) );
         }
         
         if( response.getResponseStatus()!=HTTP_STATUS.CACHED ){

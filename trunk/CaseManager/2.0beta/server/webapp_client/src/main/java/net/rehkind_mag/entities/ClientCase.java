@@ -6,9 +6,7 @@
 package net.rehkind_mag.entities;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import javafx.beans.InvalidationListener;
@@ -28,7 +26,9 @@ import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IService;
 import net.rehkind_mag.interfaces.ISubmitter;
 import net.rehkind_mag.entities.pool.ClinicPool;
+import net.rehkind_mag.entities.pool.ServicePool;
 import net.rehkind_mag.interfaces.client.IClientObject;
+import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
@@ -117,8 +117,6 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
     public void setClinic( IClinic newClinic ){  clinicID.setValue( newClinic.getId() ); }
     @Override
     public void setSubmitter(ISubmitter submitter) { 
-        System.out.println("SETTING SUBMITTER TO: "+submitter.getId());
-        System.out.println("submitter: "+submitter.toString());
         submitterID.setValue(submitter.getId()); }
     /**
      * sets all attribute back to initial data stored in the caseOriginal attribute 
@@ -142,7 +140,8 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
 
     @Override
     public List<IService> getServices() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ReadOnlyClientObjectList<ClientService> myServices = ServicePool.createPool().getAllEntitiesForCase(this);
+        return (List)myServices;
     }
 
     @Override
@@ -176,7 +175,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         builder.add("entryDate", DATE_FORMATTER.format( getEntryDate() ));
         builder.add("clinicId", clinicID.getValue());
         builder.add("submitterId", getSubmitter().getId());
-        return builder.build(); 
+        return builder.build();
     }
 
     public boolean wasIdenticalTo(JsonObject objToCompare){

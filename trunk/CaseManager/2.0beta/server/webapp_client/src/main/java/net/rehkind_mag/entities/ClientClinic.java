@@ -5,7 +5,6 @@
  */
 package net.rehkind_mag.entities;
 
-import java.text.ParseException;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -17,7 +16,6 @@ import javax.json.JsonObjectBuilder;
 import net.rehkind_mag.interfaces.IClinic;
 import net.rehkind_mag.interfaces.IContactForClinic;
 import net.rehkind_mag.entities.ClientObjectBase;
-import static net.rehkind_mag.entities.ClientObjectBase.DATE_FORMATTER;
 import net.rehkind_mag.interfaces.client.IClientObject;
 import org.jboss.logging.Logger;
 

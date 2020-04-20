@@ -120,7 +120,7 @@ public class WebappClientFXML extends Application {
     private void preloadClientObjectPools(StatusWindowController wndControl) throws IOException{
         // calls @GET_ALL for all entity_pools for intitial caching
         Platform.runLater( new StatusUpdate(wndControl, "Loading clinics...", 5));
-        ClinicPool.createPool().getAllEntities();
+        ClinicPool.createPool().getAllEntities(true);
         try{
             ClinicPool.createPool().waitFor(30000);
         }
@@ -140,7 +140,7 @@ public class WebappClientFXML extends Application {
         //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(2).toString() );
         
         Platform.runLater( new StatusUpdate(wndControl, "Loading service definitions...", 24));
-        ServiceDefinitionPool.createPool().getAllEntities();
+        ServiceDefinitionPool.createPool().getAllEntities(true);
         try{
             ServiceDefinitionPool.createPool().waitFor(30000);
         }
@@ -157,7 +157,7 @@ public class WebappClientFXML extends Application {
             System.exit(1);
         }
         Platform.runLater( new StatusUpdate(wndControl, "Loading services...", 56));
-        ServicePool.createPool().getAllEntities();
+        ServicePool.createPool().getAllEntities(true);
         try{
             ServicePool.createPool().waitFor(30000);
         }
@@ -174,7 +174,7 @@ public class WebappClientFXML extends Application {
             System.exit(1);
         }
         Platform.runLater( new StatusUpdate(wndControl, "Loading cases...", 69));
-        CasePool.createPool().getAllEntities();
+        CasePool.createPool().getAllEntities(true);
         try{
             CasePool.createPool().waitFor(30000);
         }
@@ -192,6 +192,8 @@ public class WebappClientFXML extends Application {
         }
         
         Platform.runLater( new StatusUpdate(wndControl, "Launching...", 100));
+        
+        Platform.runLater( new StatusUpdate(wndControl, "Terminate status", -1));
     }
 
     /**
@@ -212,7 +214,11 @@ public class WebappClientFXML extends Application {
         }
         @Override
         public void run() {
-            control.setStatus(job, status);
+            if(status>=0){
+                control.setStatus(job, status);
+            }else{
+                control.terminate();
+            }
         }
     
     }

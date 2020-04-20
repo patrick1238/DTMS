@@ -175,7 +175,7 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
                 JsonObject joClinic=(JsonObject)clinic;
                 Logger.getLogger(getClass()).info("Processing JsonObject clinic: {0}", new String[]{ joClinic.toString() });
 
-                cachedClinicList.put(new ClientClinic(joClinic));
+                cachedClinicList.add(new ClientClinic(joClinic));
             });
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Clinic deleted successfully.");
@@ -183,7 +183,7 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single clinic, creating view...");
             JsonObject clinicAsJsonObject = (JsonObject)response.getContent();
 
-            cachedClinicList.put(new ClientClinic( clinicAsJsonObject) );
+            cachedClinicList.add(new ClientClinic( clinicAsJsonObject) );
         }
 
         if(! (response.getResponseStatus()==HTTP_STATUS.CACHED) ){ finishPendingRequest(response.getRequestId()); }

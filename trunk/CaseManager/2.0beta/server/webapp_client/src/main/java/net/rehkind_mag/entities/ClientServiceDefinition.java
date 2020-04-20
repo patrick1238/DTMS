@@ -16,10 +16,12 @@ import javafx.beans.value.ObservableValue;
 import javax.json.Json;
 import javax.json.JsonObject;
 import net.rehkind_mag.entities.pool.ServiceDefinitionPool;
+import net.rehkind_mag.entities.pool.ServicePool;
 import net.rehkind_mag.interfaces.IMetadataValue;
 import net.rehkind_mag.interfaces.IService;
 import net.rehkind_mag.interfaces.IServiceDefinition;
 import net.rehkind_mag.interfaces.client.IClientObject;
+import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import org.jboss.logging.Logger;
 
 /**
@@ -77,7 +79,8 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
 
     @Override
     public List<IService> getServices() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ReadOnlyClientObjectList<ClientService> servicesForDefinition = ServicePool.createPool().getAllEntitiesForDefinition(this);
+        return (List)servicesForDefinition;
     }
 
     @Override

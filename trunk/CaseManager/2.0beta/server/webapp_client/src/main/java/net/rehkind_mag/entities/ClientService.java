@@ -5,6 +5,7 @@
  */
 package net.rehkind_mag.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
@@ -19,6 +20,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import net.rehkind_mag.entities.pool.CasePool;
+import net.rehkind_mag.entities.pool.ServiceDefinitionPool;
 import net.rehkind_mag.interfaces.ICase;
 import net.rehkind_mag.interfaces.IService;
 import net.rehkind_mag.interfaces.IMetadata;
@@ -67,9 +69,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
     
     @Override
     public IServiceDefinition getServiceDefinition() {
-        Logger.getLogger("TODO").warn("metadataToJsonArray(): returning an mockup service definition");
-        IServiceDefinition mockupDef = Mockups.getServiceDefinitionMockup( this.definitionId.getValue() );
-        return mockupDef;
+        return ServiceDefinitionPool.createPool().getEntity( this.definitionId.getValue() );
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
 
     @Override
     public List<IMetadata> getMetadata() {
-        return this.metadata;
+        return new ArrayList(metadata);
     }
     
     /**

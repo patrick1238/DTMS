@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -33,18 +34,20 @@ public class StatusWindowController implements Initializable {
         pbLoading.setProgress(0);
     }    
     
-    public void setStatus(String currentJob, Integer progress){
+    synchronized public void setStatus(String currentJob, Integer progress){
         pbLoading.setProgress((double)progress/(double)maxProgress);
         lblCurrent.setText(currentJob);
-        
-        if(progress==maxProgress){
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(StatusWindowController.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    public void terminate(){
+        try {
+            for(int i=0; i<100; i++){
+                Thread.sleep(15);
             }
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StatusWindowController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
             pbLoading.getScene().getWindow().hide();
         }
-        
     }
 }
