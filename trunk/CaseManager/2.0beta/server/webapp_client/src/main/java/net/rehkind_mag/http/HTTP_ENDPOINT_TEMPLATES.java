@@ -35,6 +35,11 @@ public class HTTP_ENDPOINT_TEMPLATES {
     static final public String GET_SERVICE_DEFINITION="servicedefinitionpool/servicedefinition/{ID}";
     static final public String GET_SERVICE_DEFINITIONS="servicedefinitionpool/servicedefinitions";
     
+    static final public String GET_SUBMITTER="submitterpool/submitter/{SUBMITTERID}";
+    static final public String GET_SUBMITTERS="submitterpool/submitters";
+    static final public String CREATE_SUBMITTER="submitterpool/submitter/create";
+    
+    
     static public String get_HTTP_METHOD_FOR_ENDPOINT(String endpoint) throws Exception{
         switch(endpoint){
             case GET_CASE:
@@ -43,6 +48,8 @@ public class HTTP_ENDPOINT_TEMPLATES {
             case GET_CLINICS:
             case GET_SERVICE:
             case GET_SERVICES:
+            case GET_SUBMITTER:
+            case GET_SUBMITTERS:
             case GET_SERVICE_DEFINITION:
             case GET_SERVICE_DEFINITIONS:
                 return "GET";
@@ -52,6 +59,7 @@ public class HTTP_ENDPOINT_TEMPLATES {
             case UPDATE_CLINIC:
             case CREATE_SERVICE:
             case UPDATE_SERVICE:
+            case CREATE_SUBMITTER:
                 return "PUT";
             case DELETE_CASE:
             case DELETE_CLINIC:

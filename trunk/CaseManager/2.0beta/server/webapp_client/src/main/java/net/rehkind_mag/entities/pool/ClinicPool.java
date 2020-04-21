@@ -27,9 +27,7 @@ import org.jboss.logging.Logger.Level;
 public class ClinicPool extends AClientObjectPool<ClientClinic> {
     
     private static ClinicPool singletonPool;
-    
     private static ClientClinic defaultClinic;
-    
     
     ClientObjectList<ClientClinic> cachedClinicList=new ClientObjectList();
     

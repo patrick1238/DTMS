@@ -23,6 +23,16 @@ public class ClientSubmitter extends ClientObjectBase<ClientSubmitter> implement
     StringProperty login=new SimpleStringProperty();
     StringProperty password=new SimpleStringProperty();
     
+    public static ClientSubmitter getSubmitterTemplate() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("id", -1);
+        builder.add("forename", "");
+        builder.add("surname", "");
+        builder.add("title", "");
+        builder.add("login", "");
+        builder.add("password", "");
+        return new ClientSubmitter( builder.build() );
+    }
     
     public ClientSubmitter(Integer id){
         this.ID.setValue(id);
