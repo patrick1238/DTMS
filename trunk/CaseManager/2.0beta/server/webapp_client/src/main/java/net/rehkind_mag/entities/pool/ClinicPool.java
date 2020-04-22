@@ -166,10 +166,10 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
         Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
 
         if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
-            Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local clinic list");
-            JsonArray casesAsJsonArray = (JsonArray)response.getContent();
+            Logger.getLogger(getClass()).info("Received JsonArray for clinics, updating local clinic list");
+            JsonArray clinicsAsJsonArray = (JsonArray)response.getContent();
 
-            casesAsJsonArray.forEach((clinic) -> {
+            clinicsAsJsonArray.forEach((clinic) -> {
                 JsonObject joClinic=(JsonObject)clinic;
                 Logger.getLogger(getClass()).info("Processing JsonObject clinic: {0}", new String[]{ joClinic.toString() });
 

@@ -7,7 +7,6 @@ package net.rehkind_mag.entities.pool;
 
 import com.sun.scenario.Settings;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -178,11 +177,12 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
         int requestId;
         String requestType;
         HashMap<String,Object> parameters;
-        
+        long creationTime;
         protected PendingRequest(int requestId, String requestType, HashMap<String,Object> parameters){
             this.requestId=requestId;
             this.requestType=requestType;
             this.parameters=parameters;
+            creationTime=System.currentTimeMillis();
         }
 
         public int getRequestId() {
@@ -200,6 +200,10 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
         
         @Override public String toString(){
             return String.format("PendingRequest[%d]: type=%s parameter.size()=%d", new Object[]{ requestId, requestType, parameters.size()});
+        }
+
+        long getCreationTime() {
+            return creationTime;
         }
         
     }

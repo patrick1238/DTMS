@@ -7,6 +7,7 @@ package net.rehkind_mag.entities.pool;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.rehkind_mag.entities.ClientSubmitter;
 import net.rehkind_mag.http.HTTP_ENDPOINT_TEMPLATES;
@@ -15,6 +16,7 @@ import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
+import net.rehkind_mag.utils.HTTP_STATUS;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
@@ -103,7 +105,48 @@ public class SubmitterPool extends AClientObjectPool<ClientSubmitter>{
 
     @Override
     public void receiveHttpResponse(IHttpResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{response.getRequestId(), response.getResponseStatus(), response.getMessage()});
+
+        
+        if( response.getResponseStatus()!=HTTP_STATUS.OK && response.getResponseStatus()!=HTTP_STATUS.CACHED ){
+            handleHttpResponseError(response.getRequestId(), response);
+            return;
+        }
+        
+        printPendingRequests();
+        PendingRequest requestToFinish = getPendingRequest(response.getRequestId());;
+        
+        long timeMS=System.currentTimeMillis()-requestToFinish.getCreationTime();
+        Boolean isCached=false;
+        if( response.getResponseStatus()==HTTP_STATUS.CACHED ){
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[CACHED] HttpResponse {0} ms.", new Object[]{timeMS});
+            isCached=true;
+        }else{
+            Logger.getLogger(getClass().getName()).log(Level.INFO, "[HTTP] HttpResponse {0} ms.", new Object[]{timeMS});
+        }
+        
+        
+        Logger.getLogger(getClass()).info("Finishing pendingRequest with id: {0}", new Object[]{ response.getRequestId() });
+        Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
+
+        if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
+            Logger.getLogger(getClass()).info("Received JsonArray for cases, updating local submitter list");
+            JsonArray submittersAsJsonArray = (JsonArray)response.getContent();
+
+            submittersAsJsonArray.forEach((clinic) -> {
+                JsonObject joSubmitter=(JsonObject)clinic;
+                Logger.getLogger(getClass()).info("Processing JsonObject submitter: {0}", new String[]{ joSubmitter.toString() });
+
+                cachedSubmitterList.add(new ClientSubmitter(joSubmitter));
+            });
+        } else{ // all other request result in a single submitter as JSON object
+            Logger.getLogger(getClass().getName()).info("Received JsonObject for single submitter, creating view...");
+            JsonObject clinicAsJsonObject = (JsonObject)response.getContent();
+
+            cachedSubmitterList.add(new ClientSubmitter( clinicAsJsonObject) );
+        }
+
+        if(! (response.getResponseStatus()==HTTP_STATUS.CACHED) ){ finishPendingRequest(response.getRequestId()); }
     }
     
 }
