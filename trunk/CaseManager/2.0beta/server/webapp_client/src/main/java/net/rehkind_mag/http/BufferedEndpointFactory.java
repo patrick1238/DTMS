@@ -81,6 +81,16 @@ public class BufferedEndpointFactory {
                 endpoints.put("SUBMITTERS:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
             }
             return endpoints.get("SUBMITTERS:"+serverSettings.serverAddress);
+            
+            case HTTP_ENDPOINT_TEMPLATES.GET_METADATA:
+            case HTTP_ENDPOINT_TEMPLATES.GET_ALL_METADATA:
+            case HTTP_ENDPOINT_TEMPLATES.GET_METADATA_FOR_SERVICE:
+            case HTTP_ENDPOINT_TEMPLATES.GET_METADATA_FOR_CASE:
+            if(endpoints.get("METADATA:"+serverSettings.serverAddress)==null){
+                endpoints.put("METADATA:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
+            }
+            return endpoints.get("METADATA:"+serverSettings.serverAddress);
+            
             default:
                 Logger.getLogger(BufferedEndpointFactory.class.getName()).log(Level.FATAL, String.format( "An unknown endpoint was requested: '%s'\n Returning 'null': may result in crashing everything.", endpoint));
                 return null;

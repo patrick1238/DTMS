@@ -1,0 +1,185 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package net.rehkind_mag.entities.pool;
+
+import com.sun.scenario.Settings;
+import java.util.concurrent.TimeoutException;
+import net.rehkind_mag.entities.ClientCase;
+import net.rehkind_mag.entities.ClientMetadata;
+import net.rehkind_mag.entities.ClientService;
+import net.rehkind_mag.entities.UserLogin;
+import net.rehkind_mag.interfaces.IService;
+import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
+import org.jboss.logging.Logger;
+import org.jboss.logging.Logger.Level;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
+
+/**
+ *
+ * @author rehkind
+ */
+public class MetadataPoolTest {
+    static MetadataPool METADATA_POOL;
+    static ServicePool SERVICE_POOL;
+    static CasePool CASE_POOL;
+    static ServiceDefinitionPool DEFINITION_POOL;
+    public MetadataPoolTest() throws Exception{
+        if(METADATA_POOL==null){setUpClass();}
+    }
+    
+    final public void setUpClass() {
+
+        Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
+        Settings.set("client.login", "guest");
+        Settings.set("client.password", "123456");
+        UserLogin.setLogin("guest", "123456");
+        
+        CASE_POOL=CasePool.createPool();
+        CASE_POOL.getAllEntities(true);
+        try {
+            CASE_POOL.waitFor(15000);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }  
+        
+        
+        SERVICE_POOL = ServicePool.createPool();
+        SERVICE_POOL.getAllEntities(true);
+        try {
+            SERVICE_POOL.waitFor(15000);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }  
+        
+        DEFINITION_POOL = ServiceDefinitionPool.createPool();
+        DEFINITION_POOL.getAllEntities(true);
+        try {
+            DEFINITION_POOL.waitFor(15000);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }      
+        
+        METADATA_POOL=MetadataPool.createPool();
+        METADATA_POOL.getAllEntities(true);
+        try {
+            METADATA_POOL.waitFor(15000);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+
+
+    System.out.println("ALL_POOL: "+METADATA_POOL);
+    System.out.println("SERVICE_POOL: "+SERVICE_POOL);
+    System.out.println("USER_LOGIN: "+UserLogin.getLoginAsJson());
+    }
+    
+    public void tearDown() {
+        try {
+            System.out.println("WAITING FOR POOL");
+            METADATA_POOL.waitFor(30000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
+        }
+    }
+
+    /**
+     * Test of createPool method, of class ClinicPool.
+     */
+    @Test
+    public void testCreatePool() {
+        System.out.println("\n\n########################## createPool ###################>>>>>\n\n");
+        MetadataPool result = MetadataPool.createPool();
+        System.out.println("Pool: "+result);
+        assertEquals(result, MetadataPoolTest.METADATA_POOL );
+        assertNotNull( result );
+        System.out.println("\n\n<<<<<##################### createPool #########################\n\n");
+    }
+
+    /**
+     * Test of getAllEntities method, of class MetadataPool.
+     */
+    @Test
+    public void testGetAllEntities() {
+        System.out.println("\n\n########################## getAllEntities ###################>>>>>\n\n");
+        if(METADATA_POOL==null){setUpClass();}
+        
+        UserLogin.getLoginAsJson();
+        MetadataPool pool = MetadataPoolTest.METADATA_POOL;
+        
+        ReadOnlyClientObjectList<ClientMetadata> result = pool.getAllEntities();
+        assertEquals(true, (result.size()>0));
+        
+        try {
+            System.out.println("WAITING FOR POOL");
+            METADATA_POOL.waitFor(10000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
+        }
+        System.out.println("\n\n<<<<<#### LOADED METADATA COUNT: "+result.size()+"######\n\n");
+        System.out.println("\n\n<<<<<##################### getAllEntities #########################\n\n");
+    }
+
+    /**
+     * Test of getAllEntities method, of class MetadataPool.
+     */
+    @Test
+    public void testGetEntitiesForService() {
+        System.out.println("\n\n########################## getMetadataForService ###################>>>>>\n\n");
+        if(METADATA_POOL==null){setUpClass();}
+        
+        UserLogin.getLoginAsJson();
+        MetadataPool pool = MetadataPoolTest.METADATA_POOL;
+        ClientService requestService = SERVICE_POOL.getEntity(1);
+        
+        ReadOnlyClientObjectList<ClientMetadata> result = pool.getMetadataForService(requestService, Boolean.FALSE);
+        assertEquals(true, (result.size()>0));
+        
+        try {
+            System.out.println("WAITING FOR POOL");
+            METADATA_POOL.waitFor(10000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
+        }
+        System.out.println("\n\n<<<<<#### LOADED METADATA FOR SERVICE TEST COUNT: "+result.size()+"######\n\n");
+        System.out.println("\n\n<<<<<##################### getMetadataForService #########################\n\n");
+    }
+
+    
+        /**
+     * Test of getAllEntities method, of class MetadataPool.
+     */
+    @Test
+    public void testGetEntitiesForCase() {
+        System.out.println("\n\n########################## getMetadataForCase ###################>>>>>\n\n");
+        if(METADATA_POOL==null){setUpClass();}
+        
+        UserLogin.getLoginAsJson();
+        MetadataPool pool = MetadataPoolTest.METADATA_POOL;
+        ClientCase requestCase = CASE_POOL.getEntity(1);
+        
+        int perServiceCount = 0;
+        for (IService s : requestCase.getServices()){
+            perServiceCount += pool.getMetadataForService((ClientService)s, Boolean.FALSE).size();
+            System.out.println("Service for case [1]: "+s.toString());
+            
+        }
+        
+        ReadOnlyClientObjectList<ClientMetadata> result = pool.getMetadataForCase(requestCase, Boolean.FALSE);
+        assertEquals(result.size(), perServiceCount);
+        
+        try {
+            System.out.println("WAITING FOR POOL");
+            METADATA_POOL.waitFor(10000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
+        }
+        System.out.println("\n\n<<<<<#### LOADED METADATA FOR CASE TEST COUNT: "+result.size() +" (per service= "+perServiceCount+") ######\n\n");
+        System.out.println("\n\n<<<<<##################### getMetadataForCase #########################\n\n");
+    }
+}

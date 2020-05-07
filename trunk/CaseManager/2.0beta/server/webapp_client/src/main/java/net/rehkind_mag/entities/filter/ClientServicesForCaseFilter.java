@@ -5,13 +5,9 @@
  */
 package net.rehkind_mag.entities.filter;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.interfaces.ICase;
-import net.rehkind_mag.interfaces.client.IClientObjectFilter;
-import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 
 /**
  *
@@ -25,6 +21,7 @@ public class ClientServicesForCaseFilter extends ClientObjectFilterBase<ClientSe
     
     @Override
     public boolean isClientObjectInScope(ClientService clientObject) {
+        if( Objects.equals( clientObject.getCase().getId(), filterCase.getId())){ System.out.println("cases match: "+clientObject.getCase().getId()+" / "+filterCase.getId()); }
         return Objects.equals( clientObject.getCase().getId(), filterCase.getId());
     }
 }

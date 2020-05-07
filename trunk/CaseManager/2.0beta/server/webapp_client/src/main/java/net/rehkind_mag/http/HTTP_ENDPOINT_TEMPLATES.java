@@ -39,6 +39,10 @@ public class HTTP_ENDPOINT_TEMPLATES {
     static final public String GET_SUBMITTERS="submitterpool/submitters";
     static final public String CREATE_SUBMITTER="submitterpool/submitter/create";
     
+    static final public String GET_METADATA="metadatapool/metadata/{SERVICEID}/{NAME}";
+    static final public String GET_ALL_METADATA="metadatapool/metadata";
+    static final public String GET_METADATA_FOR_SERVICE="metadatapool/metadata/forservice/{SERVICEID}";
+    static final public String GET_METADATA_FOR_CASE="metadatapool/metadata/forcase/{CASEID}";
     
     static public String get_HTTP_METHOD_FOR_ENDPOINT(String endpoint) throws Exception{
         switch(endpoint){
@@ -52,6 +56,10 @@ public class HTTP_ENDPOINT_TEMPLATES {
             case GET_SUBMITTERS:
             case GET_SERVICE_DEFINITION:
             case GET_SERVICE_DEFINITIONS:
+            case GET_METADATA:
+            case GET_ALL_METADATA:
+            case GET_METADATA_FOR_SERVICE:
+            case GET_METADATA_FOR_CASE:
                 return "GET";
             case CREATE_CASE:
             case UPDATE_CASE:

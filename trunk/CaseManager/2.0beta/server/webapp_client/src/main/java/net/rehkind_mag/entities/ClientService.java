@@ -60,7 +60,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("id", -1)
             .add("case", caseId)
-            .add("serviceDefinition", Mockups.getServiceDefinitionMockup( definitionId ).toJson() )
+            .add("serviceDefinition", ServiceDefinitionPool.createPool().getEntity( definitionId ).toJson() )
             .add("serviceMetadata", Json.createArrayBuilder().build() );
         return new ClientService( builder.build() );
     }
@@ -74,6 +74,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
 
     @Override
     public ICase getCase() {
+        if( caseId.getValue() == -1 ){ System.out.println("CASE_ID FOR SERVICE IS -1"); }
         return CasePool.createPool().getEntity(caseId.getValue());
     }
 
@@ -97,19 +98,14 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
      * 
      */
     final public void resetService(){
-        System.out.println("ORIGINAL: "+original.getValue().toString());
+        Logger.getLogger(getClass()).debug( "ORIGINAL: "+original.getValue().toString() );
         ID.setValue( getOriginalJson().getInt("id") );
         caseId.setValue( getOriginalJson().getInt("case") );
         definitionId.setValue(getOriginalJson().getJsonObject("serviceDefinition").getInt("id") );
-        loadMetadata( getOriginalJson().getJsonArray("serviceMetadata"));
         
-        Logger.getLogger("global").info("------------ resetService() called -------------");
-        Logger.getLogger("global").info("serviceOriginal: "+original.toString());
-        Logger.getLogger("global").info("toString():   "+toString());
-    }
-
-    private void loadMetadata(JsonArray metadataJson){
-        this.metadata.clear();
+        Logger.getLogger(getClass()).debug("------------ resetService() called -------------");
+        Logger.getLogger(getClass()).debug("serviceOriginal: "+original.toString());
+        Logger.getLogger(getClass()).debug("toString():   "+toString());
     }
     
     @Override
