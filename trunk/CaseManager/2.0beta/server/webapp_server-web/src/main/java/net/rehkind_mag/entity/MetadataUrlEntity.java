@@ -123,5 +123,9 @@ public class MetadataUrlEntity implements Serializable, IMetadataUrl {
     public String getName() {
         return this.metadataUrlEntityPK.getMetaKey();
     }
-    
+
+    @Override
+    public METADATA_TYPE getType() {
+        return METADATA_TYPE.URL;
+    }
 }

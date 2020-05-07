@@ -21,6 +21,8 @@ import net.rehkind_mag.interfaces.IService;
  */
 @Local
 public interface LocalMetadataRepository {
+    public List<IMetadata> getAllEntities();
+    
     public IMetadataDouble getDoubleMetadata(IService service, String key);
     public IMetadataInt getIntegerMetadata(IService service, String key);
     public IMetadataString getStringMetadata(IService service, String key);

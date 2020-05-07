@@ -14,6 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import net.rehkind_mag.interfaces.IMetadata;
 import net.rehkind_mag.interfaces.IMetadataDouble;
 
 /**
@@ -106,5 +107,9 @@ public class MetadataDoubleEntity implements Serializable, IMetadataDouble {
     public String getName() {
         return this.metadataDoubleEntityPK.getKey();
     }
-    
+
+    @Override
+    public METADATA_TYPE getType() {
+        return METADATA_TYPE.DOUBLE;
+    }
 }

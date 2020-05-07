@@ -56,7 +56,18 @@ public class MetadataRepository implements LocalMetadataRepository {
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
+    public List<IMetadata> getAllEntities(){
+        ArrayList<IMetadata> combinedEntities=new ArrayList<>();
+        combinedEntities.addAll( doubleRepo.findAll() );
+        combinedEntities.addAll( intRepo.findAll() );
+        combinedEntities.addAll( textRepo.findAll() );
+        combinedEntities.addAll( stringRepo.findAll() );
+        combinedEntities.addAll( urlRepo.findAll() );
+        
+        return combinedEntities;
+    }
+    
     @Override
     public List<IMetadata> getMetadataForService(IService service){
         ArrayList<IMetadata> data = new ArrayList<>();

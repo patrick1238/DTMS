@@ -109,5 +109,9 @@ public class MetadataStringEntity implements Serializable, IMetadataString {
     public String toString() {
         return "net.rehkind_mag.entity.MetadataStringEntity[ metadataStringEntityPK=" + metadataStringEntityPK + " ]";
     }
-    
+
+    @Override
+    public METADATA_TYPE getType() {
+        return METADATA_TYPE.STRING;
+    }
 }

@@ -109,4 +109,10 @@ public class MetadataIntEntity implements Serializable, IMetadataInt {
         return "net.rehkind_mag.entity.MetadataIntEntity[ metadataIntEntityPK=" + metadataIntEntityPK + " ]";
     }
     
+
+    @Override
+    public METADATA_TYPE getType() {
+        return METADATA_TYPE.INTEGER;
+    }
+    
 }
