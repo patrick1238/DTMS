@@ -74,6 +74,6 @@ public abstract class ClientObjectBase<T extends IClientObject> implements IClie
     
     @Override
     public String toString(){
-        return toJson().toString();
+        return toJson().toString()+" (original: "+original.getValue().toString()+")";
     }
 }

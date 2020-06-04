@@ -6,6 +6,7 @@
 package net.rehkind_mag.utils;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonStructure;
@@ -20,7 +21,7 @@ public class HttpAccessRequest {
     String compiledEndpoint;
     String uuid;
     JsonObject submitter;
-    JsonObject body;
+    JsonStructure body;
     ServerSettings settings;
     
     protected HttpAccessRequest(){}
@@ -53,10 +54,12 @@ public class HttpAccessRequest {
     public JsonObject getSubmitter(){
         return submitter;
     }
-    public JsonObject getBody(){
-        return body;
+    public JsonObject getBodyObject(){
+        return (JsonObject)body;
     }
-
+    public JsonArray getBodyArray(){
+        return (JsonArray)body;
+    }
     public String getCompiledEndpoint() {
         return compiledEndpoint;
     }

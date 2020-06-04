@@ -118,27 +118,31 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
     }
 
     @Override
-    public int persistEntity(ClientClinic entity) throws TimeoutException{
-        String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_CLINIC;
-        String buildEP = templateEP;
-        
-        HashMap<String,Object> param = new HashMap<>();
-        param.put("clinic_id", entity.getId());
-        
-        JsonObject httpBody = entity.toJson();
-        try{
-            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not update clinic", ex);
-        }
+    public int persistEntity(ClientClinic entity, boolean forcePersist) throws TimeoutException{
+        Integer requestId = -1;
+        if( forcePersist || entity.hasLocalChanges() ){
+            String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_CLINIC;
+            String buildEP = templateEP;
 
-        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
-        Integer requestId = requestIDs[requestIDs.length-1];
-        
-        waitForRequest(requestId);
-        getAllEntities();
-        waitFor();
-        
+            HashMap<String,Object> param = new HashMap<>();
+            param.put("clinic_id", entity.getId());
+
+            JsonObject httpBody = entity.toJson();
+            try{
+                fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not update clinic", ex);
+            }
+
+            Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+            requestId = requestIDs[requestIDs.length-1];
+
+            waitForRequest(requestId);
+            getAllEntities();
+            waitFor();
+        }else{
+            Logger.getLogger(getClass()).info("Persisting clinic entity '"+entity.getName()+"' [id="+entity.getId()+"] skipped. No local changes found...set forcePersist=TRUE to force a persist.");
+        }
         return requestId;
     }
 

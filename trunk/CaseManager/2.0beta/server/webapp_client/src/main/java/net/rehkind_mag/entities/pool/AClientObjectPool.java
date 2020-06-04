@@ -38,7 +38,8 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     abstract public ReadOnlyClientObjectList<T> getAllEntities(Boolean updatePool);
     abstract public int createEntity(T toCreate) throws TimeoutException ;
     abstract public int deleteEntity(T entity) throws TimeoutException;
-    abstract public int persistEntity(T entity) throws TimeoutException;
+    abstract public int persistEntity(T entity, boolean forcePersist) throws TimeoutException;
+    public int persistEntity(T entity) throws TimeoutException { return persistEntity(entity, Boolean.FALSE); }
     
     protected void fireHTTPRequest(String endpointCompiled, String type) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, Json.createObjectBuilder().build(), null);
