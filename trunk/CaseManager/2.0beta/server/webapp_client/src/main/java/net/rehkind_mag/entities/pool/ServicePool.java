@@ -147,11 +147,31 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
 
     @Override
-    public int persistEntity(ClientService entity) throws TimeoutException {
-        System.out.println("UPDATE");
+    public int persistEntity(ClientService entity, boolean forcePersist) throws TimeoutException {
+        if(entity.hasLocalChanges()){
+            Logger.getLogger(getClass()).warn("The ClientService object has locale changes. This should not happen at all. (changing the service def could likely break the db - changes are ignored)");
+        }
+        MetadataPool.createPool().persistMetadataForService(entity);
         return -1;
     }
 
+    
+    void persistAllEntitiesForCase(ClientCase entity, boolean forcePersist) {
+        ReadOnlyClientObjectList<ClientService> servicesForCase = getAllEntitiesForCase(entity);
+        for( ClientService cs : servicesForCase ){
+            if( forcePersist || cs.hasLocalChanges() ){
+                if (forcePersist){ Logger.getLogger(getClass()).info("Persisting service entity '"+entity.getCaseNumber()+"'. [FORCED PERSIST]"); }
+                else { Logger.getLogger(getClass()).info("Persisting service entity '"+entity.getCaseNumber()+"'. [LOCAL CHANGES]"); }
+                try{
+                    // TODO: maybe implement an additional endpoint that takes a list of services - to minimize the http calls to server
+                    // -> loop: collect in listOfChangedServices
+                    // -> persistEntityList( listOfChangedServices )
+                    persistEntity(cs);
+                }catch( TimeoutException ex ){ Logger.getLogger(getClass()).warn("Could not persist service[id="+cs.getId()+"]: Connection time out."); }
+            }
+        }
+    }
+    
     @Override
     public void receiveHttpResponse(IHttpResponse response) {
         Logger.getLogger(getClass().getName()).log(Level.INFO, "HttpResponse received: id={0} status: {1} message: {2}", new Object[]{response.getRequestId(), response.getResponseStatus(), response.getMessage()});

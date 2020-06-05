@@ -16,6 +16,7 @@ import net.rehkind_mag.interfaces.client.ClientObjectList;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
 import net.rehkind_mag.utils.HTTP_REQUEST_TYPE;
 import net.rehkind_mag.entities.ClientCase;
+import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.http.HTTP_ENDPOINT_TEMPLATES;
 import net.rehkind_mag.http.NotSignedInException;
 import net.rehkind_mag.utils.HTTP_STATUS;
@@ -145,28 +146,39 @@ public class CasePool extends AClientObjectPool<ClientCase> {
     }
 
     @Override
-    public int persistEntity(ClientCase entity) throws TimeoutException {
-        String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_CASE;
-        String buildEP = templateEP;
-        
-        HashMap<String,Object> param = new HashMap<>();
-        param.put("case_id", entity.getId());
-        
-        JsonObject httpBody = entity.toJson();
-        try{
-            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not update case", ex);
-        }
+    public int persistEntity(ClientCase entity, boolean forcePersist) throws TimeoutException {
+        int requestIdForReturn = -1;
+        if( forcePersist || entity.hasLocalChanges() ){ 
+            if (forcePersist){ Logger.getLogger(getClass()).info("Persisting case entity '"+entity.getCaseNumber()+"'. [FORCED PERSIST]"); }
+            else { Logger.getLogger(getClass()).info("Persisting case entity '"+entity.getCaseNumber()+"'. [LOCAL CHANGES]"); }
+            String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_CASE;
+            String buildEP = templateEP;
 
-        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
-        Integer requestId = requestIDs[requestIDs.length-1];
-        waitForRequest(requestId); // wait till update completed
+            HashMap<String,Object> param = new HashMap<>();
+            param.put("case_id", entity.getId());
+
+            JsonObject httpBody = entity.toJson();
+            try{
+                fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not update case", ex);
+            }
+
+            Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+            Integer requestId = requestIDs[requestIDs.length-1];
+            waitForRequest(requestId); // wait till update completed
+
+            getEntity(entity.getId(), Boolean.TRUE);
+            waitFor(); // wait till updated entity reloaded
+
+            requestIdForReturn = requestId;
+        }else{
+            Logger.getLogger(getClass()).info("Persisting case entity '"+entity.getCaseNumber()+"' skipped. No local changes found...set forcePersist=TRUE to force a persist.");
+        }
         
-        getEntity(entity.getId(), Boolean.TRUE);
-        waitFor(); // wait till updated entity reloaded
-        
-        return requestId;
+        // recursely call for child entities:
+        ServicePool.createPool().persistAllEntitiesForCase(entity, forcePersist);
+        return requestIdForReturn;
     }
 
     @Override

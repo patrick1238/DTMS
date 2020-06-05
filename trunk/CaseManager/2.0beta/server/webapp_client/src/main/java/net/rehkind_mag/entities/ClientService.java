@@ -20,6 +20,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import net.rehkind_mag.entities.pool.CasePool;
+import net.rehkind_mag.entities.pool.MetadataPool;
 import net.rehkind_mag.entities.pool.ServiceDefinitionPool;
 import net.rehkind_mag.interfaces.ICase;
 import net.rehkind_mag.interfaces.IService;
@@ -90,7 +91,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
 
     @Override
     public List<IMetadata> getMetadata() {
-        return new ArrayList(metadata);
+        return new ArrayList( MetadataPool.createPool().getMetadataForService(this, Boolean.FALSE) );
     }
     
     /**

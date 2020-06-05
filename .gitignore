@@ -5,6 +5,7 @@ trunk/CasePrinter/DTMS_Case_printer_1.0/build/classes/Listener/ConfigChangedList
 ###################
 *.com
 *.class
+<<<<<<< HEAD
 *.dll
 *.exe
 *.o
@@ -23,3 +24,7 @@ trunk/CasePrinter/DTMS_Case_printer_1.0/build/classes/Listener/ConfigChangedList
 *.tar
 *.zip
 /trunk/CaseManager/2.0beta/server/webapp_client/target
+=======
+/trunk/CaseManager/2.0beta/server/webapp_client/target/
+/trunk/CaseManager/2.0beta/server/webapp_client/nbproject/
+>>>>>>> 4ec131a0477f8d111b9cc91e6c924486f45d4f77

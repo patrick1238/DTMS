@@ -15,6 +15,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonStructure;
 import net.rehkind_mag.interfaces.IHttpResponse;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -52,6 +53,7 @@ public class JsonObjectHttpResponse implements IHttpResponse<JsonStructure> {
         }
         try{ content = parseContent(con); }catch(IOException ioEx){
             content = Json.createObjectBuilder().build();
+            Logger.getLogger(getClass()).warn("Could not parse HTTPResponse content...", ioEx);
         }
         this.requestId=requestId;
     }

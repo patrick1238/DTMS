@@ -114,7 +114,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
     }
 
     @Override
-    public int persistEntity(ClientMetadata entity) throws TimeoutException {
+    public int persistEntity(ClientMetadata entity, boolean forcePersist) throws TimeoutException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -173,6 +173,14 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         }
 
         if(! (response.getResponseStatus()==HTTP_STATUS.CACHED) ){ finishPendingRequest(response.getRequestId()); }
+    }
+
+    void persistMetadataForService(ClientService entity) {
+        ReadOnlyClientObjectList<ClientMetadata> metadataForService = getMetadataForService(entity, Boolean.FALSE);
+        
+        for (ClientMetadata meta : metadataForService){
+            HIER
+        }
     }
     
 }

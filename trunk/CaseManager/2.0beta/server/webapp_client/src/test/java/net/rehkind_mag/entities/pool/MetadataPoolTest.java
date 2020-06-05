@@ -182,4 +182,33 @@ public class MetadataPoolTest {
         System.out.println("\n\n<<<<<#### LOADED METADATA FOR CASE TEST COUNT: "+result.size() +" (per service= "+perServiceCount+") ######\n\n");
         System.out.println("\n\n<<<<<##################### getMetadataForCase #########################\n\n");
     }
+    
+        /**
+     * Test of getAllEntities method, of class MetadataPool.
+     */
+    @Test
+    public void testGetEntitiesFromClientService() {
+        System.out.println("\n\n########################## testGetEntitiesFromClientService ###################>>>>>\n\n");
+        if(METADATA_POOL==null){ setUpClass(); }
+        MetadataPool pool = METADATA_POOL;
+        UserLogin.getLoginAsJson();
+        ClientService requestService = SERVICE_POOL.getEntity(1);
+        
+        // direct call from pool
+        int metaPoolCount = pool.getMetadataForService(requestService, Boolean.FALSE).size();
+        // call from ClientService
+        ReadOnlyClientObjectList<ClientMetadata> result = pool.getMetadataForService(requestService, Boolean.FALSE);
+        int fromServiceCount = result.size();
+        
+        assertEquals(metaPoolCount, fromServiceCount);
+        
+        try {
+            System.out.println("WAITING FOR POOL");
+            METADATA_POOL.waitFor(10000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
+        }
+        System.out.println("\n\n<<<<<#### LOADED METADATA FOR CASE TEST COUNT: "+metaPoolCount +" == "+fromServiceCount+" ######\n\n");
+        System.out.println("\n\n<<<<<##################### testGetEntitiesFromClientService #########################\n\n");
+    }
 }
