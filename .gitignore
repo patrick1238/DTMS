@@ -22,3 +22,4 @@ trunk/CasePrinter/DTMS_Case_printer_1.0/build/classes/Listener/ConfigChangedList
 *.rar
 *.tar
 *.zip
+/trunk/CaseManager/2.0beta/server/webapp_client/target
