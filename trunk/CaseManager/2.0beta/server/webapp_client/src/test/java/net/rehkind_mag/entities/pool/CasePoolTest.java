@@ -18,6 +18,7 @@ import net.rehkind_mag.entities.ClientClinic;
 import net.rehkind_mag.entities.ClientSubmitter;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
+import net.rehkind_mag.webapp_client.WebappClientFXML;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -38,10 +39,7 @@ public class CasePoolTest {
 
     
     final public void setUpClass() throws Exception {
-        Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
-        Settings.set("client.login", "guest");
-        Settings.set("client.password", "123456");
-        UserLogin.setLogin("guest", "123456");
+        WebappClientFXML.loadSettings();
         
         CASE_POOL=CasePool.createPool();
         CASE_POOL.getAllEntities(true);
@@ -184,7 +182,7 @@ public class CasePoolTest {
         System.out.println("\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ new number: "+newCaseNumber+"\n");
         int requestId=-1;
         try{
-            requestId = pool.persistEntity(entity);
+            requestId = pool.persistEntity(entity, true);
         }catch( TimeoutException toEx ){
             System.out.println("TIMEOUT_EXCEPTION");
             toEx.printStackTrace();

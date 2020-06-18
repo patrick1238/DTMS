@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 import net.rehkind_mag.entities.ClientSubmitter;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
+import net.rehkind_mag.webapp_client.WebappClientFXML;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 import static org.junit.Assert.assertEquals;
@@ -30,10 +31,7 @@ public class SubmitterPoolTest {
 
     
     final public void setUpClass() throws Exception {
-        Settings.set("server.address", "http://192.168.31.2:8585/webapp/resources/");
-        Settings.set("client.login", "guest");
-        Settings.set("client.password", "123456");
-        UserLogin.setLogin("guest", "123456");
+        WebappClientFXML.loadSettings();
         
         SUBMITTER_POOL=SubmitterPool.createPool();
         SUBMITTER_POOL.getAllEntities(true);

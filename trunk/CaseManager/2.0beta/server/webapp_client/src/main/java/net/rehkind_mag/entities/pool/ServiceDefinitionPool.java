@@ -83,7 +83,7 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
     }
 
     @Override
-    public int persistEntity(ClientServiceDefinition entity) throws TimeoutException {
+    public int persistEntity(ClientServiceDefinition entity, boolean forcePersist) throws TimeoutException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

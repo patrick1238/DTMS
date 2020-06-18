@@ -7,7 +7,9 @@ package net.rehkind_mag.entities.pool;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
+import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import net.rehkind_mag.entities.ClientCase;
 import net.rehkind_mag.entities.ClientMetadata;
@@ -177,9 +179,13 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
 
     void persistMetadataForService(ClientService entity) {
         ReadOnlyClientObjectList<ClientMetadata> metadataForService = getMetadataForService(entity, Boolean.FALSE);
-        
+        int hasChangesCount=0;
+        JsonArrayBuilder metadataArrayBuilder=Json.createArrayBuilder();
         for (ClientMetadata meta : metadataForService){
-            HIER
+            if( meta.hasLocalChanges() ){
+                hasChangesCount += 1;
+                metadataArrayBuilder.add( meta.toJson() );
+            }
         }
     }
     

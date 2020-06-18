@@ -13,6 +13,7 @@ import net.rehkind_mag.entities.ClientService;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.IService;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
+import net.rehkind_mag.webapp_client.WebappClientFXML;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 import static org.junit.Assert.assertEquals;
@@ -32,12 +33,8 @@ public class MetadataPoolTest {
         if(METADATA_POOL==null){setUpClass();}
     }
     
-    final public void setUpClass() {
-
-        Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
-        Settings.set("client.login", "guest");
-        Settings.set("client.password", "123456");
-        UserLogin.setLogin("guest", "123456");
+    final public void setUpClass() throws Exception {
+        WebappClientFXML.loadSettings();
         
         CASE_POOL=CasePool.createPool();
         CASE_POOL.getAllEntities(true);
@@ -105,9 +102,11 @@ public class MetadataPoolTest {
      * Test of getAllEntities method, of class MetadataPool.
      */
     @Test
-    public void testGetAllEntities() {
+    public void testGetAllEntities() throws Exception {
         System.out.println("\n\n########################## getAllEntities ###################>>>>>\n\n");
-        if(METADATA_POOL==null){setUpClass();}
+        if(METADATA_POOL==null){
+            setUpClass();
+        }
         
         UserLogin.getLoginAsJson();
         MetadataPool pool = MetadataPoolTest.METADATA_POOL;
@@ -129,7 +128,7 @@ public class MetadataPoolTest {
      * Test of getAllEntities method, of class MetadataPool.
      */
     @Test
-    public void testGetEntitiesForService() {
+    public void testGetEntitiesForService() throws Exception {
         System.out.println("\n\n########################## getMetadataForService ###################>>>>>\n\n");
         if(METADATA_POOL==null){setUpClass();}
         
@@ -155,7 +154,7 @@ public class MetadataPoolTest {
      * Test of getAllEntities method, of class MetadataPool.
      */
     @Test
-    public void testGetEntitiesForCase() {
+    public void testGetEntitiesForCase() throws Exception {
         System.out.println("\n\n########################## getMetadataForCase ###################>>>>>\n\n");
         if(METADATA_POOL==null){setUpClass();}
         
@@ -187,7 +186,7 @@ public class MetadataPoolTest {
      * Test of getAllEntities method, of class MetadataPool.
      */
     @Test
-    public void testGetEntitiesFromClientService() {
+    public void testGetEntitiesFromClientService() throws Exception {
         System.out.println("\n\n########################## testGetEntitiesFromClientService ###################>>>>>\n\n");
         if(METADATA_POOL==null){ setUpClass(); }
         MetadataPool pool = METADATA_POOL;

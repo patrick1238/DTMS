@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import net.rehkind_mag.entities.ClientClinic;
 import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
+import net.rehkind_mag.webapp_client.WebappClientFXML;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -33,10 +34,7 @@ public class ClinicPoolTest {
     }
     
     public void setUpClass() throws Exception {
-        Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
-        Settings.set("client.login", "guest");
-        Settings.set("client.password", "123456");
-        UserLogin.setLogin("guest", "123456");
+        WebappClientFXML.loadSettings();
         
         CLINIC_POOL=ClinicPool.createPool();
         CLINIC_POOL.getAllEntities(true);
@@ -176,7 +174,7 @@ public class ClinicPoolTest {
         System.out.println("new name: "+newClinicName);
         int requestId = -1;
         try{
-            requestId = pool.persistEntity(entity);
+            requestId = pool.persistEntity(entity, true);
         }catch( TimeoutException toEx ){
             System.out.println("TIMEOUT_EXCEPTION");
             toEx.printStackTrace();
