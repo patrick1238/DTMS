@@ -1,5 +1,30 @@
 
 trunk/CasePrinter/DTMS_Case_printer_1.0/build/classes/Listener/ConfigChangedListener.class
+
+# Compiled source #
+###################
+*.com
 *.class
+<<<<<<< HEAD
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+/trunk/CaseManager/2.0beta/server/webapp_client/target
+=======
 /trunk/CaseManager/2.0beta/server/webapp_client/target/
 /trunk/CaseManager/2.0beta/server/webapp_client/nbproject/
+>>>>>>> 4ec131a0477f8d111b9cc91e6c924486f45d4f77
