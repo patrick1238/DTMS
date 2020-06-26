@@ -62,6 +62,7 @@ public class BufferedEndpointFactory {
             case HTTP_ENDPOINT_TEMPLATES.CREATE_SERVICE:
             case HTTP_ENDPOINT_TEMPLATES.UPDATE_SERVICE:
             case HTTP_ENDPOINT_TEMPLATES.DELETE_SERVICE:
+                case HTTP_ENDPOINT_TEMPLATES.UPDATE_SERVICE_METADATA:
             if(endpoints.get("SERVICES:"+serverSettings.serverAddress)==null){
                 endpoints.put("SERVICES:"+serverSettings.serverAddress, CREATE_ENDPOINT(serverSettings.serverAddress));
             }

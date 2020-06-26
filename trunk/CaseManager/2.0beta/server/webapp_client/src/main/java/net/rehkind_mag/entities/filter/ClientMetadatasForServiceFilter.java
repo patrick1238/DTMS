@@ -19,7 +19,7 @@ public class ClientMetadatasForServiceFilter  extends ClientObjectFilterBase<Cli
         service = targetService;
     }
     @Override
-    public boolean isClientObjectInScope(ClientMetadata clientObject) {
+    public synchronized boolean isClientObjectInScope(ClientMetadata clientObject) {
         return clientObject.getService().getId() == service.getId();
     }
 }

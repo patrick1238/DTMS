@@ -41,6 +41,7 @@ net\rehkind_mag\entities\ClientServiceDefinition.class
 net\rehkind_mag\entities\ClientClinic$1.class
 net\rehkind_mag\entities\ClientService$1.class
 net\rehkind_mag\gui\ClinicPicker.class
+net\rehkind_mag\entities\filter\ClientObjectLocalChangesFilter.class
 net\rehkind_mag\entities\filter\ClientServicesForCaseFilter.class
 net\rehkind_mag\entities\Mockups.class
 net\rehkind_mag\entities\pool\CasePool.class

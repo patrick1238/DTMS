@@ -21,6 +21,7 @@ D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp
 D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\entities\filter\ClientMetadatasForServiceFilter.java
 D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\entities\filter\ClientServicesForCaseFilter.java
 D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\controls\AccessPaneController.java
+D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\entities\filter\ClientObjectLocalChangesFilter.java
 D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\entities\filter\ClientObjectFilterBase.java
 D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\http\NotSignedInException.java
 D:\Documents\SubversionProjects\src\DTMS\trunk\CaseManager\2.0beta\server\webapp_client\src\main\java\net\rehkind_mag\controls\ClientObjectController.java

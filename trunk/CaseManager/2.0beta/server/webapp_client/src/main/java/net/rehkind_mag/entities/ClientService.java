@@ -93,7 +93,10 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
     public List<IMetadata> getMetadata() {
         return new ArrayList( MetadataPool.createPool().getMetadataForService(this, Boolean.FALSE) );
     }
-    
+    public JsonArray getMetadataJsonArray() {
+        return Json.createArrayBuilder().build();
+        //return MetadataPool.createPool().getMetadataForService(this, Boolean.FALSE).toJson();
+    }
     /**
      * sets all attribute back to initial data stored in the caseOriginal attribute 
      * 
@@ -126,7 +129,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         builder.add("id", getId());
         builder.add("case", getCase().getId());
         builder.add("serviceDefinition", ((ClientServiceDefinition)getServiceDefinition()).toJson());
-        builder.add("serviceMetadata", metadataToJsonArray());
+        builder.add("serviceMetadata", getMetadataJsonArray());
         return builder.build(); 
     }
 
@@ -176,11 +179,6 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
     @Override
     public void removeListener(InvalidationListener il) {
         invalListener.remove(il);
-    }
-
-    private JsonValue metadataToJsonArray() {
-        Logger.getLogger("TODO").warn("metadataToJsonArray(): returning an empty list needs replacement with actual metadata list");
-        return Json.createArrayBuilder().build();
     }
     
 }

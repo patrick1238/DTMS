@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import javafx.collections.ObservableListBase;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 
 /**
  *
@@ -18,25 +21,33 @@ public class ReadOnlyClientObjectList<T extends IClientObject> extends Observabl
     HashMap<Integer, IClientObject> cachedObjects = new HashMap<>();
     
     @Override
-    public T get(int index) {
+    public synchronized T get(int index) {
         return (T)cachedObjects.get(cachedObjects.keySet().toArray(new Integer[]{})[index]);
     }
     
-    public T getByID(int id) {
+    public synchronized T getByID(int id) {
         return (T)cachedObjects.get(id);
     }
 
-    public Collection<T> getAll() {
+    public synchronized Collection<T> getAll() {
         return (Collection<T>)cachedObjects.values();
     }
     
-    public Set<Integer> getAllIDs() {
+    public synchronized Set<Integer> getAllIDs() {
         return cachedObjects.keySet();
     }
     
     @Override
-    public int size() {
+    public synchronized int size() {
         return cachedObjects.keySet().size();
     }
     
+    public synchronized JsonArray toJson(){
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        for( IClientObject co : getAll() ){
+            builder.add(co.toJson());
+        }
+
+        return builder.build();
+    }
 }

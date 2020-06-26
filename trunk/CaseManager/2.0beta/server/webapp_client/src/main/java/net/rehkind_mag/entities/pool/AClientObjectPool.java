@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
+import javax.json.JsonValue;
 import net.rehkind_mag.interfaces.IHttpResponse;
 import net.rehkind_mag.interfaces.IHttpResponseReceiver;
 import net.rehkind_mag.interfaces.client.IClientObject;
@@ -47,16 +49,16 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     protected void fireHTTPRequest(String endpointCompiled, String type, HashMap<String,Object> param) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, Json.createObjectBuilder().build(), param);
     }
-    protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody) throws NotSignedInException{
+    protected void fireHTTPRequest(String endpointCompiled, String type, JsonStructure httpBody) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, httpBody, null);
     }
-    protected void fireHTTPRequest(String endpointCompiled, String type, JsonObject httpBody, HashMap<String,Object> param) throws NotSignedInException{
+    protected void fireHTTPRequest(String endpointCompiled, String type, JsonStructure httpBody, HashMap<String,Object> param) throws NotSignedInException{
         fireHTTPRequest(endpointCompiled, endpointCompiled, type, httpBody, param);
     }
     protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, HashMap<String, Object> param) throws NotSignedInException{
         fireHTTPRequest(endpointTemplate, endpointCompiled, type, Json.createObjectBuilder().build(), param);
     }
-    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, JsonObject httpBody, HashMap<String, Object> additionalParameters) throws NotSignedInException{
+    protected void fireHTTPRequest(String endpointTemplate, String endpointCompiled, String type, JsonStructure httpBody, HashMap<String, Object> additionalParameters) throws NotSignedInException{
         HttpRequestManager manager = HttpRequestManager.createHttpRequestManager(Settings.get("server.address"), HttpRequestManager.CONTANT_TYPE_JSON);
         String uuid = ""; // get request don't need uuid
         if( type.equals( HTTP_REQUEST_TYPE.CREATE ) ||

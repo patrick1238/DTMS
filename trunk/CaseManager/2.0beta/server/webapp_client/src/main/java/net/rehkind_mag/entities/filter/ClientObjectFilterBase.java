@@ -16,7 +16,7 @@ import net.rehkind_mag.interfaces.client.ReadOnlyClientObjectList;
  */
 abstract public class ClientObjectFilterBase<T extends ClientObjectBase> implements IClientObjectFilter<T>{
     @Override
-    public ReadOnlyClientObjectList<T> filterClientObjectList(ReadOnlyClientObjectList<T> originalList) {
+    synchronized public ReadOnlyClientObjectList<T> filterClientObjectList(ReadOnlyClientObjectList<T> originalList) {
         ClientObjectList<T> filteredList= new ClientObjectList<>();
         for(T clientObject : originalList.getAll()){
             if(isClientObjectInScope(clientObject)){

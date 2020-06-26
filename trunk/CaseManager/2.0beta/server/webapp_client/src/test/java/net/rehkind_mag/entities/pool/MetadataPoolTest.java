@@ -6,6 +6,8 @@
 package net.rehkind_mag.entities.pool;
 
 import com.sun.scenario.Settings;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.TimeoutException;
 import net.rehkind_mag.entities.ClientCase;
 import net.rehkind_mag.entities.ClientMetadata;
@@ -18,6 +20,7 @@ import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -171,6 +174,7 @@ public class MetadataPoolTest {
         
         ReadOnlyClientObjectList<ClientMetadata> result = pool.getMetadataForCase(requestCase, Boolean.FALSE);
         assertEquals(result.size(), perServiceCount);
+        assertTrue(perServiceCount>0);
         
         try {
             System.out.println("WAITING FOR POOL");
@@ -200,6 +204,78 @@ public class MetadataPoolTest {
         int fromServiceCount = result.size();
         
         assertEquals(metaPoolCount, fromServiceCount);
+        assertTrue(fromServiceCount>0);
+        try {
+            System.out.println("WAITING FOR POOL");
+            METADATA_POOL.waitFor(10000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
+        }
+        //System.out.println("\n\n<<<<<#### LOADED METADATA FOR CASE TEST COUNT: "+metaPoolCount +" == "+fromServiceCount+" ######\n\n");
+        System.out.println("\n\n<<<<<##################### testGetEntitiesFromClientService #########################\n\n");
+    }
+    
+    /**
+     * Test of getAllEntities method, of class MetadataPool.
+     */
+    @Test
+    public void testUpdateServiceMetadata() throws Exception {
+        System.out.println("\n\n########################## testUpdateServiceMetadata ###################>>>>>\n\n");
+        if(METADATA_POOL==null){ setUpClass(); }
+        MetadataPool pool = METADATA_POOL;
+        UserLogin.getLoginAsJson();
+        ClientService requestService = SERVICE_POOL.getEntity(1);
+        System.out.println("using service: "+requestService.getServiceDefinition().getName());
+        // direct call from pool
+        ReadOnlyClientObjectList<ClientMetadata> meta = pool.getMetadataForService(requestService, Boolean.FALSE);
+        int metaCount = meta.size();
+        System.out.println("service metadata count: "+metaCount);
+        for( ClientMetadata cm : meta ){
+            System.out.println(" +++ "+cm.getName()+" : "+cm.getData());
+        }
+        Random rnd = new Random();
+        // change values randomly
+        HashMap newValues = new HashMap();
+        for( ClientMetadata cm : meta ){
+            switch( cm.getType() ){
+                case STRING:
+                case TEXT:
+                    String newData = (String)cm.getData();
+                    newData = newData.split("TEST")[0]+"TEST"+rnd.nextInt(300);
+                    System.out.println("   - switching "+ cm.getData() +" to "+newData);
+                    cm.setData(newData);
+                    newValues.put(cm.getMetadataKey(), newData);
+                    
+                    break;
+                case INTEGER:
+                    Integer newIntData = (Integer)cm.getData();
+                    newIntData+= (rnd.nextInt(30)-10);
+                    System.out.println("   - switching "+ cm.getData() +" to "+newIntData);
+                    cm.setData(newIntData);
+                    newValues.put(cm.getMetadataKey(), newIntData);
+                    break;
+            }
+        }
+        
+        pool.persistMetadataForService(requestService, true);
+        
+        // call from ClientService
+        ReadOnlyClientObjectList<ClientMetadata> result = pool.getMetadataForService(requestService, Boolean.FALSE);
+        //int fromServiceCount = result.size();
+        
+        // check new values:
+        boolean metadataHaveNewValues=true;
+        int checkedKeys=0;
+        for( ClientMetadata cm : result ){
+            System.out.println("");
+            if( newValues.keySet().contains( cm.getMetadataKey() ) ){
+                metadataHaveNewValues = metadataHaveNewValues && cm.getData().equals(newValues.get(cm.getMetadataKey()));
+                checkedKeys++;
+            }
+        }
+        
+        assertTrue(metadataHaveNewValues );
+        assertTrue(checkedKeys>0);
         
         try {
             System.out.println("WAITING FOR POOL");
@@ -207,7 +283,7 @@ public class MetadataPoolTest {
         } catch (TimeoutException ex) {
             Logger.getLogger(ClinicPoolTest.class.getName()).log(Level.FATAL, null, ex);
         }
-        System.out.println("\n\n<<<<<#### LOADED METADATA FOR CASE TEST COUNT: "+metaPoolCount +" == "+fromServiceCount+" ######\n\n");
-        System.out.println("\n\n<<<<<##################### testGetEntitiesFromClientService #########################\n\n");
+        System.out.println("\n\n<<<<<#### UPDATED METADATA FOR SERVICE: "+ requestService.getId() + " ######\n\n");
+        System.out.println("\n\n<<<<<##################### testUpdateServiceMetadata #########################\n\n");
     }
 }

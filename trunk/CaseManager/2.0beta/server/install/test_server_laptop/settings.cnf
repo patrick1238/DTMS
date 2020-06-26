@@ -1,0 +1,6 @@
+export SRC_DIRECTORY=/d/Documents/SubversionProjects/src/DTMS/trunk/CaseManager/2.0beta/server/
+
+export SERVER_ADDRESS=192.168.31.2
+export SERVER_WILDFLY_PATH=/home/pathmin/wildfly/wildfly-16.0.0.Final/
+export SERVER_SSH_USER=pathmin
+export SERVER_SSH_KEY=/path/to/key_file
