@@ -21,6 +21,7 @@ import net.rehkind_mag.entity.MetadataTextEntity;
 import net.rehkind_mag.entity.MetadataTextEntityPK;
 import net.rehkind_mag.entity.MetadataUrlEntity;
 import net.rehkind_mag.entity.MetadataUrlEntityPK;
+import net.rehkind_mag.interfaces.ICase;
 import net.rehkind_mag.interfaces.IMetadata;
 import net.rehkind_mag.interfaces.IMetadataDouble;
 import net.rehkind_mag.interfaces.IMetadataInt;
@@ -28,6 +29,7 @@ import net.rehkind_mag.interfaces.IMetadataString;
 import net.rehkind_mag.interfaces.IMetadataText;
 import net.rehkind_mag.interfaces.IMetadataUrl;
 import net.rehkind_mag.interfaces.IService;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -186,6 +188,11 @@ public class MetadataRepository implements LocalMetadataRepository {
             em.persist( updateEntity );
         }
         return updateEntity;
+    }
+
+    @Override
+    public List<IMetadata> getMetadataForCase(ICase requestCase) {
+        throw new NotImplementedException();
     }
     
     

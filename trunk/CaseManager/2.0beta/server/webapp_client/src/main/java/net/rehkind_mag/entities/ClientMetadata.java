@@ -55,7 +55,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
                 this.data.setValue( asJson.getString("value") );
                 break;
         }
-        this.data.setValue(getDataValue(asJson));
+        //this.data.setValue(getDataValue(asJson));
         serviceId.setValue(asJson.getInt("serviceId"));
         
         generateId();
@@ -111,7 +111,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
             case "string":
             case "text":
             case "url":
-                builder.add("value", (Double)data.getValue());
+                builder.add("value", (String)data.getValue());
                 break;
         }
         return builder.build();

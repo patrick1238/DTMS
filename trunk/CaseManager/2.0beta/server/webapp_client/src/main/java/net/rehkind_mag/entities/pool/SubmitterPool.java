@@ -99,7 +99,7 @@ public class SubmitterPool extends AClientObjectPool<ClientSubmitter>{
     }
 
     @Override
-    public int persistEntity(ClientSubmitter entity) throws TimeoutException {
+    public int persistEntity(ClientSubmitter entity, boolean forcePersist) throws TimeoutException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -31,6 +31,7 @@ public class HTTP_ENDPOINT_TEMPLATES {
     static final public String DELETE_SERVICE="servicepool/service/delete";
     static final public String GET_SERVICES_FOR_CASE="/services/forcase/{CASEID}";
     static final public String GET_SERVICES_FOR_DEFINITION="/services/fordef/{DEFINITIONID}";
+    static final public String UPDATE_SERVICE_METADATA="/service/{SERVICEID}/metadata/update";
     
     static final public String GET_SERVICE_DEFINITION="servicedefinitionpool/servicedefinition/{ID}";
     static final public String GET_SERVICE_DEFINITIONS="servicedefinitionpool/servicedefinitions";
@@ -44,9 +45,12 @@ public class HTTP_ENDPOINT_TEMPLATES {
     static final public String GET_METADATA_FOR_SERVICE="metadatapool/metadata/forservice/{SERVICEID}";
     static final public String GET_METADATA_FOR_CASE="metadatapool/metadata/forcase/{CASEID}";
     
+    
+
     static public String get_HTTP_METHOD_FOR_ENDPOINT(String endpoint) throws Exception{
         switch(endpoint){
             case GET_CASE:
+            case GET_CASE_BY_CASE_NUMBER:
             case GET_CASES:
             case GET_CLINIC:
             case GET_CLINICS:
@@ -68,6 +72,7 @@ public class HTTP_ENDPOINT_TEMPLATES {
             case CREATE_SERVICE:
             case UPDATE_SERVICE:
             case CREATE_SUBMITTER:
+            case UPDATE_SERVICE_METADATA:
                 return "PUT";
             case DELETE_CASE:
             case DELETE_CLINIC:

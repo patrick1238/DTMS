@@ -8,8 +8,11 @@ package net.rehkind_mag.entities.pool;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
+import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonStructure;
 import net.rehkind_mag.entities.ClientCase;
 import net.rehkind_mag.entities.ClientMetadata;
 import net.rehkind_mag.entities.ClientService;
@@ -69,7 +72,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         return cachedMetadataList;
     }
     
-    public ReadOnlyClientObjectList<ClientMetadata> getMetadataForService(ClientService requestService, Boolean updatePool){
+    public synchronized ReadOnlyClientObjectList<ClientMetadata> getMetadataForService(ClientService requestService, Boolean updatePool){
         ClientMetadatasForServiceFilter filter = new ClientMetadatasForServiceFilter(requestService);
         if( updatePool ){
             try {
@@ -82,8 +85,11 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
                 Logger.getLogger(getClass()).log(Level.WARN, "could not load metadata", ex);
             }
         }
-        ReadOnlyClientObjectList<ClientMetadata> unfilteredList = getAllEntities(false);
-        
+        ReadOnlyClientObjectList<ClientMetadata> unfilteredList = new ClientObjectList();
+        unfilteredList.addAll( getAllEntities(false) );
+        //System.out.println("All loaded metadata="+unfilteredList.size());
+        //ReadOnlyClientObjectList<ClientMetadata> filteredList = filter.filterClientObjectList(unfilteredList);
+        //System.out.println("Filtered metadata="+filteredList.size());
         return filter.filterClientObjectList(unfilteredList);
     }
 
@@ -180,7 +186,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
     int persistMetadataForService( ClientService service ) throws TimeoutException { return persistMetadataForService( service, false ); }
     
     int persistMetadataForService( ClientService service, Boolean forcePersist ) throws TimeoutException {
-        ReadOnlyClientObjectList<ClientService> convertedToList = new ReadOnlyClientObjectList<>();
+        ClientObjectList<ClientService> convertedToList = new ClientObjectList<>();
         convertedToList.add(service);
         return persistMetadataForServices(convertedToList, forcePersist);
     }
@@ -189,54 +195,50 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
     
     int persistMetadataForServices(ReadOnlyClientObjectList<ClientService> services, Boolean forcePersist ) throws TimeoutException {
         int requestIdForReturn=-1;
-        ReadOnlyClientObjectList<ClientMetadata> metadataForServices = new ReadOnlyClientObjectList<ClientMetadata>();
-        ArrayList<Integer> serviceIds = new ArrayList<>();
-        ArrayList<Integer> metadataIds = new ArrayList<>();
+        ClientObjectList metadataForService = new ClientObjectList();
         for( ClientService s : services ){
-            serviceIds.add(s.getId());
+            
             if( forcePersist ){ // add all metadata
-                metadataForServices.addAll( getMetadataForService( s, Boolean.FALSE ) );
+                metadataForService.addAll( getMetadataForService( s, Boolean.FALSE ) );
+                Logger.getLogger(getClass()).info("Persisting all metadata entities ("+metadataForService.size()+") for requested services ("+services.size()+"). [FORCED PERSIST]");
             }
             else{ // add only metadata which have local changes
-                metadataForServices.addAll( new ClientObjectLocalChangesFilter<ClientMetadata>().filterClientObjectList( getMetadataForService( s, Boolean.FALSE ) ) );
+                metadataForService.addAll( new ClientObjectLocalChangesFilter<ClientMetadata>().filterClientObjectList( getMetadataForService( s, Boolean.FALSE ) ) );
+                Logger.getLogger(getClass()).info("Persisting only metadata for services ("+ services.size() +") with local changes ("+metadataForService.size()+"). [LOCAL CHANGES]");
             }
-        }
-        
-        if( metadataForServices.isEmpty() ){
-            Logger.getLogger(getClass()).info("Apperently there are no metadata to update for the requested services...skipping http request.");
-            return -1;
-        }else{
-            for(ClientMetadata cm : metadataForServices){ metadataIds.add(cm.getId()); }
-        }
-        
-        if (forcePersist){ Logger.getLogger(getClass()).info("Persisting all metadata entities ("+metadataForServices.size()+") for requested services ("+services.size()+"). [FORCED PERSIST]"); }
-        else { Logger.getLogger(getClass()).info("Persisting only metadata for services ("+ services.size() +") with local changes ("+metadataForServices.size()+"). [LOCAL CHANGES]"); }
-        String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_METADATA_LIST;
-        String buildEP = templateEP;
+            String templateEP = HTTP_ENDPOINT_TEMPLATES.UPDATE_SERVICE_METADATA;
+            String buildEP = templateEP.replace("{SERVICEID}",""+s.getId());
+            
+            
+            HashMap<String,Object> param = new HashMap<>();
 
-        HashMap<String,Object> param = new HashMap<>();
-        
-        param.put("service_ids", serviceIds);
-        param.put("update_metadata_ids", metadataIds);
-        
-        JsonObject httpBody = (JsonObject)metadataForServices.toJson(); // TODO: check if simple casting works
-        try{
-            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not update metadata list, not signed in.", ex);
-        }
+            param.put("service_id", s.getId());
+            
+            JsonStructure httpBody = metadataForService.toJson(); // TODO: check if simple casting works
+            try{
+                fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.UPDATE, httpBody, param);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not update metadata list, not signed in.", ex);
+            }
+            
+            Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
+            Integer requestId = requestIDs[requestIDs.length-1];
+            waitForRequest(requestId); // wait till update completed
 
-        Integer[] requestIDs = pendingHttpRequests.keySet().toArray(new Integer[]{});
-        Integer requestId = requestIDs[requestIDs.length-1];
-        waitForRequest(requestId); // wait till update completed
-        
-        for(ClientService cs : services){
-            getMetadataForService(cs, Boolean.TRUE);
+//            for(ClientService cs : services){
+//                getMetadataForService(cs, Boolean.TRUE);
+//            }
+//        
+//            waitFor(); // wait till updated entity reloaded
+            getAllEntities(true);
+            requestIdForReturn = requestId;
         }
         
-        waitFor(); // wait till updated entity reloaded
-
-        requestIdForReturn = requestId;
         return requestIdForReturn;
+
+
+
+
+
     }
 }

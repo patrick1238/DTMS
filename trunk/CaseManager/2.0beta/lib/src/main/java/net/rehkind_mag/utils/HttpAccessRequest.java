@@ -10,6 +10,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonStructure;
+import javax.json.JsonValue;
 
 /**
  * A HttpAccessRequest consists of three Object, provided as JsonObjects: uuid, submitter, body
@@ -26,7 +27,7 @@ public class HttpAccessRequest {
     
     protected HttpAccessRequest(){}
     
-    public HttpAccessRequest(String endpointTemplate, String compiledEndpoint, String uuid, JsonObject submitter, JsonObject body){
+    public HttpAccessRequest(String endpointTemplate, String compiledEndpoint, String uuid, JsonObject submitter, JsonStructure body){
         this.endpoint=endpointTemplate;
         this.compiledEndpoint=compiledEndpoint;
         this.uuid=uuid;

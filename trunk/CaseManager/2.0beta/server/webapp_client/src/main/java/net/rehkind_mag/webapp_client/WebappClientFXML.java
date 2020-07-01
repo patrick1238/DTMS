@@ -22,6 +22,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import net.rehkind_mag.controls.StatusWindowController;
+import net.rehkind_mag.entities.UserLogin;
 import net.rehkind_mag.entities.pool.CasePool;
 import net.rehkind_mag.entities.pool.ClinicPool;
 import net.rehkind_mag.entities.pool.ServiceDefinitionPool;
@@ -32,9 +33,7 @@ import net.rehkind_mag.entities.pool.ServicePool;
  * @author rehkind
  */
 public class WebappClientFXML extends Application {
-    
-    @Override
-    public void start(Stage primaryStage) throws IOException {
+    public static void loadSettings() throws IOException{
         File f = new File(System.getProperty("user.home")+File.separator+".dtms"+File.separator, "case_manager_testclient.settings");
         // DEFAULT SETTINGS >>>
         String[] settingNames=new String[]{
@@ -71,17 +70,22 @@ public class WebappClientFXML extends Application {
                 br.close();
                 fr.close();
             }
-            
+            UserLogin.setLogin(Settings.get("client.login"), Settings.get("client.password"));
+        }else{
+            Logger.getLogger("global").info("No user settings file found at "+f.getAbsolutePath());
         }
-        
         Logger.getGlobal().info("Application running with following settings:");
         String line;
         for( String name : settingNames ){
             line="   "+name+": "+Settings.get(name);
             Logger.getGlobal().info(line);
         }
-
-                
+    }
+    
+    
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        WebappClientFXML.loadSettings();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_main_pane.fxml"));
         
         Scene scene = new Scene(root, 1200, 900);

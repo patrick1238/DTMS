@@ -7,6 +7,7 @@ package net.rehkind_mag.control;
 
 import java.util.List;
 import javax.ejb.Local;
+import net.rehkind_mag.interfaces.ICase;
 import net.rehkind_mag.interfaces.IMetadata;
 import net.rehkind_mag.interfaces.IMetadataDouble;
 import net.rehkind_mag.interfaces.IMetadataInt;
@@ -36,4 +37,5 @@ public interface LocalMetadataRepository {
     public IMetadataUrl setUrlMetadata(IService service, String key, String value);
     
     public List<IMetadata> getMetadataForService(IService service);
+    public List<IMetadata> getMetadataForCase(ICase requestCase);
 }
