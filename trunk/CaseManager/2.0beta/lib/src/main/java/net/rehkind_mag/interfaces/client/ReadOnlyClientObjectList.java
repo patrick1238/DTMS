@@ -9,6 +9,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import javafx.collections.ObservableListBase;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 
 /**
  *
@@ -39,4 +42,12 @@ public class ReadOnlyClientObjectList<T extends IClientObject> extends Observabl
         return cachedObjects.keySet().size();
     }
     
+    public JsonArray toJson(){
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        for(IClientObject co : getAll()){
+            builder.add( co.toJson() );
+        }
+        
+        return builder.build();
+    }
 }
