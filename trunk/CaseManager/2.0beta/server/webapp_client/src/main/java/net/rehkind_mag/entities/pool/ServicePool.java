@@ -43,8 +43,11 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     private ServicePool(){ }
     
     static public ServicePool createPool() {
-        if (ServicePool.singletonPool == null){ ServicePool.singletonPool=new ServicePool(); }
-        defaultService = ClientService.getServiceTemplate(1, -1);
+        if (ServicePool.singletonPool == null){
+            ServicePool.singletonPool=new ServicePool();
+            defaultService = ClientService.getServiceTemplate(1, 1);
+        }
+        
         return ServicePool.singletonPool;
     }
     

@@ -86,7 +86,10 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
             }
         }
         ReadOnlyClientObjectList<ClientMetadata> unfilteredList = new ClientObjectList();
-        unfilteredList.addAll( getAllEntities(false) );
+        ClientMetadata[] asArray = getAllEntities(false).toArray(new ClientMetadata[]{});
+        for(ClientMetadata cm : asArray){
+            unfilteredList.add( cm );
+        }
         //System.out.println("All loaded metadata="+unfilteredList.size());
         //ReadOnlyClientObjectList<ClientMetadata> filteredList = filter.filterClientObjectList(unfilteredList);
         //System.out.println("Filtered metadata="+filteredList.size());

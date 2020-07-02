@@ -55,7 +55,7 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
     @Override
     public ClientServiceDefinition getEntity(int serviceDefId, Boolean updatePool) {
         ClientServiceDefinition returnService = this.cachedServiceDefinitionList.getByID(serviceDefId);
-        System.out.println("ServiceDef["+serviceDefId+"] requested...returning cached object: "+returnService+ " (original: "+((returnService!=null)?returnService.getOriginalJson():"<NOT_DEFINED>")+")");
+        // System.out.println("ServiceDef["+serviceDefId+"] requested...returning cached object: "+returnService+ " (original: "+((returnService!=null)?returnService.getOriginalJson():"<NOT_DEFINED>")+")");
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_SERVICE_DEFINITION;
         String buildEP = templateEP.replace("{ID}", ""+serviceDefId);
         

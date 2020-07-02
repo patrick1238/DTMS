@@ -91,8 +91,12 @@ public class MetadataPoolTest {
      * Test of createPool method, of class ClinicPool.
      */
     @Test
-    public void testCreatePool() {
+    public void testCreatePool() throws Exception {
         System.out.println("\n\n########################## createPool ###################>>>>>\n\n");
+        if(METADATA_POOL==null){
+            setUpClass();
+        }
+        
         MetadataPool result = MetadataPool.createPool();
         System.out.println("Pool: "+result);
         assertEquals(result, MetadataPoolTest.METADATA_POOL );

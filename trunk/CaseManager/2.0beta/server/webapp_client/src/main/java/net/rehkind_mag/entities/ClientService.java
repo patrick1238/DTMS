@@ -63,6 +63,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
             .add("case", caseId)
             .add("serviceDefinition", ServiceDefinitionPool.createPool().getEntity( definitionId ).toJson() )
             .add("serviceMetadata", Json.createArrayBuilder().build() );
+        System.out.println("getServiceTemplate");
         return new ClientService( builder.build() );
     }
     

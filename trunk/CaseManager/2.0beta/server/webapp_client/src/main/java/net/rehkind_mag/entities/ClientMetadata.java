@@ -154,8 +154,8 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
 
     @Override
     public IService getService() {
-        System.out.println("requesting service for metadata ( serviceId="+serviceId.getValue()+")");
-        return ServicePool.createPool().getEntity( serviceId.getValue() );
+        // System.out.println("requesting service for metadata ( serviceId="+serviceId.getValue()+")");
+        return ServicePool.createPool().getEntity( serviceId.getValue(), false );
     }
 
     @Override
