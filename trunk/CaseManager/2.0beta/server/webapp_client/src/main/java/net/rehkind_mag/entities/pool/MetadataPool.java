@@ -152,9 +152,9 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         Logger.getLogger(getClass()).info("Pending request is: {0}", new Object[]{ requestToFinish });
         if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL) ){
             Logger.getLogger(getClass()).info("Received JsonArray for metadata, updating local metadata list");
-            JsonArray clinicsAsJsonArray = (JsonArray)response.getContent();
+            JsonArray metadataAsJsonArray = (JsonArray)response.getContent();
 
-            clinicsAsJsonArray.forEach((metadata) -> {
+            metadataAsJsonArray.forEach((metadata) -> {
                 JsonObject joMeta=(JsonObject)metadata;
                 Logger.getLogger(getClass()).info("Processing JsonObject metadata: {0}", new String[]{ joMeta.toString() });
                 ClientMetadata newMetadata = new ClientMetadata( joMeta );                

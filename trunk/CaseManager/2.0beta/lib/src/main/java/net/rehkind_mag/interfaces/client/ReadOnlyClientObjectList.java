@@ -42,21 +42,12 @@ public class ReadOnlyClientObjectList<T extends IClientObject> extends Observabl
         return cachedObjects.keySet().size();
     }
     
-<<<<<<< HEAD
-    public JsonArray toJson(){
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        for(IClientObject co : getAll()){
-            builder.add( co.toJson() );
-        }
-        
-=======
+
     public synchronized JsonArray toJson(){
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for( IClientObject co : getAll() ){
             builder.add(co.toJson());
         }
-
->>>>>>> 18e87c4cfa9ed50258e9462ea5917c5dbb578cba
         return builder.build();
     }
 }

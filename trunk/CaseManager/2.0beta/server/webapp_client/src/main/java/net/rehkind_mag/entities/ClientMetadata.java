@@ -41,7 +41,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         ID.setValue(asJson.getInt("serviceId"));
         this.name.setValue(asJson.getString("name"));
         this.type.setValue(asJson.getString("type"));
-        System.out.println("AS_JSON: "+asJson.toString());
+        //System.out.println("AS_JSON: "+asJson.toString());
         switch( type.getValue() ){
             case "integer":
                 this.data.setValue( asJson.getInt("value") );
@@ -80,7 +80,10 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     
     @Override
     public boolean hasLocalChanges() {
+        if( original.getValue() == null ){ return true; }
+        
         boolean nameUnchanged = name.getValue().equals(original.getValue().getString("name"));
+        System.out.println(serviceId.getValue()+ "/" +original.getValue().getInt("serviceId"));
         boolean serviceIdUnchanged = serviceId.getValue().equals(original.getValue().getInt("serviceId"));
         boolean dataUnchanged = this.data.getValue() == original.getValue().get("value");
         boolean typeUnchanged = this.type.getValue() == original.getValue().getString("type");
@@ -151,6 +154,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
 
     @Override
     public IService getService() {
+        System.out.println("requesting service for metadata ( serviceId="+serviceId.getValue()+")");
         return ServicePool.createPool().getEntity( serviceId.getValue() );
     }
 

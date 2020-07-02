@@ -47,19 +47,18 @@ public class MetadataPoolTest {
             java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }  
         
+        DEFINITION_POOL = ServiceDefinitionPool.createPool();
+        DEFINITION_POOL.getAllEntities(true);
+        try {
+            DEFINITION_POOL.waitFor(15000);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }  
         
         SERVICE_POOL = ServicePool.createPool();
         SERVICE_POOL.getAllEntities(true);
         try {
             SERVICE_POOL.waitFor(15000);
-        } catch (TimeoutException ex) {
-            java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }  
-        
-        DEFINITION_POOL = ServiceDefinitionPool.createPool();
-        DEFINITION_POOL.getAllEntities(true);
-        try {
-            DEFINITION_POOL.waitFor(15000);
         } catch (TimeoutException ex) {
             java.util.logging.Logger.getLogger(MetadataPoolTest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }      
@@ -236,28 +235,32 @@ public class MetadataPoolTest {
         Random rnd = new Random();
         // change values randomly
         HashMap newValues = new HashMap();
+        HashMap oldValues = new HashMap();
         for( ClientMetadata cm : meta ){
             switch( cm.getType() ){
                 case STRING:
                 case TEXT:
+                    String oldData = (String)cm.getData();
                     String newData = (String)cm.getData();
                     newData = newData.split("TEST")[0]+"TEST"+rnd.nextInt(300);
                     System.out.println("   - switching "+ cm.getData() +" to "+newData);
                     cm.setData(newData);
                     newValues.put(cm.getMetadataKey(), newData);
-                    
+                    oldValues.put(cm.getMetadataKey(), oldData);
                     break;
                 case INTEGER:
+                    Integer oldIntData = (Integer)cm.getData();
                     Integer newIntData = (Integer)cm.getData();
                     newIntData+= (rnd.nextInt(30)-10);
                     System.out.println("   - switching "+ cm.getData() +" to "+newIntData);
                     cm.setData(newIntData);
                     newValues.put(cm.getMetadataKey(), newIntData);
+                    oldValues.put(cm.getMetadataKey(), oldIntData);
                     break;
             }
         }
         
-        pool.persistMetadataForService(requestService, true);
+        pool.persistMetadataForService(requestService, false);
         
         // call from ClientService
         ReadOnlyClientObjectList<ClientMetadata> result = pool.getMetadataForService(requestService, Boolean.FALSE);
@@ -267,8 +270,9 @@ public class MetadataPoolTest {
         boolean metadataHaveNewValues=true;
         int checkedKeys=0;
         for( ClientMetadata cm : result ){
-            System.out.println("");
+            System.out.println("reloaded metadata: "+cm.getName()+" - "+cm.getData());
             if( newValues.keySet().contains( cm.getMetadataKey() ) ){
+                System.out.println("should have been changed: "+oldValues.get(cm.getMetadataKey())+" -> "+newValues.get(cm.getMetadataKey()));
                 metadataHaveNewValues = metadataHaveNewValues && cm.getData().equals(newValues.get(cm.getMetadataKey()));
                 checkedKeys++;
             }
