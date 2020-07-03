@@ -176,6 +176,8 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
             });
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Metadata deleted successfully.");
+        } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.UPDATE)){ // no case as response (deleted)
+            Logger.getLogger(getClass().getName()).info("Metadata updated successfully.");
         } else{ // all other request result in a single clinic as JSON object
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single metadata, creating ClientMetadata...");
             JsonObject metadataAsJsonObject = (JsonObject)response.getContent();

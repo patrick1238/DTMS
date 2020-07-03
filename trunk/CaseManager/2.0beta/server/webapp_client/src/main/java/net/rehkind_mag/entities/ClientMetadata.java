@@ -38,12 +38,14 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     
     public ClientMetadata(JsonObject asJson) {
         if(asJson==null){ Logger.getLogger(getClass()).fatal("ClientMetadata(): JSONObject is NULL"); }
+        System.out.println("AS_JSON: "+asJson.toString());
         ID.setValue(asJson.getInt("serviceId"));
         this.name.setValue(asJson.getString("name"));
         this.type.setValue(asJson.getString("type"));
-        //System.out.println("AS_JSON: "+asJson.toString());
+        
         switch( type.getValue() ){
             case "integer":
+            case "int":
                 this.data.setValue( asJson.getInt("value") );
                 break;
             case "double":
@@ -106,15 +108,25 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         builder.add("serviceId", serviceId.getValue());
         switch(type.getValue()){
             case "integer":
+            case "int":
                 builder.add("value", (Integer)data.getValue());
+                builder.add("type", "int");
                 break;
             case "double":
                 builder.add("value", (Double)data.getValue());
+                builder.add("type", "double");
                 break;
             case "string":
+                builder.add("value", (String)data.getValue());
+                builder.add("type", "string");
+                break;
             case "text":
+                builder.add("value", (String)data.getValue());
+                builder.add("type", "text");
+                break;
             case "url":
                 builder.add("value", (String)data.getValue());
+                builder.add("type", "url");
                 break;
         }
         return builder.build();

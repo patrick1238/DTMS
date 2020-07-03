@@ -41,7 +41,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
     
     public ClientService(JsonObject caseAsJson){
         original.setValue( caseAsJson );
-        System.out.println("creating ClientService from: "+original.getValue().toString());
+        // System.out.println("creating ClientService from: "+original.getValue().toString());
         ClientService self=this;
         ChangeListener listener = new ChangeListener() {
             @Override
