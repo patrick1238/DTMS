@@ -47,7 +47,7 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
         return true;
     }
     
-    private void internalPut(T object) throws IndexOutOfBoundsException{
+    synchronized private void internalPut(T object) throws IndexOutOfBoundsException{
         int id = object.getId();
         if( id<=0 ){
             throw new IndexOutOfBoundsException("addOrMerge called for object with invalid ID '"+id+"'");

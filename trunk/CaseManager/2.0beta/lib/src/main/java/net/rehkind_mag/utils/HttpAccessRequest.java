@@ -36,7 +36,11 @@ public class HttpAccessRequest {
     }
     
     public HttpAccessRequest(JsonObject request){
-        this.body=request.getJsonObject("body");
+        try{
+            this.body=request.getJsonObject("body");
+        }catch(ClassCastException ex){
+            this.body=request.getJsonArray("body");
+        }
         this.submitter=request.getJsonObject("submitter");
         this.uuid=request.getString("uuid");
     }

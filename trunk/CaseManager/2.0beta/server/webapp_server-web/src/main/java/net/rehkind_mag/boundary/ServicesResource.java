@@ -238,8 +238,9 @@ public class ServicesResource {
         } );
         for( int i=0; i<updatedMetadata.size(); i++ ){
             JsonObject newData = updatedMetadata.getJsonObject(i);
-            String key=newData.getString("key");
-            if( !allFieldsString.contains(newData.getString("key")) ){
+            String key=newData.getString("name");
+            Logger.getLogger("global").log(Logger.Level.INFO, "now processing json: "+newData.toString());
+            if( !allFieldsString.contains(key) ){
                 Logger.getLogger("global").warn("Updating field '"+key+"' not possible: does not belong to ServiceDefinition");
             }else{
                 Logger.getLogger("global").warn("Updating field '"+key+"' new value="+newData.getString("value"));
