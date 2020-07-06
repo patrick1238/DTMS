@@ -14,9 +14,11 @@ import javax.json.JsonObjectBuilder;
  * @author rehkind
  */
 public class UserLogin {
+    
     static String login="guest";
     static String pwd="123456";
     static JsonObject jsonLogin;
+    
     public static void setLogin(String login, String pwd){
         UserLogin.login=login;
         UserLogin.pwd=pwd;
