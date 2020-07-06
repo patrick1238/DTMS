@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="250.0" minHeight="100.0" minWidth="250.0" prefHeight="300.0" prefWidth="250.0" styleClass="style-dark" stylesheets="@../../styles/application_style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="net.rehkind_mag.controls.elements.PickerController">
+<AnchorPane id="AnchorPane" maxHeight="600.0" maxWidth="250.0" minHeight="100.0" minWidth="250.0" prefHeight="300.0" prefWidth="250.0" styleClass="style-dark" stylesheets="@../../styles/application_style.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="net.patho234.controls.elements.PickerController">
    <children>
       <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="14.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <content>

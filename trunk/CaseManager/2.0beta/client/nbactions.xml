@@ -10,7 +10,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath net.rehkind_mag.webapp_client.WebappClientFXML</exec.args>
+                <exec.args>-classpath %classpath net.patho234.webapp_client.WebappClientFXML</exec.args>
                 <exec.executable>java</exec.executable>
                 <skipTests>true</skipTests>
             </properties>
@@ -25,7 +25,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath net.rehkind_mag.webapp_client.WebappClientFXML</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath net.patho234.webapp_client.WebappClientFXML</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
             </properties>
@@ -40,7 +40,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath net.rehkind_mag.webapp_client.WebappClientFXML</exec.args>
+                <exec.args>-classpath %classpath net.patho234.webapp_client.WebappClientFXML</exec.args>
                 <exec.executable>java</exec.executable>
             </properties>
         </action>
@@ -63,6 +63,19 @@
             </packagings>
             <goals>
                 <goal>clean</goal>
+                <goal>install</goal>
+            </goals>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+        </action>
+        <action>
+            <actionName>build-with-dependencies</actionName>
+            <reactor>also-make</reactor>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
                 <goal>install</goal>
             </goals>
             <properties>
