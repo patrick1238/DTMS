@@ -21,6 +21,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro8.JMetro;
 import net.patho234.controls.StatusWindowController;
 import net.patho234.entities.UserLogin;
 import net.patho234.entities.pool.CasePool;
@@ -85,15 +86,16 @@ public class WebappClientFXML extends Application {
     
     @Override
     public void start(Stage primaryStage) throws IOException {
-        WebappClientFXML.loadSettings();
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_main_pane.fxml"));
+        //WebappClientFXML.loadSettings();
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_login_pane.fxml"));
+        new JMetro(JMetro.Style.LIGHT).applyTheme(root);
         
-        Scene scene = new Scene(root, 1200, 900);
+        Scene scene = new Scene(root);
         
-        primaryStage.setTitle("TestClient for HTTPRequests - LINFO");
+        primaryStage.setTitle("Digital tissue management suite");
         primaryStage.setScene(scene);
         primaryStage.show();
-        
+        /**
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_status_window.fxml"));
         Parent rootStatus = loader.load();
         StatusWindowController statusControl = loader.getController();
@@ -117,6 +119,7 @@ public class WebappClientFXML extends Application {
         rootStage.show();
         
         preloadThread.start();
+        * **/
         
 
     }

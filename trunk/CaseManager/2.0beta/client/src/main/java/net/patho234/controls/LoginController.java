@@ -8,8 +8,12 @@ package net.patho234.controls;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -22,13 +26,13 @@ import javafx.scene.control.TextField;
 public class LoginController implements Initializable {
 
     @FXML
-    private TextField UsernameField;
+    private TextField usernameField;
     @FXML
-    private Button RegisterButton;
+    private PasswordField passwordField;
     @FXML
-    private Button LoginButton;
+    private Button registerButton;
     @FXML
-    private PasswordField PasswordField;
+    private Button loginButton;
 
     /**
      * Initializes the controller class.
@@ -37,5 +41,14 @@ public class LoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void registerPressed(ActionEvent event) {
+
+    }
+
+    @FXML
+    private void loginPressed(ActionEvent event) {
+    }
     
 }
