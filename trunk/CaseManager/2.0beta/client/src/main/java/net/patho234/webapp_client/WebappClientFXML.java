@@ -34,7 +34,7 @@ import net.patho234.entities.pool.ServicePool;
  */
 public class WebappClientFXML extends Application {
     public static void loadSettings() throws IOException{
-        File f = new File(System.getProperty("user.home")+File.separator+".dtms"+File.separator, "case_manager_testclient.settings");
+        File f = new File(System.getProperty("user.home")+File.separator+".dtms"+File.separator, "dtms_client.settings");
         // DEFAULT SETTINGS >>>
         String[] settingNames=new String[]{
             "server.address",
