@@ -5,7 +5,7 @@
  */
 package net.rehkind_mag.test;
 
-import net.rehkind_mag.utils.UUIDGenerator;
+import net.patho234.utils.UUIDGenerator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
