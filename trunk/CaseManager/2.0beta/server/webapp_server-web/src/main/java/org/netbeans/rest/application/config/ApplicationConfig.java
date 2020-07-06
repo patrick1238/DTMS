@@ -29,7 +29,16 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(net.rehkind_mag.boundary.UsersResource.class);
+        resources.add(net.patho234.boundary.CasesResource.class);
+        resources.add(net.patho234.boundary.ClinicsResource.class);
+        resources.add(net.patho234.boundary.ContactPersonResource.class);
+        resources.add(net.patho234.boundary.LogsResource.class);
+        resources.add(net.patho234.boundary.MetadataResource.class);
+        resources.add(net.patho234.boundary.MetadataValuesResource.class);
+        resources.add(net.patho234.boundary.ServiceDefinitionsResource.class);
+        resources.add(net.patho234.boundary.ServicesResource.class);
+        resources.add(net.patho234.boundary.SubmittersResource.class);
+        resources.add(net.patho234.boundary.UsersResource.class);
     }
     
 }

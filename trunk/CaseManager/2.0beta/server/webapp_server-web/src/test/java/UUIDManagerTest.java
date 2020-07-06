@@ -1,9 +1,9 @@
 
 import javax.ejb.EJB;
 import javax.validation.constraints.AssertFalse;
-import net.rehkind_mag.utils.LocalUUIDManager;
-import net.rehkind_mag.utils.UUIDGenerator;
-import net.rehkind_mag.utils.UUIDManager;
+import net.patho234.utils.LocalUUIDManager;
+import net.patho234.utils.UUIDGenerator;
+import net.patho234.utils.UUIDManager;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;

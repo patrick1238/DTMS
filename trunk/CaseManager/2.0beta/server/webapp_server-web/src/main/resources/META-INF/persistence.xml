@@ -3,22 +3,22 @@
   <persistence-unit name="net.rehkind-mag_linfo_0.1" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>java:/jdbc/linfo_open</jta-data-source>
-    <class>net.rehkind_mag.entity.CaseEntity</class>
-    <class>net.rehkind_mag.entity.ServiceEntity</class>
-    <class>net.rehkind_mag.entity.ServiceDefinitionEntity</class>
-    <class>net.rehkind_mag.entity.ClinicEntity</class>
-    <class>net.rehkind_mag.entity.ContactForClinicEntity</class>
-    <class>net.rehkind_mag.entity.ContactPersonEntity</class>
     <class>net.rehkind_mag.entity.ContactForSupplierEntity</class>
     <class>net.rehkind_mag.entity.LocationEntity</class>
-    <class>net.rehkind_mag.entity.MetadataValueEntity</class>
-    <class>net.rehkind_mag.entity.MetadataStringEntity</class>
-    <class>net.rehkind_mag.entity.MetadataIntEntity</class>
-    <class>net.rehkind_mag.entity.MetadataTextEntity</class>
-    <class>net.rehkind_mag.entity.MetadataDoubleEntity</class>
-    <class>net.rehkind_mag.entity.SubmitterEntity</class>
-    <class>net.rehkind_mag.entity.LogEntryEntity</class>
-    <class>net.rehkind_mag.entity.MetadataUrlEntity</class>
+    <class>net.patho234.entity.ContactPersonEntity</class>
+    <class>net.patho234.entity.MetadataUrlEntity</class>
+    <class>net.patho234.entity.CaseEntity</class>
+    <class>net.patho234.entity.ContactForClinicEntity</class>
+    <class>net.patho234.entity.MetadataStringEntity</class>
+    <class>net.patho234.entity.MetadataIntEntity</class>
+    <class>net.patho234.entity.ClinicEntity</class>
+    <class>net.patho234.entity.SubmitterEntity</class>
+    <class>net.patho234.entity.ServiceDefinitionEntity</class>
+    <class>net.patho234.entity.MetadataTextEntity</class>
+    <class>net.patho234.entity.MetadataValueEntity</class>
+    <class>net.patho234.entity.ServiceEntity</class>
+    <class>net.patho234.entity.LogEntryEntity</class>
+    <class>net.patho234.entity.MetadataDoubleEntity</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
