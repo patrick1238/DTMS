@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>net.rehkind-mag</groupId>
-        <artifactId>webapp_server</artifactId>
-        <version>0.1</version>
-    </parent>
+    <groupId>net.patho234</groupId>
     <artifactId>webapp_client</artifactId>
+    <version>0.1</version>
     <packaging>jar</packaging>
     <repositories>
         <repository>
@@ -25,7 +22,7 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.0.4</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
