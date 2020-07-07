@@ -18,10 +18,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import jfxtras.styles.jmetro8.JMetro;
 import net.patho234.entities.ClientSubmitter;
 import net.patho234.entities.pool.SubmitterPool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.webapp_client.FxmlManager;
 import org.jboss.logging.Logger;
 
 /**
@@ -45,19 +48,30 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        // TODO: set windows default on close to NOT closing the program, here or when button pressed?
     }    
 
     @FXML
-    private void registerPressed(ActionEvent event) {
-
+    private void registerPressed(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_register_pane.fxml"));
+        Parent root = loader.load();
+        
+        RegistrationController controller = loader.getController();
+        
+        FxmlManager.applyDefaultStyle( root );
+        
+        Scene scene = new Scene(root);
+        Stage registerStage = new Stage();
+        registerStage.setTitle("Register a new user account");
+        registerStage.setScene(scene);
+        registerStage.show();
     }
 
     @FXML
     private void loginPressed(ActionEvent event) {
         String user = usernameField.getText();
         String pwd = passwordField.getText();
-        System.out.println("PIMPANELLA");
+        
         boolean allowLogin=true;
         String errorMsg="";
         if( "".equals(user) || user == null ){
@@ -81,6 +95,8 @@ public class LoginController implements Initializable {
         
         // TODO:
         // start MainWindow here
+        usernameField.getScene().getWindow().hide();
+        System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
     }
     
     private boolean isValidLogin(String login, String password){
