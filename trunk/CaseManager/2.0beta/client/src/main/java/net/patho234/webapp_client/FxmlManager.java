@@ -23,7 +23,8 @@ public class FxmlManager {
     public static EventHandler<WindowEvent> EXIT_APPLICATION_HANDLER = new EventHandler<WindowEvent>(){
         @Override
         public void handle(WindowEvent t) {
-            if( !t.isConsumed() ){
+            
+            if( t==null || !t.isConsumed() ){
                 Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Shutting down "+APPLICATION_DEFAULTS.APPLICATION_NAME+".");
             } else { Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Ignoring already consumed event "+t); }
         }

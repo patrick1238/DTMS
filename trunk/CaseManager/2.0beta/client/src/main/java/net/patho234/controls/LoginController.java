@@ -24,6 +24,7 @@ import net.patho234.entities.ClientSubmitter;
 import net.patho234.entities.pool.SubmitterPool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.views.MainWindow;
 import net.patho234.webapp_client.FxmlManager;
 import org.jboss.logging.Logger;
 
@@ -94,9 +95,10 @@ public class LoginController implements Initializable {
         
         // TODO:
         // start MainWindow here
+        usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
-        //primaryStage.setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
+        new MainWindow().show();
     }
     
     private boolean isValidLogin(String login, String password){
