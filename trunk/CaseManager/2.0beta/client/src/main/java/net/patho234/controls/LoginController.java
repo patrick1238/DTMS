@@ -6,6 +6,7 @@ package net.patho234.controls;
  * and open the template in the editor.
  */
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -17,6 +18,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import jfxtras.styles.jmetro8.JMetro;
+import net.patho234.entities.ClientSubmitter;
+import net.patho234.entities.pool.SubmitterPool;
+import net.patho234.gui.ClientPopup;
+import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.webapp_client.FxmlManager;
+import org.jboss.logging.Logger;
 
 /**
  * FXML Controller class
@@ -39,16 +48,76 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        this.usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
     }    
 
     @FXML
-    private void registerPressed(ActionEvent event) {
-
+    private void registerPressed(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_register_pane.fxml"));
+        Parent root = loader.load();
+        
+        RegistrationController controller = loader.getController();
+        
+        FxmlManager.applyDefaultStyle( root );
+        
+        Scene scene = new Scene(root);
+        Stage registerStage = new Stage();
+        registerStage.setTitle("Register a new user account");
+        registerStage.setScene(scene);
+        registerStage.show();
     }
 
     @FXML
     private void loginPressed(ActionEvent event) {
+        String user = usernameField.getText();
+        String pwd = passwordField.getText();
+        
+        boolean allowLogin=true;
+        String errorMsg="";
+        if( "".equals(user) || user == null ){
+            allowLogin=false;
+            errorMsg="Required login field is empty.\n";
+        }
+        
+        if( "".equals(pwd) || pwd == null ){
+            allowLogin=false;
+            errorMsg+="Required password field is empty.\n";
+        }
+        
+        if( !allowLogin ){
+            try {
+                new ClientPopup("Login failed", errorMsg).show( usernameField.getScene().getWindow() );
+            }catch(IOException ioEx){
+                Logger.getLogger(getClass()).error("FXML template for ClientPopup window not found...something is wrong with the JAR.");
+            }
+            return;
+        }
+        
+        // TODO:
+        // start MainWindow here
+        usernameField.getScene().getWindow().hide();
+        System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
     }
     
+    private boolean isValidLogin(String login, String password){
+        ReadOnlyClientObjectList<ClientSubmitter> submitters = SubmitterPool.createPool().getAllEntities();
+        boolean isValid=false;
+        boolean loginExists=false;
+        for( ClientSubmitter cs : submitters ){
+            if(cs.getLogin().equals(login)){
+                
+                isValid = isValid || cs.getPassword().equals(password);
+            }
+        }
+        
+        if( !isValid ){
+            String errorMsg = ( !loginExists )?"Account with login '"+login+"' was not found, check for possible typos or register an account first.":"Password was incorrect.";
+            try {
+                new ClientPopup("Login failed", errorMsg).show(usernameField.getScene().getWindow());
+            }catch(IOException ioEx){
+                Logger.getLogger(getClass()).error("FXML template for ClientPopup window not found...something is wrong with the JAR.");
+            }
+        }
+        return isValid;
+    }
 }

@@ -88,7 +88,7 @@ public class WebappClientFXML extends Application {
     public void start(Stage primaryStage) throws IOException {
         //WebappClientFXML.loadSettings();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_login_pane.fxml"));
-        new JMetro(JMetro.Style.LIGHT).applyTheme(root);
+        FxmlManager.applyDefaultStyle( root );
         
         Scene scene = new Scene(root);
         
