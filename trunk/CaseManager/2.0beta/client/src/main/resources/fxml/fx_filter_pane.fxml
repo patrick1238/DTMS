@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="418.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.filterController">
@@ -32,7 +33,19 @@
                            <children>
                               <ScrollPane prefHeight="253.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <content>
-                                  <AnchorPane fx:id="filterPane" minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="416.0" />
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="416.0">
+                                       <children>
+                                          <StackPane fx:id="filterStack" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <AnchorPane fx:id="casePane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="twoDimPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="threeDimPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="fourDimPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="genomicsPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="methPane" prefHeight="200.0" prefWidth="200.0" />
+                                             </children>
+                                          </StackPane>
+                                       </children></AnchorPane>
                                 </content>
                               </ScrollPane>
                            </children>

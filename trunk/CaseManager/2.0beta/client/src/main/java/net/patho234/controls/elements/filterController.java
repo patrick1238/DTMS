@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 /**
  * FXML Controller class
@@ -20,8 +21,6 @@ import javafx.scene.layout.AnchorPane;
  */
 public class filterController implements Initializable {
 
-    @FXML
-    private AnchorPane filterPane;
     @FXML
     private Button caseCounter;
     @FXML
@@ -34,6 +33,20 @@ public class filterController implements Initializable {
     private Button genomicsCounter;
     @FXML
     private Button methCounter;
+    @FXML
+    private StackPane filterStack;
+    @FXML
+    private AnchorPane casePane;
+    @FXML
+    private AnchorPane twoDimPane;
+    @FXML
+    private AnchorPane threeDimPane;
+    @FXML
+    private AnchorPane fourDimPane;
+    @FXML
+    private AnchorPane genomicsPane;
+    @FXML
+    private AnchorPane methPane;
 
     /**
      * Initializes the controller class.
