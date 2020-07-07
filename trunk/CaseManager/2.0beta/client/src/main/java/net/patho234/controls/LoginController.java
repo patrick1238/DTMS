@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro8.JMetro;
 import net.patho234.entities.ClientSubmitter;
+import net.patho234.entities.UserLogin;
 import net.patho234.entities.pool.SubmitterPool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.interfaces.ISubmitter;
@@ -129,5 +130,7 @@ public class LoginController implements Initializable, ISubmitterReceiver {
     public void setSubmitter(ISubmitter submitter){
         this.usernameField.setText(submitter.getLogin());
         this.passwordField.setText(submitter.getPassword());
+        
+        UserLogin.setLogin(submitter);
     }
 }
