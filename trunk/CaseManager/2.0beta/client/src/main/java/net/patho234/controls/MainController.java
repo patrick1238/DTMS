@@ -15,7 +15,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 /**
  * FXML Controller class
@@ -35,13 +37,25 @@ public class MainController implements Initializable {
     @FXML
     private MenuItem aboutMenuItem;
     @FXML
-    private TabPane mainTab;
-    @FXML
     private Menu userMenu;
     @FXML
     private MenuItem changeUserMenuItem;
     @FXML
     private MenuItem logoutMenuItem;
+    @FXML
+    private StackPane tableStack;
+    @FXML
+    private AnchorPane casePane;
+    @FXML
+    private AnchorPane twoDimPane;
+    @FXML
+    private AnchorPane threeDimPane;
+    @FXML
+    private AnchorPane fourDimPane;
+    @FXML
+    private AnchorPane genomicsPane;
+    @FXML
+    private AnchorPane methPane;
 
     /**
      * Initializes the controller class.

@@ -3,23 +3,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.MainController">
    <children>
-      <TabPane fx:id="mainTab" layoutY="26.0" prefHeight="374.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
-      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="603.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="516.7999938964844" minWidth="10.0" prefWidth="253.40001220703124" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="523.9999633789063" minWidth="0.0" prefWidth="346.1999877929688" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <HBox prefHeight="26.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
@@ -40,7 +30,7 @@
                   </MenuBar>
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <AnchorPane prefHeight="26.0" prefWidth="401.0">
                <children>
                   <MenuBar layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="518.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <menus>
@@ -57,6 +47,16 @@
                </children>
             </AnchorPane>
          </children>
-      </GridPane>
+      </HBox>
+      <StackPane fx:id="tableStack" layoutY="26.0" prefHeight="374.0" prefWidth="600.0">
+         <children>
+            <AnchorPane fx:id="casePane" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane fx:id="twoDimPane" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane fx:id="threeDimPane" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane fx:id="fourDimPane" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane fx:id="genomicsPane" prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane fx:id="methPane" prefHeight="200.0" prefWidth="200.0" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>
