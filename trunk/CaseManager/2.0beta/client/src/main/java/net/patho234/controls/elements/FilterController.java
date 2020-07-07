@@ -19,7 +19,7 @@ import javafx.scene.layout.StackPane;
  *
  * @author patri
  */
-public class filterController implements Initializable {
+public class FilterController implements Initializable {
 
     @FXML
     private Button caseCounter;

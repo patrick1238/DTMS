@@ -17,7 +17,7 @@ import javafx.scene.control.TextField;
  *
  * @author patri
  */
-public class entityTableController implements Initializable  {
+public class EntityTableController implements Initializable  {
 
     @FXML
     private TextField fastSearch;
