@@ -48,7 +48,7 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO: set windows default on close to NOT closing the program, here or when button pressed?
+        this.usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
     }    
 
     @FXML

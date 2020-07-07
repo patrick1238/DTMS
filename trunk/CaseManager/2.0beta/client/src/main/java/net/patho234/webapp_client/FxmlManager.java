@@ -5,9 +5,14 @@
  */
 package net.patho234.webapp_client;
 
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.WindowEvent;
+import javax.swing.event.HyperlinkEvent;
 import jfxtras.styles.jmetro8.JMetro;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -15,6 +20,16 @@ import jfxtras.styles.jmetro8.JMetro;
  */
 public class FxmlManager {
     public static JMetro.Style DEFAULT_STYLE = JMetro.Style.LIGHT;
+    public static EventHandler<WindowEvent> EXIT_APPLICATION_HANDLER = new EventHandler<WindowEvent>(){
+        @Override
+        public void handle(WindowEvent t) {
+            if( !t.isConsumed() ){
+                Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Shutting down "+APPLICATION_DEFAULTS.APPLICATION_NAME+".");
+            } else { Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Ignoring already consumed event "+t); }
+        }
+    
+    };
+    
     
     public static void applyDefaultStyle(Parent fxComponent){
         new JMetro( DEFAULT_STYLE ).applyTheme( fxComponent );
@@ -23,4 +38,6 @@ public class FxmlManager {
     public static void applyDefaultStyle( Scene fxComponent ){
         new JMetro( DEFAULT_STYLE ).applyTheme( fxComponent );
     }
+    
+    
 }
