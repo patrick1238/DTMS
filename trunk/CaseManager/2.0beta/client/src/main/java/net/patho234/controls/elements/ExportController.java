@@ -7,29 +7,41 @@ package net.patho234.controls.elements;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 /**
+ * FXML Controller class
  *
  * @author patri
  */
-public class EntityTableController implements Initializable  {
+public class ExportController implements Initializable {
 
     @FXML
-    private TextField fastSearch;
+    private TextField projectID;
     @FXML
-    private TableView<?> entityTable;
-    
+    private Button folderButton;
+    @FXML
+    private TableView<?> exportTable;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    } 
+    }    
+
+    @FXML
+    private void exportButtonClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void folderButtonClicked(ActionEvent event) {
+    }
     
 }
