@@ -3,33 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.patho234.controls.elements;
+package net.patho234.controls;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 
 /**
+ * FXML Controller class
  *
  * @author patri
  */
-public class EntityTableController implements Initializable  {
+public class AddController implements Initializable {
 
     @FXML
-    private TextField fastSearch;
-    @FXML
-    private TableView<?> entityTable;
-    
+    private GridPane objectGridPane;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    } 
+    }    
+
+    @FXML
+    private void saveButtonClicked(ActionEvent event) {
+    }
     
 }
