@@ -29,7 +29,7 @@ import org.jboss.logging.Logger;
  *
  * @author patri
  */
-public class MainController implements Initializable {
+public class TableViewerController implements Initializable {
 
     @FXML
     private MenuItem addCaseMenuItem;
