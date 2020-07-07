@@ -5,6 +5,7 @@
  */
 package net.patho234.webapp_client;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
@@ -26,6 +27,7 @@ public class FxmlManager {
             
             if( t==null || !t.isConsumed() ){
                 Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Shutting down "+APPLICATION_DEFAULTS.APPLICATION_NAME+".");
+                Platform.exit();
             } else { Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Ignoring already consumed event "+t); }
         }
     };
