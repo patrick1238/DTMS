@@ -48,7 +48,6 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
     }    
 
     @FXML
@@ -97,6 +96,7 @@ public class LoginController implements Initializable {
         // start MainWindow here
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
+        //primaryStage.setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
     }
     
     private boolean isValidLogin(String login, String password){

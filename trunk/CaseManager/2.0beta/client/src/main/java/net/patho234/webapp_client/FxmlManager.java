@@ -27,9 +27,15 @@ public class FxmlManager {
                 Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Shutting down "+APPLICATION_DEFAULTS.APPLICATION_NAME+".");
             } else { Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Ignoring already consumed event "+t); }
         }
-    
     };
-    
+    public static EventHandler<WindowEvent> DISPOSE_WINDOW_HANDLER = new EventHandler<WindowEvent>(){
+        @Override
+        public void handle(WindowEvent t) {
+            if( !t.isConsumed() ){
+                Logger.getLogger(getClass()).info("[FxmlManager.DISPOSE_WINDOW_HANDLER] Closing window "+t.getSource()+".");
+            } else { Logger.getLogger(getClass()).info("[FxmlManager.DISPOSE_WINDOW_HANDLER] Ignoring already consumed event "+t); }
+        }
+    };    
     
     public static void applyDefaultStyle(Parent fxComponent){
         new JMetro( DEFAULT_STYLE ).applyTheme( fxComponent );
