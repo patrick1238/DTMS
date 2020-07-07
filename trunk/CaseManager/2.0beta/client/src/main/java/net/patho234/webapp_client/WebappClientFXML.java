@@ -86,7 +86,7 @@ public class WebappClientFXML extends Application {
     
     @Override
     public void start(Stage primaryStage) throws IOException {
-        //WebappClientFXML.loadSettings();
+        WebappClientFXML.loadSettings();
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/fx_login_pane.fxml"));
         FxmlManager.applyDefaultStyle( root );
         
@@ -97,138 +97,12 @@ public class WebappClientFXML extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
         
-        /**
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_status_window.fxml"));
-        Parent rootStatus = loader.load();
-        StatusWindowController statusControl = loader.getController();
-        
-        Thread preloadThread = new Thread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            preloadClientObjectPools(statusControl);
-                        }catch(IOException ioEx){}
-                    }
-                }
-        );
-        
-
-        Stage rootStage = new Stage();
-        Scene statusScene = new Scene(rootStatus);
-        rootStage.setScene(statusScene);
-        rootStage.setAlwaysOnTop(true);
-        rootStage.show();
-        
-        preloadThread.start();
-        * **/
-        
-
     }
     
-    private void preloadClientObjectPools(StatusWindowController wndControl) throws IOException{
-        // calls @GET_ALL for all entity_pools for intitial caching
-        Platform.runLater( new StatusUpdate(wndControl, "Loading clinics...", 5));
-        ClinicPool.createPool().getAllEntities(true);
-        try{
-            ClinicPool.createPool().waitFor(30000);
-        }
-        catch(TimeoutException ex){
-            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
-            ex.printStackTrace();
-            
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Timeout during start-up");
-            alert.setHeaderText("Connection to wildfly server could not be established.");
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
-            
-            System.exit(1);
-        }
-        //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(1).toString() );
-        //Logger.getGlobal().info( "loaded clinic: "+ClinicPool.createPool().getEntity(2).toString() );
-        
-        Platform.runLater( new StatusUpdate(wndControl, "Loading service definitions...", 24));
-        ServiceDefinitionPool.createPool().getAllEntities(true);
-        try{
-            ServiceDefinitionPool.createPool().waitFor(30000);
-        }
-        catch(TimeoutException ex){
-            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
-            ex.printStackTrace();
-            
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Timeout during start-up");
-            alert.setHeaderText("Connection to wildfly server could not be established.");
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
-
-            System.exit(1);
-        }
-        Platform.runLater( new StatusUpdate(wndControl, "Loading services...", 56));
-        ServicePool.createPool().getAllEntities(true);
-        try{
-            ServicePool.createPool().waitFor(30000);
-        }
-        catch(TimeoutException ex){
-            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
-            ex.printStackTrace();
-            
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Timeout during start-up");
-            alert.setHeaderText("Connection to wildfly server could not be established.");
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
-
-            System.exit(1);
-        }
-        Platform.runLater( new StatusUpdate(wndControl, "Loading cases...", 69));
-        CasePool.createPool().getAllEntities(true);
-        try{
-            CasePool.createPool().waitFor(30000);
-        }
-        catch(TimeoutException ex){
-            Logger.getLogger(getClass().getName()).severe( String.format( "ERROR during start-up: %s", new Object[]{ex.getMessage() } ) );
-            ex.printStackTrace();
-            
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Timeout during start-up");
-            alert.setHeaderText("Connection to wildfly server could not be established.");
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
-
-            System.exit(1);
-        }
-        
-        Platform.runLater( new StatusUpdate(wndControl, "Launching...", 100));
-        
-        Platform.runLater( new StatusUpdate(wndControl, "Terminate status", -1));
-    }
-
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
-    private class StatusUpdate implements Runnable{
-        String job;
-        Integer status;
-        StatusWindowController control;
-        private StatusUpdate(StatusWindowController wndControl,String job, Integer status){
-            control = wndControl;
-            this.job=job;
-            this.status=status;
-        }
-        @Override
-        public void run() {
-            if(status>=0){
-                control.setStatus(job, status);
-            }else{
-                control.terminate();
-            }
-        }
-    
     }
 }

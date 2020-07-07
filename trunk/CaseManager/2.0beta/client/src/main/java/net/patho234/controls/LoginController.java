@@ -101,7 +101,12 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
-        new MainWindow().show();
+        try{
+            new MainWindow().show();
+        }catch(IOException ioEx){
+            Logger.getLogger(getClass()).fatal("Could not load MainWindow...some FXML files could not be located...exiting");
+            FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
+        }
     }
     
     private boolean isValidLogin(String login, String password){

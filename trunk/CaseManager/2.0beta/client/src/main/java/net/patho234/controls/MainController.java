@@ -5,7 +5,6 @@
  */
 package net.patho234.controls;
 
-import com.sun.istack.internal.logging.Logger;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -23,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import net.patho234.entities.UserLogin;
 import net.patho234.webapp_client.FxmlManager;
+import org.jboss.logging.Logger;
 
 /**
  * FXML Controller class
@@ -81,7 +81,7 @@ public class MainController implements Initializable {
         Logger.getLogger(getClass()).info("Loading 3D images panel.");
         
         Logger.getLogger(getClass()).info("Loading 4D images panel.");
-    }    
+    }
     
     
     private void initializeMenuEventHandler(){
@@ -96,5 +96,6 @@ public class MainController implements Initializable {
         
         
         // TODO: implement  missing MenuItem events
+        Logger.getLogger(getClass()).warn("Not yet all MenuItem handler implemented.");
     }
 }
