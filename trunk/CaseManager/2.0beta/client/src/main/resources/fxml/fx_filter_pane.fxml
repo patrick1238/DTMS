@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="418.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.filterController">
+   <children>
+      <VBox prefHeight="545.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane prefHeight="1500.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="296.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ButtonBar buttonOrder="%key.unspecified" nodeOrientation="LEFT_TO_RIGHT" prefHeight="40.0" prefWidth="418.0" VBox.vgrow="NEVER">
+                          <buttons>
+                              <Button mnemonicParsing="false" onAction="#casesClicked" prefHeight="32.0" prefWidth="78.0" text="Case" />
+                              <Button mnemonicParsing="false" onAction="#twoDimClicked" text="2D" />
+                              <Button mnemonicParsing="false" onAction="#threeDimClicked" text="3D" />
+                              <Button mnemonicParsing="false" onAction="#fourDimClicked" text="4D" />
+                              <Button mnemonicParsing="false" onAction="#genomicsClicked" text="Genomics" />
+                            <Button mnemonicParsing="false" onAction="#methClicked" text="Methylation" />
+                          </buttons>
+                           <VBox.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </VBox.margin>
+                        </ButtonBar>
+                        <AnchorPane prefHeight="257.0" prefWidth="418.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <ScrollPane prefHeight="253.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="416.0">
+                                       <children>
+                                          <StackPane fx:id="filterStack" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <AnchorPane fx:id="casePane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="twoDimPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="threeDimPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="fourDimPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="genomicsPane" prefHeight="200.0" prefWidth="200.0" />
+                                                <AnchorPane fx:id="methPane" prefHeight="200.0" prefWidth="200.0" />
+                                             </children>
+                                          </StackPane>
+                                       </children></AnchorPane>
+                                </content>
+                              </ScrollPane>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="417.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="caseCounter" layoutX="82.0" layoutY="6.0" mnemonicParsing="false" onAction="#caseCounterClicked" text="X Cases" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="twoDimCounter" mnemonicParsing="false" onAction="#twoDimCounterClicked" text="X 2D Images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="threeDimCounter" mnemonicParsing="false" onAction="#threeDimCounterClicked" text="X 3D Images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="fourDimCounter" mnemonicParsing="false" onAction="#fourDimCounterClicked" text="X 4D Images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="genomicsCounter" mnemonicParsing="false" onAction="#genomicsCounterClicked" text="X Genomics" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="methCounter" mnemonicParsing="false" onAction="#methCounterClicked" text="X Methylation" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
