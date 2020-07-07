@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.patho234.controls;
+package oldController;
 
 import net.patho234.entities.ClientService;
 import java.net.URL;

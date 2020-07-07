@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.MainController">
+<AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.MainController">
    <children>
       <TabPane fx:id="mainTab" layoutY="26.0" prefHeight="374.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0" />
-      <GridPane prefHeight="26.0" prefWidth="603.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="603.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="516.7999938964844" minWidth="10.0" prefWidth="82.40001220703125" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="523.9999633789063" minWidth="0.0" prefWidth="518.3999877929688" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="516.7999938964844" minWidth="10.0" prefWidth="253.40001220703124" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="523.9999633789063" minWidth="0.0" prefWidth="346.1999877929688" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -25,12 +25,12 @@
                <children>
                   <MenuBar prefHeight="26.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <menus>
-                      <Menu mnemonicParsing="false" text="File">
+                      <Menu mnemonicParsing="false" text=" File ">
                         <items>
                               <MenuItem fx:id="addCaseMenuItem" mnemonicParsing="false" text="Add case" />
                         </items>
                       </Menu>
-                      <Menu mnemonicParsing="false" text="Help">
+                      <Menu mnemonicParsing="false" text=" Help ">
                         <items>
                               <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" text="Preferences" />
                           <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
@@ -44,7 +44,7 @@
                <children>
                   <MenuBar layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="518.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <menus>
-                      <Menu fx:id="userMenu" mnemonicParsing="false" text="Logged in as Patrick Wurzel">
+                      <Menu fx:id="userMenu" mnemonicParsing="false" text=" Logged in as Patrick Wurzel ">
                         <items>
                               <MenuItem fx:id="profileMenuItem" mnemonicParsing="false" text="Profile" />
                               <MenuItem fx:id="changeUserMenuItem" mnemonicParsing="false" text="Change user" />
