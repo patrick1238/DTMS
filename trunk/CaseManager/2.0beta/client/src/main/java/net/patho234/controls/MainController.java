@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
@@ -36,7 +37,11 @@ public class MainController implements Initializable {
     @FXML
     private TabPane mainTab;
     @FXML
-    private Label loginLabel;
+    private Menu userMenu;
+    @FXML
+    private MenuItem changeUserMenuItem;
+    @FXML
+    private MenuItem logoutMenuItem;
 
     /**
      * Initializes the controller class.
