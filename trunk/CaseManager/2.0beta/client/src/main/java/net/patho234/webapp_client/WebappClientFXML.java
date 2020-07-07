@@ -95,6 +95,8 @@ public class WebappClientFXML extends Application {
         primaryStage.setTitle("Digital tissue management suite");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
+        
         /**
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_status_window.fxml"));
         Parent rootStatus = loader.load();

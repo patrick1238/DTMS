@@ -12,4 +12,8 @@ package net.patho234.webapp_client;
 public class APPLICATION_DEFAULTS {
     public static String APPLICATION_NAME="DTMS CaseManager";
     public static String VERSION_NUMBER="unversioned";
+    
+    public static int MAIN_WINDOW_WIDTH=900;
+    public static int MAIN_WINDOW_HEIGHT=700;
+    
 }

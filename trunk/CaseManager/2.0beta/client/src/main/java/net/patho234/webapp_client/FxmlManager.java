@@ -5,6 +5,7 @@
  */
 package net.patho234.webapp_client;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.Parent;
@@ -23,13 +24,21 @@ public class FxmlManager {
     public static EventHandler<WindowEvent> EXIT_APPLICATION_HANDLER = new EventHandler<WindowEvent>(){
         @Override
         public void handle(WindowEvent t) {
-            if( !t.isConsumed() ){
+            
+            if( t==null || !t.isConsumed() ){
                 Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Shutting down "+APPLICATION_DEFAULTS.APPLICATION_NAME+".");
+                Platform.exit();
             } else { Logger.getLogger(getClass()).info("[FxmlManager.EXIT_APPLICATION_HANDLER] Ignoring already consumed event "+t); }
         }
-    
     };
-    
+    public static EventHandler<WindowEvent> DISPOSE_WINDOW_HANDLER = new EventHandler<WindowEvent>(){
+        @Override
+        public void handle(WindowEvent t) {
+            if( !t.isConsumed() ){
+                Logger.getLogger(getClass()).info("[FxmlManager.DISPOSE_WINDOW_HANDLER] Closing window "+t.getSource()+".");
+            } else { Logger.getLogger(getClass()).info("[FxmlManager.DISPOSE_WINDOW_HANDLER] Ignoring already consumed event "+t); }
+        }
+    };    
     
     public static void applyDefaultStyle(Parent fxComponent){
         new JMetro( DEFAULT_STYLE ).applyTheme( fxComponent );

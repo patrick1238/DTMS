@@ -23,7 +23,11 @@ import jfxtras.styles.jmetro8.JMetro;
 import net.patho234.entities.ClientSubmitter;
 import net.patho234.entities.pool.SubmitterPool;
 import net.patho234.gui.ClientPopup;
+import net.patho234.interfaces.ISubmitter;
+import net.patho234.interfaces.client.ISubmitterReceiver;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.views.MainWindow;
+import net.patho234.views.RegistrationView;
 import net.patho234.webapp_client.FxmlManager;
 import org.jboss.logging.Logger;
 
@@ -32,7 +36,7 @@ import org.jboss.logging.Logger;
  *
  * @author patri
  */
-public class LoginController implements Initializable {
+public class LoginController implements Initializable, ISubmitterReceiver {
 
     @FXML
     private TextField usernameField;
@@ -48,7 +52,6 @@ public class LoginController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
     }    
 
     @FXML
@@ -61,10 +64,9 @@ public class LoginController implements Initializable {
         FxmlManager.applyDefaultStyle( root );
         
         Scene scene = new Scene(root);
-        Stage registerStage = new Stage();
-        registerStage.setTitle("Register a new user account");
-        registerStage.setScene(scene);
+        Stage registerStage = new RegistrationView( this );
         registerStage.show();
+        
     }
 
     @FXML
@@ -95,8 +97,10 @@ public class LoginController implements Initializable {
         
         // TODO:
         // start MainWindow here
+        usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
+        new MainWindow().show();
     }
     
     private boolean isValidLogin(String login, String password){
@@ -119,5 +123,11 @@ public class LoginController implements Initializable {
             }
         }
         return isValid;
+    }
+    
+    @Override
+    public void setSubmitter(ISubmitter submitter){
+        this.usernameField.setText(submitter.getLogin());
+        this.passwordField.setText(submitter.getPassword());
     }
 }
