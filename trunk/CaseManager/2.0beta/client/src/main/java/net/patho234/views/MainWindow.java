@@ -62,7 +62,6 @@ public class MainWindow extends Stage {
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
         controller = fxmlLoader.getController();
-        controller.setEnabled(false);
 
         Scene scene = new Scene(root);
         setTitle(APPLICATION_DEFAULTS.APPLICATION_NAME + " @" + APPLICATION_DEFAULTS.VERSION_NUMBER);
@@ -91,7 +90,6 @@ public class MainWindow extends Stage {
                     preloadClientObjectPools(statusControl);
                 } catch (IOException ioEx) {
                 } finally {
-                    controller.setEnabled(true);
                     ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
                     searchManager.createSearch("global", (ClientObjectList) CasePool.createPool().getAllEntities());
 
@@ -214,6 +212,7 @@ public class MainWindow extends Stage {
     }
 
     public boolean loadSubpanes() {
+        this.show();
         HashMap<Integer,AnchorPane> mainViewHandler = new HashMap<>();
         FXMLLoader fxmlLoader2;
         fxmlLoader2 = new FXMLLoader(this.getClass().getResource("/fxml/elements/fx_home_pane.fxml"));
@@ -227,7 +226,6 @@ public class MainWindow extends Stage {
         mainViewHandler.put(0,anchor(node));
         HomeController homecontroller = fxmlLoader2.getController();
         homecontroller.setDisplay(this.tableviewer);
-        /*
         fxmlLoader2 = new FXMLLoader(this.getClass().getResource("/fxml/elements/fx_filter_pane.fxml"));
         node = null;
         try {
@@ -248,8 +246,7 @@ public class MainWindow extends Stage {
         }
         mainViewHandler.put(2,anchor(node));
         ExportController exportcontroller = fxmlLoader2.getController();
-*/
-        mainViewHandler.get(0).setVisible(true);
+        controller.setPossibleDisplays(mainViewHandler);
         return true;
     }
 
