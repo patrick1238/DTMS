@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 /**
  * FXML Controller class
@@ -26,7 +27,15 @@ public class MainPaneController implements Initializable {
     @FXML
     private Menu userMenu;
     @FXML
-    private AnchorPane displayPane;
+    private StackPane displayStack;
+    @FXML
+    private AnchorPane homePane;
+    @FXML
+    private AnchorPane filterPane;
+    @FXML
+    private AnchorPane exportPane;
+    @FXML
+    private AnchorPane imageAnalysisPane;
 
     /**
      * Initializes the controller class.
@@ -133,9 +142,6 @@ public class MainPaneController implements Initializable {
     private void homeWindowClicked(ActionEvent event) {
     }
 
-    @FXML
-    private void searchWindowClicked(ActionEvent event) {
-    }
 
     @FXML
     private void exportWindowClicked(ActionEvent event) {
@@ -147,6 +153,10 @@ public class MainPaneController implements Initializable {
 
     @FXML
     private void logoutClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void filterWindowClicked(ActionEvent event) {
     }
     
 }

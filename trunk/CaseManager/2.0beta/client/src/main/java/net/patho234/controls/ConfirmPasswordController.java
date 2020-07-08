@@ -17,7 +17,7 @@ import javafx.scene.control.PasswordField;
  *
  * @author patri
  */
-public class Fx_confirm_passwordController implements Initializable {
+public class ConfirmPasswordController implements Initializable {
 
     @FXML
     private PasswordField passwordField;

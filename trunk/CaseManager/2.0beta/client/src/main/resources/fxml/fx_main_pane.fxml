@@ -5,6 +5,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="386.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.MainPaneController">
    <children>
@@ -68,8 +69,9 @@
           <Menu mnemonicParsing="false" text=" Window ">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#homeWindowClicked" text="Home" />
-              <MenuItem mnemonicParsing="false" onAction="#searchWindowClicked" text="Search" />
+              <MenuItem mnemonicParsing="false" onAction="#filterWindowClicked" text="Filter" />
                   <MenuItem mnemonicParsing="false" onAction="#exportWindowClicked" text="Export" />
+                  <MenuItem mnemonicParsing="false" text="Image analysis" />
             </items>
           </Menu>
         </menus>
@@ -85,6 +87,16 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane fx:id="displayPane" layoutX="10.0" layoutY="60.0" prefHeight="329.0" prefWidth="365.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
+      <AnchorPane layoutX="10.0" layoutY="60.0" prefHeight="329.0" prefWidth="365.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0">
+         <children>
+            <StackPane fx:id="displayStack" layoutX="64.0" layoutY="75.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <AnchorPane fx:id="homePane" prefHeight="200.0" prefWidth="200.0" />
+                  <AnchorPane fx:id="filterPane" prefHeight="200.0" prefWidth="200.0" />
+                  <AnchorPane fx:id="exportPane" prefHeight="200.0" prefWidth="200.0" />
+                  <AnchorPane fx:id="imageAnalysisPane" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </StackPane>
+         </children></AnchorPane>
    </children>
 </AnchorPane>
