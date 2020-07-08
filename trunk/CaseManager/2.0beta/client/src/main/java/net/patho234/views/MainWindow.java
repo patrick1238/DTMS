@@ -58,8 +58,6 @@ public class MainWindow extends Stage{
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
         controller = fxmlLoader.getController();
-        this.loadTableViewerWindow();
-        this.loadSubpanes(null);
         controller.setEnabled(false);
 
         Scene scene = new Scene(root);
@@ -196,14 +194,14 @@ public class MainWindow extends Stage{
         }
     }
     
-    private boolean loadTableViewerWindow(){
+    public boolean loadTableViewerWindow(){
         tableviewer = new TableViewerWindow();
+        tableviewer.initializeTables();
         tableviewer.show();
         return true;
     }
         
-    public boolean loadSubpanes(IDataDisplay display){
-        //HomePane pane = new HomePane(display);
+    public boolean loadSubpanes(){
         FXMLLoader fxmlLoader2 = new FXMLLoader(this.getClass().getResource("/fxml/elements/fx_home_pane.fxml"));
         Node home = null;
         try {

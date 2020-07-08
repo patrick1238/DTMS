@@ -49,7 +49,7 @@ public class TableViewerWindow extends Stage implements IDataDisplay{
         setScene(scene);
     }
     
-    private void addTableView(){
+    public void initializeTables(){
         
     }
 

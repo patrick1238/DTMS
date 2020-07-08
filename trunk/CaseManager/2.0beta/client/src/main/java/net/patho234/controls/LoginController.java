@@ -103,6 +103,8 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
         MainWindow mainWnd = new MainWindow();
+        mainWnd.loadTableViewerWindow();
+        mainWnd.loadSubpanes();
         mainWnd.show();
     }
     

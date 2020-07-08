@@ -67,10 +67,10 @@ public class TableViewerController implements Initializable, IDtmsSearchListener
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        userMenu.setText("Logged in as "+UserLogin.getUserName());
+        /*userMenu.setText("Logged in as "+UserLogin.getUserName());
         
         Logger.getLogger(getClass()).info("Setting up menu items");
-        //initializeMenuEventHandler();
+        initializeMenuEventHandler();
 
         
         Logger.getLogger(getClass()).info("Loading cases panel.");
@@ -80,7 +80,8 @@ public class TableViewerController implements Initializable, IDtmsSearchListener
         Logger.getLogger(getClass()).info("Loading 3D images panel.");
         
         Logger.getLogger(getClass()).info("Loading 4D images panel.");
-        bindTableViewToSearchManger();
+        bindTableViewToSearchManger();*/
+
     }
     
     
