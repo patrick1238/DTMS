@@ -32,7 +32,7 @@ import net.patho234.webapp_client.FxmlManager;
 public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearchListener{
     
     TableViewerController controller;
-    HashMap<Integer,String> views;
+    HashMap<String,Integer> views;
     HashMap<Integer,AnchorPane> viewableWindows;
     HashMap<Integer,TableView> tableViews;
     Integer currentlyVisible;
@@ -89,14 +89,14 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
 
     @Override
     public HashMap<String,Integer> getViews() {
-        HashMap<String,Integer> tableViews = new HashMap<>();
+        this.views = new HashMap<>();
         String[] availableServices = Settings.get("dtms.services").split(":");
         Integer iterator = 0;
         for(String service:availableServices){
-            tableViews.put(service,iterator);
+            views.put(service,iterator);
             iterator += 1;
         }
-        return tableViews;
+        return views;
     }
 
     @Override

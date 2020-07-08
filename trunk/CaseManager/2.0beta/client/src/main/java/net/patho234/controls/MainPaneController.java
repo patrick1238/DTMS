@@ -6,6 +6,7 @@
 package net.patho234.controls;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,6 +29,9 @@ public class MainPaneController implements Initializable {
     private Menu userMenu;
     @FXML
     private StackPane displayStack;
+    
+    Integer currentlyVisible;
+    HashMap<Integer,AnchorPane> mainViewHandler;
 
     /**
      * Initializes the controller class.
@@ -160,5 +164,9 @@ public class MainPaneController implements Initializable {
     }
     public StackPane getDisplayStack(){
         return this.displayStack;
-    }    
+    }  
+    
+    public void setPossibleDisplays(){
+        
+    }
 }
