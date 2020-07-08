@@ -73,8 +73,8 @@ public class LoginController implements Initializable, ISubmitterReceiver {
 
     @FXML
     private void loginPressed(ActionEvent event) {
-        String user = usernameField.getText();
-        String pwd = passwordField.getText();
+        String user = "guest";//usernameField.getText();
+        String pwd = "123456";//passwordField.getText();
         
         boolean allowLogin=true;
         String errorMsg="";
@@ -103,6 +103,7 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
         MainWindow mainWnd = new MainWindow();
+        mainWnd.loadSubpanes(null);
         mainWnd.show();
     }
     

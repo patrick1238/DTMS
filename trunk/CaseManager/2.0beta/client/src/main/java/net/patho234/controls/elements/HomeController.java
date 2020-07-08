@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
@@ -31,6 +32,8 @@ public class HomeController implements Initializable {
     private Button genomicsButton;
     @FXML
     private Button methButton;
+    @FXML
+    private AnchorPane anchor;
 
     /**
      * Initializes the controller class.
@@ -98,6 +101,10 @@ public class HomeController implements Initializable {
 
     @FXML
     private void inspectMethDiagnose(ActionEvent event) {
+    }
+    
+    public AnchorPane getAnchor(){
+        return this.anchor;
     }
     
 }

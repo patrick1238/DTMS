@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -28,21 +28,13 @@ public class MainPaneController implements Initializable {
     private Menu userMenu;
     @FXML
     private StackPane displayStack;
-    @FXML
-    private AnchorPane homePane;
-    @FXML
-    private AnchorPane filterPane;
-    @FXML
-    private AnchorPane exportPane;
-    @FXML
-    private AnchorPane imageAnalysisPane;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        //Todo
     }    
 
 
@@ -138,14 +130,6 @@ public class MainPaneController implements Initializable {
     private void closeClicked(ActionEvent event) {
     }
 
-    @FXML
-    private void homeWindowClicked(ActionEvent event) {
-    }
-
-
-    @FXML
-    private void exportWindowClicked(ActionEvent event) {
-    }
 
     @FXML
     private void profileClicked(ActionEvent event) {
@@ -154,15 +138,27 @@ public class MainPaneController implements Initializable {
     @FXML
     private void logoutClicked(ActionEvent event) {
     }
+    
+    @FXML
+    private void homeButtonClicked(ActionEvent event) {
+    }
 
     @FXML
-    private void filterWindowClicked(ActionEvent event) {
+    private void filterButtonClicked(ActionEvent event) {
     }
+
+    @FXML
+    private void exportButtonClicked(ActionEvent event) {
+    }
+
     
     
     public void setEnabled( boolean enable ){ 
-        if( this.exportPane.getScene() != null ){
-            this.exportPane.getScene().getRoot().setDisable(!enable);
+        if( this.statusLabel.getScene() != null ){
+            this.statusLabel.getScene().getRoot().setDisable(!enable);
         }
     }
+    public StackPane getDisplayStack(){
+        return this.displayStack;
+    }    
 }
