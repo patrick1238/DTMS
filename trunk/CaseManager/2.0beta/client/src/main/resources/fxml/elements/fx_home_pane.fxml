@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" prefHeight="390.0" prefWidth="186.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.HomeController">
+   <children>
+      <GridPane layoutY="23.0" prefHeight="367.0" prefWidth="186.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="23.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="caseButton" mnemonicParsing="false" onAction="#caseButtonClicked" text="Button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="twoDimButton" mnemonicParsing="false" onAction="#twoDimButtonClicked" text="Button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <Button fx:id="threeDimButton" mnemonicParsing="false" onAction="#threeDimButtonClicked" text="Button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <children>
+                  <Button fx:id="fourDimButton" mnemonicParsing="false" onAction="#fourDimButtonClicked" text="Button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="4">
+               <children>
+                  <Button fx:id="genomicsButton" mnemonicParsing="false" onAction="#genomicsButtonClicked" text="Button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+               <children>
+                  <Button fx:id="methButton" mnemonicParsing="false" onAction="#methButtonClicked" text="Button" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </GridPane>
+      <MenuBar layoutY="2.0" prefHeight="22.0" prefWidth="186.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Inspect">
+            <items>
+                  <Menu mnemonicParsing="false" text="Case">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#inspectCaseGeneral" text="General" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="2D">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#inspectTwoDimDiagnose" text="Diagnose" />
+                      <MenuItem mnemonicParsing="false" onAction="#inspectTwoDimStaining" text="Staining" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="3D">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#inspectThreeDimDiagnose" text="Diagnose" />
+                        <MenuItem mnemonicParsing="false" onAction="#inspectThreeDimStaining" text="Staining" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="4D">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#inspectFourDimDiagnose" text="Diagnose" />
+                        <MenuItem mnemonicParsing="false" onAction="#inspectFourDimStaining" text="Staining" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Genomics">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#inspectGenomicsDiagnose" text="Diagnose" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Methylation">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#inspectMethDiagnose" text="Diagnose" />
+                    </items>
+                  </Menu>
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>

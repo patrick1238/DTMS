@@ -1,62 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
 <AnchorPane id="AnchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.TableViewerController">
    <children>
-      <HBox prefHeight="26.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane fx:id="tableStack" layoutY="26.0" prefHeight="374.0" prefWidth="600.0" AnchorPane.bottomAnchor="25.600000000000023" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <MenuBar prefHeight="26.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <menus>
-                      <Menu mnemonicParsing="false" text=" File ">
-                        <items>
-                              <MenuItem fx:id="addCaseMenuItem" mnemonicParsing="false" text="Add case" />
-                        </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text=" Help ">
-                        <items>
-                              <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" text="Preferences" />
-                          <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
-                        </items>
-                      </Menu>
-                    </menus>
-                  </MenuBar>
-               </children>
-            </AnchorPane>
-            <AnchorPane prefHeight="26.0" prefWidth="401.0">
+                  <TableView fx:id="casesTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <MenuBar layoutY="1.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" prefWidth="518.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <menus>
-                      <Menu fx:id="userMenu" mnemonicParsing="false" text=" Logged in as Patrick Wurzel ">
-                        <items>
-                              <MenuItem fx:id="profileMenuItem" mnemonicParsing="false" text="Profile" />
-                              <MenuItem fx:id="changeUserMenuItem" mnemonicParsing="false" text="Change user" />
-                              <MenuItem fx:id="logoutMenuItem" mnemonicParsing="false" text="Logout" />
-                          <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
-                        </items>
-                      </Menu>
-                    </menus>
-                  </MenuBar>
-               </children>
-            </AnchorPane>
-         </children>
-      </HBox>
-      <StackPane fx:id="tableStack" layoutY="26.0" prefHeight="374.0" prefWidth="600.0">
-         <children>
-            <AnchorPane fx:id="casePane" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="twoDimPane" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="threeDimPane" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="fourDimPane" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="genomicsPane" prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane fx:id="methPane" prefHeight="200.0" prefWidth="200.0" />
+                  <TableView fx:id="twoDimTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="threeDimTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="fourDimTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="genomicsTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="methTable" layoutX="176.0" layoutY="54.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children></AnchorPane>
          </children>
       </StackPane>
+      <TextField layoutY="373.0" promptText="Fast search" style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>
