@@ -114,6 +114,5 @@ public class HomeController implements Initializable {
         for(Integer id: views.keySet()){
             this.viewIDs.put(views.get(id), id);
         }
-        for(String view:)
     }
 }

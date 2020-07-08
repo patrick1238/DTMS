@@ -20,11 +20,13 @@ import javafx.stage.Stage;
 import net.patho234.controls.MainPaneController;
 import net.patho234.controls.StatusWindowController;
 import net.patho234.controls.elements.HomeController;
+import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IDataDisplay;
+import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
@@ -39,14 +41,14 @@ public class MainWindow extends Stage{
     TableViewerWindow tableviewer;
 
     public MainWindow(){
-        /*
+
         try{
             startClientObjectPoolPreloading();
         }catch(IOException ioEx){
             Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for status preloader window...exiting.", ioEx);
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
-*/
+
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxml/fx_main_pane.fxml"));
         Parent root=null;
         try {
@@ -63,7 +65,7 @@ public class MainWindow extends Stage{
         Scene scene = new Scene(root);
         setTitle(APPLICATION_DEFAULTS.APPLICATION_NAME+" @"+APPLICATION_DEFAULTS.VERSION_NUMBER);
         setScene(scene);
-
+        
         this.setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
     }
         
@@ -88,8 +90,9 @@ public class MainWindow extends Stage{
                         }catch(IOException ioEx){}
                         finally{
                             controller.setEnabled(true);
+                            ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
+                            searchManager.createSearch("global", (ClientObjectList)CasePool.createPool().getAllEntities());
                         }
-                        
                     }
                 }
         );
