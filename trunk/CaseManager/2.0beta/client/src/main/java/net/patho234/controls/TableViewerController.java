@@ -30,7 +30,7 @@ import org.jboss.logging.Logger;
  *
  * @author patri
  */
-public class TableViewerController implements Initializable, IDtmsSearchListener {
+public class TableViewerController implements Initializable  {
 
     private MenuItem closeMenuItem;
     @FXML
@@ -57,7 +57,7 @@ public class TableViewerController implements Initializable, IDtmsSearchListener
         Logger.getLogger(getClass()).info("Loading 3D images panel.");
         
         Logger.getLogger(getClass()).info("Loading 4D images panel.");
-        bindTableViewToSearchManger();*/
+        */
 
     }
     
@@ -75,17 +75,6 @@ public class TableViewerController implements Initializable, IDtmsSearchListener
         
         // TODO: implement  missing MenuItem events
         Logger.getLogger(getClass()).warn("Not yet all MenuItem handler implemented.");
-    }
-    
-    private void bindTableViewToSearchManger(){
-        ClientObjectSearchManager.create().getSearch("global").addDtmsSearchResultListener(this);
-    }
-
-    @Override
-    public void receiveSearchResults(ClientObjectList newResults) {
-        for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
-            System.out.println("todo: display case "+resultCase);
-        }
     }
     
     public void addTableView(AnchorPane view){

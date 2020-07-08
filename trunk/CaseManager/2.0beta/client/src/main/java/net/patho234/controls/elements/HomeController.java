@@ -111,7 +111,7 @@ public class HomeController implements Initializable {
         this.display = display;
         this.viewIDs = this.display.getViews();
         for(String key:this.viewIDs.keySet()){
-            System.out.println(key);
+            
         }
     }
 }
