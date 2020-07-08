@@ -90,6 +90,8 @@ public class MainWindow extends Stage{
                             controller.setEnabled(true);
                             ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
                             searchManager.createSearch("global", (ClientObjectList)CasePool.createPool().getAllEntities());
+                            
+                            loadTableViewerWindow();
                         }
                     }
                 }
@@ -195,9 +197,16 @@ public class MainWindow extends Stage{
     }
     
     public boolean loadTableViewerWindow(){
-        tableviewer = new TableViewerWindow();
-        tableviewer.initializeTables();
-        tableviewer.show();
+
+        Platform.runLater( new Runnable() {
+            @Override
+            public void run() {
+                tableviewer = new TableViewerWindow();
+                tableviewer.initializeTables();
+                tableviewer.show();
+                loadSubpanes();
+            }
+        } );
         return true;
     }
         

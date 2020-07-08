@@ -16,7 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import net.patho234.controls.TableViewerController;
+import net.patho234.entities.ClientCase;
+import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.interfaces.IDataDisplay;
+import net.patho234.interfaces.client.ClientObjectList;
+import net.patho234.interfaces.client.IDtmsSearchListener;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
@@ -24,7 +28,7 @@ import net.patho234.webapp_client.FxmlManager;
  *
  * @author rehkind
  */
-public class TableViewerWindow extends Stage implements IDataDisplay{
+public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearchListener{
     
     TableViewerController controller;
     HashMap<Integer,String> views;
@@ -48,6 +52,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay{
         setWidth(APPLICATION_DEFAULTS.MAIN_WINDOW_WIDTH);
         setHeight(APPLICATION_DEFAULTS.MAIN_WINDOW_HEIGHT);
         setScene(scene);
+        
+        bindTableViewToSearchManger();
     }
     
     public void initializeTables(){
@@ -78,4 +84,14 @@ public class TableViewerWindow extends Stage implements IDataDisplay{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    private void bindTableViewToSearchManger(){
+        ClientObjectSearchManager.create().getSearch("global").addDtmsSearchResultListener(this);
+    }
+
+    @Override
+    public void receiveSearchResults(ClientObjectList newResults) {
+        for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
+            System.out.println("todo: display case "+resultCase);
+        }
+    }
 }
