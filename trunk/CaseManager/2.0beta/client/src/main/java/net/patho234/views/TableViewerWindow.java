@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -36,6 +37,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     HashMap<Integer,AnchorPane> viewableWindows;
     HashMap<Integer,TableView> tableViews;
     Integer currentlyVisible;
+    
+    ClientObjectList<ClientCase> currentCaseList;
     
     public TableViewerWindow(){       
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_table_viewer_pane.fxml"));
@@ -112,13 +115,37 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
 
     @Override
     public void receiveSearchResults(ClientObjectList newResults) {
+        
+        // ========= CaseTableView ===========
         for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
             System.out.println("todo: display case "+resultCase);
+            
         }
+        tableViews.get(1).setItems(newResults);
+        ((TableView<ClientCase>)tableViews.get("Case")).setRowFactory((caseForRow) -> {
+            TableRow<ClientCase> row = new TableRow<ClientCase>();
+            
+            return row; 
+        });
+        // ========= 2DTableView ===========
+        // *TODO
+        // ========= 3DTableView ===========
+        // *TODO
+        // ========= 4DTableView ===========
+        // *TODO
     }
 
     @Override
     public Integer getVisibleDataCount(Integer id) {
-        return 5;
+        switch ( id ) {
+            case 1:
+                if(currentCaseList != null){
+                    return currentCaseList.size();
+                }
+            default:
+                Logger.getLogger("global").warning("getVisibleDataCount(Integer id) can not handle id="+id+" yet.");
+                return 5;
+        }
+        
     }
 }
