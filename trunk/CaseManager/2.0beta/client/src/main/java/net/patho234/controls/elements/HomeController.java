@@ -6,12 +6,14 @@
 package net.patho234.controls.elements;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import net.patho234.interfaces.IDataDisplay;
 
 /**
  * FXML Controller class
@@ -34,13 +36,15 @@ public class HomeController implements Initializable {
     private Button methButton;
     @FXML
     private AnchorPane anchor;
+    
+    IDataDisplay display;
+    HashMap<String,Integer> viewIDs;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }    
 
     @FXML
@@ -103,8 +107,13 @@ public class HomeController implements Initializable {
     private void inspectMethDiagnose(ActionEvent event) {
     }
     
-    public AnchorPane getAnchor(){
-        return this.anchor;
+    public void setDisplay(IDataDisplay display){
+        this.display = display;
+        this.viewIDs = new HashMap<>();
+        HashMap<Integer,String> views = this.display.getViews();
+        for(Integer id: views.keySet()){
+            this.viewIDs.put(views.get(id), id);
+        }
+        for(String view:)
     }
-    
 }

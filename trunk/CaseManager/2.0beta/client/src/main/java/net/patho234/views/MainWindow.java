@@ -10,20 +10,16 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import net.patho234.controls.MainPaneController;
 import net.patho234.controls.StatusWindowController;
+import net.patho234.controls.elements.HomeController;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
 import net.patho234.entities.pool.ServiceDefinitionPool;
@@ -39,27 +35,29 @@ import net.patho234.webapp_client.FxmlManager;
 public class MainWindow extends Stage{
     
     MainPaneController controller;
-    FXMLLoader fxmlLoader;
+    HomeController homeController;
+    TableViewerWindow tableviewer;
 
     public MainWindow(){
+        /*
         try{
             startClientObjectPoolPreloading();
         }catch(IOException ioEx){
             Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for status preloader window...exiting.", ioEx);
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
-
-        System.out.println(this.getClass().getResource("/fxml/fx_main_pane.fxml"));
-        fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxml/fx_main_pane.fxml"));
+*/
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxml/fx_main_pane.fxml"));
         Parent root=null;
         try {
             root = fxmlLoader.load();
         } catch (IOException ex) {
             Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for main window...exiting.", ex);
-            ex.printStackTrace();
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
         controller = fxmlLoader.getController();
+        this.loadTableViewerWindow();
+        this.loadSubpanes(null);
         controller.setEnabled(false);
 
         Scene scene = new Scene(root);
@@ -194,16 +192,31 @@ public class MainWindow extends Stage{
             }
         }
     }
+    
+    private boolean loadTableViewerWindow(){
+        tableviewer = new TableViewerWindow();
+        tableviewer.show();
+        return true;
+    }
         
     public boolean loadSubpanes(IDataDisplay display){
-        HomePane pane = new HomePane(display);
-        //Button pane = new Button();
-        AnchorPane anchor = new AnchorPane(pane);
-        AnchorPane.setTopAnchor(pane, 0.0);
-        AnchorPane.setRightAnchor(pane, 0.0);
-        AnchorPane.setLeftAnchor(pane, 0.0);
-        AnchorPane.setBottomAnchor(pane, 0.0);
-        controller.getDisplayStack().getChildren().add(anchor);
+        //HomePane pane = new HomePane(display);
+        FXMLLoader fxmlLoader2 = new FXMLLoader(this.getClass().getResource("/fxml/elements/fx_home_pane.fxml"));
+        Node home = null;
+        try {
+            home = fxmlLoader2.load();
+        } catch (IOException ex) {
+            Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for main window...exiting.", ex);
+            FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
+        }
+        HomeController homecontroller = fxmlLoader2.getController();
+        homecontroller.setDisplay(this.tableviewer);
+        AnchorPane homeanchor = new AnchorPane(home);
+        AnchorPane.setTopAnchor(home, 0.0);
+        AnchorPane.setRightAnchor(home, 0.0);
+        AnchorPane.setLeftAnchor(home, 0.0);
+        AnchorPane.setBottomAnchor(home, 0.0);
+        controller.getDisplayStack().getChildren().add(homeanchor);
         return true;
     }
 }

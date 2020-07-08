@@ -5,34 +5,30 @@
  */
 package net.patho234.views;
 
+import com.sun.scenario.Settings;
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import net.patho234.controls.TableViewerController;
-import net.patho234.controls.StatusWindowController;
-import net.patho234.entities.pool.CasePool;
-import net.patho234.entities.pool.ClinicPool;
-import net.patho234.entities.pool.ServiceDefinitionPool;
-import net.patho234.entities.pool.ServicePool;
+import net.patho234.interfaces.IDataDisplay;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
-import net.patho234.webapp_client.WebappClientFXML;
 
 /**
  *
  * @author rehkind
  */
-public class TableViewerWindow extends Stage {
+public class TableViewerWindow extends Stage implements IDataDisplay{
+    
     TableViewerController controller;
-    public TableViewerWindow() throws IOException {
-        
+    HashMap<Integer,String> views;
+    
+    public TableViewerWindow(){       
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_table_viewer_pane.fxml"));
         Parent root=null;
         try {
@@ -44,13 +40,34 @@ public class TableViewerWindow extends Stage {
         
         controller = loader.getController();
         
-        FxmlManager.applyDefaultStyle( root );
+        //FxmlManager.applyDefaultStyle( root );
         Scene scene = new Scene(root);
         setScene(scene);
         setTitle(APPLICATION_DEFAULTS.APPLICATION_NAME + " - <todo: proper title>");
         setWidth(APPLICATION_DEFAULTS.MAIN_WINDOW_WIDTH);
         setHeight(APPLICATION_DEFAULTS.MAIN_WINDOW_HEIGHT);
         setScene(scene);
+    }
+    
+    private void addTableView(){
+        
+    }
+
+    @Override
+    public HashMap<Integer,String> getViews() {
+        HashMap<Integer,String> tableViews = new HashMap<>();
+        String[] availableServices = Settings.get("dtms.services").split(":");
+        Integer iterator = 0;
+        for(String service:availableServices){            
+            tableViews.put(iterator,service);
+            iterator += 1;
+        }
+        return tableViews;
+    }
+
+    @Override
+    public boolean setVisible(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
