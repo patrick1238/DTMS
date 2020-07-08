@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -23,7 +24,9 @@ public class MainPaneController implements Initializable {
     @FXML
     private Label statusLabel;
     @FXML
-    private AnchorPane workingPaneOptions;
+    private Menu userMenu;
+    @FXML
+    private AnchorPane displayPane;
 
     /**
      * Initializes the controller class.
@@ -33,17 +36,6 @@ public class MainPaneController implements Initializable {
         // TODO
     }    
 
-    @FXML
-    private void inspectWindowSelected(ActionEvent event) {
-    }
-
-    @FXML
-    private void searchWindowSelected(ActionEvent event) {
-    }
-
-    @FXML
-    private void exportWindowSelected(ActionEvent event) {
-    }
 
     @FXML
     private void caseAddProp(ActionEvent event) {
@@ -115,6 +107,46 @@ public class MainPaneController implements Initializable {
 
     @FXML
     private void methDelProp(ActionEvent event) {
+    }
+
+    @FXML
+    private void addCaseClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void reloadDatabaseClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void preferencesClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void aboutClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void closeClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void homeWindowClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void searchWindowClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void exportWindowClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void profileClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void logoutClicked(ActionEvent event) {
     }
     
 }

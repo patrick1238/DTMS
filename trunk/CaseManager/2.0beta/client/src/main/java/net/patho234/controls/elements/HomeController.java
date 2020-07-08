@@ -11,17 +11,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 
 /**
  * FXML Controller class
  *
  * @author patri
  */
-public class StatisticsController implements Initializable {
+public class HomeController implements Initializable {
 
-    @FXML
-    private ComboBox<?> inspectBox;
     @FXML
     private Button caseButton;
     @FXML
@@ -42,10 +39,6 @@ public class StatisticsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
-
-    @FXML
-    private void inspectButtonClicked(ActionEvent event) {
-    }
 
     @FXML
     private void caseButtonClicked(ActionEvent event) {
@@ -69,6 +62,42 @@ public class StatisticsController implements Initializable {
 
     @FXML
     private void methButtonClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectCaseGeneral(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectTwoDimDiagnose(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectTwoDimStaining(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectThreeDimDiagnose(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectThreeDimStaining(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectFourDimDiagnose(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectFourDimStaining(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectGenomicsDiagnose(ActionEvent event) {
+    }
+
+    @FXML
+    private void inspectMethDiagnose(ActionEvent event) {
     }
     
 }
