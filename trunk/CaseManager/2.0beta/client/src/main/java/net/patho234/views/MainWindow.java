@@ -5,6 +5,7 @@
  */
 package net.patho234.views;
 
+import com.sun.security.ntlm.Client;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -24,11 +25,14 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.patho234.controls.MainPaneController;
 import net.patho234.controls.StatusWindowController;
+import net.patho234.entities.filter.ClientObjectSearchManager;
+import net.patho234.entities.filter.DtmsSearch;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IDataDisplay;
+import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
@@ -65,7 +69,7 @@ public class MainWindow extends Stage{
         Scene scene = new Scene(root);
         setTitle(APPLICATION_DEFAULTS.APPLICATION_NAME+" @"+APPLICATION_DEFAULTS.VERSION_NUMBER);
         setScene(scene);
-
+        
         this.setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
     }
         
@@ -90,8 +94,9 @@ public class MainWindow extends Stage{
                         }catch(IOException ioEx){}
                         finally{
                             controller.setEnabled(true);
+                            ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
+                            searchManager.createSearch("global", (ClientObjectList)CasePool.createPool().getAllEntities());
                         }
-                        
                     }
                 }
         );
