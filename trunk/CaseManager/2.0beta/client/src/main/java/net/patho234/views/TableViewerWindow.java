@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import net.patho234.controls.TableViewerController;
 import net.patho234.interfaces.IDataDisplay;
@@ -50,7 +51,14 @@ public class TableViewerWindow extends Stage implements IDataDisplay{
     }
     
     public void initializeTables(){
-        
+        HashMap<Integer,TableView> tableViews = new HashMap<>();
+        String[] availableServices = Settings.get("dtms.services").split(":");
+        Integer iterator = 0;
+        for(String service:availableServices){
+            TableView view = new TableView<Object>();
+            tableViews.put(iterator, view);
+            iterator += 1;
+        }
     }
 
     @Override
