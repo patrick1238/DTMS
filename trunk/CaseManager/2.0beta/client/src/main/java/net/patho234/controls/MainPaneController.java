@@ -159,4 +159,10 @@ public class MainPaneController implements Initializable {
     private void filterWindowClicked(ActionEvent event) {
     }
     
+    
+    public void setEnabled( boolean enable ){ 
+        if( this.exportPane.getScene() != null ){
+            this.exportPane.getScene().getRoot().setDisable(!enable);
+        }
+    }
 }
