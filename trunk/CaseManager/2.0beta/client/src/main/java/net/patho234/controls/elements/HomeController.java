@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import net.patho234.interfaces.IDataDisplay;
@@ -49,26 +50,44 @@ public class HomeController implements Initializable {
 
     @FXML
     private void caseButtonClicked(ActionEvent event) {
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        this.display.setVisible(viewIDs.get(id));
     }
 
     @FXML
     private void twoDimButtonClicked(ActionEvent event) {
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        this.display.setVisible(viewIDs.get(id));
     }
 
     @FXML
     private void threeDimButtonClicked(ActionEvent event) {
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        this.display.setVisible(viewIDs.get(id));
     }
 
     @FXML
     private void fourDimButtonClicked(ActionEvent event) {
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        this.display.setVisible(viewIDs.get(id));
     }
 
     @FXML
     private void genomicsButtonClicked(ActionEvent event) {
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        this.display.setVisible(viewIDs.get(id));
     }
 
     @FXML
     private void methButtonClicked(ActionEvent event) {
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        this.display.setVisible(viewIDs.get(id));
     }
 
     @FXML
@@ -113,16 +132,22 @@ public class HomeController implements Initializable {
         for(String key:this.viewIDs.keySet()){
             if(key.equals("Case")){
                 this.caseButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                this.caseButton.setId(key);
             }else if(key.equals("2D")){
                 this.twoDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                this.twoDimButton.setId(key);
             }else if(key.equals("3D")){
                 this.threeDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                this.threeDimButton.setId(key);
             }else if(key.equals("4D")){
                 this.fourDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                this.fourDimButton.setId(key);
             }else if(key.equals("Genomics")){
                 this.genomicsButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                this.genomicsButton.setId(key);
             }else if(key.equals("Methylation")){
                 this.methButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                this.methButton.setId(key);
             }else{
                 System.out.println(key);
             }

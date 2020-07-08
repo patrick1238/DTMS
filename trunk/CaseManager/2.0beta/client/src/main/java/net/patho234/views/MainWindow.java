@@ -226,6 +226,7 @@ public class MainWindow extends Stage{
         AnchorPane.setRightAnchor(home, 0.0);
         AnchorPane.setLeftAnchor(home, 0.0);
         AnchorPane.setBottomAnchor(home, 0.0);
+        
         controller.getDisplayStack().getChildren().add(homeanchor);
         return true;
     }
