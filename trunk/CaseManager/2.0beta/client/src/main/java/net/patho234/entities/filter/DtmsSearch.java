@@ -8,12 +8,10 @@ package net.patho234.entities.filter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Observable;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import javax.naming.directory.SearchResult;
 import net.patho234.entities.ClientObjectBase;
 import net.patho234.interfaces.client.ClientObjectList;
-import net.patho234.interfaces.client.IClientObject;
 import net.patho234.interfaces.client.IClientObjectFilter;
 import net.patho234.interfaces.client.IDtmsSearch;
 import net.patho234.interfaces.client.IDtmsSearchListener;
@@ -29,7 +27,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
     ClientObjectList<T> originalList;
     ClientObjectList<T> resultList;
     
-    HashSet<IDtmsSearchListener> listener = new HashSet<IDtmsSearchListener>();
+    HashSet<IDtmsSearchListener> resultListener = new HashSet<IDtmsSearchListener>();
     
     ListChangeListener originalListListener;
     
@@ -68,16 +66,29 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
             Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
         }
         Logger.getLogger(getClass()).info("Updating search result - filtered list has "+workingList.size()+" entries.");
+        
+        notifyAll();
     }
 
+    private void notifyAllResultListener(){
+        for(IDtmsSearchListener resultReceiver : this.resultListener){ notifyResultListener(resultReceiver); }
+    }
+    private void notifyResultListener(IDtmsSearchListener resultReceiver){
+        resultReceiver.receiveSearchResults(resultList);
+    }
+    
+    
     @Override
     public void addDtmsSearchResultListener( IDtmsSearchListener newListener ) {
-        listener.add(newListener);
+        resultListener.add(newListener);
+        if( this.resultList!=null ){
+            notifyResultListener(newListener);
+        }
     }
 
     @Override
     public void removeDtmsSearchResultListener( IDtmsSearchListener toRemoveListener ) {
-        listener.remove(toRemoveListener);
+        resultListener.remove(toRemoveListener);
     }
 
     @Override

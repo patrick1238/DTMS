@@ -11,16 +11,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import net.patho234.entities.ClientCase;
 import net.patho234.entities.UserLogin;
+import net.patho234.entities.filter.ClientObjectSearchManager;
+import net.patho234.interfaces.client.ClientObjectList;
+import net.patho234.interfaces.client.IDtmsSearchListener;
 import net.patho234.webapp_client.FxmlManager;
 import org.jboss.logging.Logger;
 
@@ -29,7 +28,7 @@ import org.jboss.logging.Logger;
  *
  * @author patri
  */
-public class TableViewerController implements Initializable {
+public class TableViewerController implements Initializable, IDtmsSearchListener {
 
     @FXML
     private MenuItem addCaseMenuItem;
@@ -81,6 +80,8 @@ public class TableViewerController implements Initializable {
         Logger.getLogger(getClass()).info("Loading 3D images panel.");
         
         Logger.getLogger(getClass()).info("Loading 4D images panel.");
+        
+        bindTableViewToSearchManger();
     }
     
     
@@ -97,5 +98,16 @@ public class TableViewerController implements Initializable {
         
         // TODO: implement  missing MenuItem events
         Logger.getLogger(getClass()).warn("Not yet all MenuItem handler implemented.");
+    }
+    
+    private void bindTableViewToSearchManger(){
+        ClientObjectSearchManager.create().getSearch("global").addDtmsSearchResultListener(this);
+    }
+
+    @Override
+    public void receiveSearchResults(ClientObjectList newResults) {
+        for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
+            System.out.println("todo: display case "+resultCase);
+        }
     }
 }
