@@ -14,4 +14,5 @@ import java.util.HashMap;
 public interface IDataDisplay {
     public HashMap<String,Integer> getViews();
     public void setVisible(Integer id);
+    public Integer getVisibleDataCount(Integer id);
 }

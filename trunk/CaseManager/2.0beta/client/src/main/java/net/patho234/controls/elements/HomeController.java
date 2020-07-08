@@ -111,7 +111,21 @@ public class HomeController implements Initializable {
         this.display = display;
         this.viewIDs = this.display.getViews();
         for(String key:this.viewIDs.keySet()){
-            
+            if(key.equals("Case")){
+                this.caseButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+            }else if(key.equals("2D")){
+                this.twoDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+            }else if(key.equals("3D")){
+                this.threeDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+            }else if(key.equals("4D")){
+                this.fourDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+            }else if(key.equals("Genomics")){
+                this.genomicsButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+            }else if(key.equals("Methylation")){
+                this.methButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+            }else{
+                System.out.println(key);
+            }
         }
     }
 }

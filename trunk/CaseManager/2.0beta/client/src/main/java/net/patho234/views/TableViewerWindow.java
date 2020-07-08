@@ -116,4 +116,9 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
             System.out.println("todo: display case "+resultCase);
         }
     }
+
+    @Override
+    public Integer getVisibleDataCount(Integer id) {
+        return 5;
+    }
 }

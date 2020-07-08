@@ -1,4 +1,4 @@
 server.address,http://192.168.31.1:8080/webapp/resources/
 client.login, guest
 client.password, 123456
-dtms.services, Cases:2DImage:3DImage:4DImage:Genomics:Methylation
+dtms.services, Case:2D:3D:4D:Genomics:Methylation
