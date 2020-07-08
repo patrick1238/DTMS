@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import net.patho234.controls.MainPaneController;
+import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
 /**
@@ -36,7 +37,7 @@ public class MainWindow extends Stage{
             controller = fxmlLoader.getController();
 
             Scene scene = new Scene(root);
-            setTitle("Register a new user account");
+            setTitle(APPLICATION_DEFAULTS.APPLICATION_NAME+" @"+APPLICATION_DEFAULTS.VERSION_NUMBER);
             setScene(scene);
 
             this.setOnCloseRequest(FxmlManager.EXIT_APPLICATION_HANDLER);
