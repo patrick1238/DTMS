@@ -18,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author patri
  */
-public class WorkingPaneController implements Initializable {
+public class MainPaneController implements Initializable {
 
     @FXML
     private Label statusLabel;

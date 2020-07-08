@@ -56,7 +56,7 @@ public class TableViewerWindow extends Stage {
         
         preloadThread.start();
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_main_pane.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_table_viewer_pane.fxml"));
         Parent root=null;
         try {
             root = loader.load();

@@ -27,8 +27,9 @@ import net.patho234.gui.ClientPopup;
 import net.patho234.interfaces.ISubmitter;
 import net.patho234.interfaces.client.ISubmitterReceiver;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.views.MainWindow;
 import net.patho234.views.TableViewerWindow;
-import net.patho234.views.RegistrationView;
+import net.patho234.views.RegistrationWindow;
 import net.patho234.webapp_client.FxmlManager;
 import org.jboss.logging.Logger;
 
@@ -65,7 +66,7 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         FxmlManager.applyDefaultStyle( root );
         
         Scene scene = new Scene(root);
-        Stage registerStage = new RegistrationView( this );
+        Stage registerStage = new RegistrationWindow( this );
         registerStage.show();
         
     }
@@ -101,12 +102,7 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
         usernameField.getScene().getWindow().hide();
         System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
-        try{
-            TableViewerWindow mainWnd = new TableViewerWindow();
-        }catch(IOException ioEx){
-            Logger.getLogger(getClass()).fatal("Could not load MainWindow...some FXML files could not be located...exiting");
-            FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
-        }
+        MainWindow mainWnd = new MainWindow();
     }
     
     private boolean isValidLogin(String login, String password){

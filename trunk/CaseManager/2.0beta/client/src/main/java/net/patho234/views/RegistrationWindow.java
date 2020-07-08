@@ -23,19 +23,19 @@ import net.patho234.webapp_client.FxmlManager;
  *
  * @author patri
  */
-public class RegistrationView extends Stage{
+public class RegistrationWindow extends Stage{
     
     RegistrationController controller;
     ISubmitterReceiver receiver;
     
-    public RegistrationView( ISubmitterReceiver receiver){
+    public RegistrationWindow( ISubmitterReceiver receiver){
         this.receiver = receiver;
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxml/fx_register_pane.fxml"));
         Parent root=null;
         try {
             root = fxmlLoader.load();
         } catch (IOException ex) {
-            Logger.getLogger(RegistrationView.class.getName()).log(Level.SEVERE, "Could not load FXML file for registration window...exiting.", ex);
+            Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for registration window...exiting.", ex);
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
         controller = fxmlLoader.getController();
