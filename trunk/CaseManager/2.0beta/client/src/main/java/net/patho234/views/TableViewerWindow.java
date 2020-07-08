@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.patho234.controls.TableViewerController;
 import net.patho234.interfaces.IDataDisplay;
@@ -28,6 +29,9 @@ public class TableViewerWindow extends Stage implements IDataDisplay{
     
     TableViewerController controller;
     HashMap<Integer,String> views;
+    HashMap<Integer,AnchorPane> viewableWindows;
+    HashMap<Integer,TableView> tableViews;
+    Integer currentlyVisible;
     
     public TableViewerWindow(){       
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_table_viewer_pane.fxml"));
@@ -51,31 +55,48 @@ public class TableViewerWindow extends Stage implements IDataDisplay{
     }
     
     public void initializeTables(){
-        HashMap<Integer,TableView> tableViews = new HashMap<>();
+        viewableWindows = new HashMap<>();
+        tableViews = new HashMap<>();
         String[] availableServices = Settings.get("dtms.services").split(":");
         Integer iterator = 0;
         for(String service:availableServices){
-            TableView view = new TableView<Object>();
-            tableViews.put(iterator, view);
+            AnchorPane anchor = buildUpTable(service);
+            viewableWindows.put(iterator, anchor);
             iterator += 1;
         }
+        viewableWindows.get(0).setVisible(true);
+        this.currentlyVisible = 0;
+    }
+    
+    private AnchorPane buildUpTable(String service){
+        TableView view = new TableView<Object>();
+        this.tableViews.put(currentlyVisible, view);
+        AnchorPane tableAnchor = new AnchorPane(view);
+        tableAnchor.setVisible(false);
+        AnchorPane.setTopAnchor(view, 0.0);
+        AnchorPane.setRightAnchor(view, 0.0);
+        AnchorPane.setLeftAnchor(view, 0.0);
+        AnchorPane.setBottomAnchor(view, 0.0);
+        this.controller.addTableView(tableAnchor);
+        return tableAnchor;
     }
 
     @Override
-    public HashMap<Integer,String> getViews() {
-        HashMap<Integer,String> tableViews = new HashMap<>();
+    public HashMap<String,Integer> getViews() {
+        HashMap<String,Integer> tableViews = new HashMap<>();
         String[] availableServices = Settings.get("dtms.services").split(":");
         Integer iterator = 0;
-        for(String service:availableServices){            
-            tableViews.put(iterator,service);
+        for(String service:availableServices){
+            tableViews.put(service,iterator);
             iterator += 1;
         }
         return tableViews;
     }
 
     @Override
-    public boolean setVisible(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    public void setVisible(Integer id) {
+        this.viewableWindows.get(currentlyVisible).setVisible(false);
+        this.viewableWindows.get(id).setVisible(true);
+        this.currentlyVisible = id;
+    }    
 }

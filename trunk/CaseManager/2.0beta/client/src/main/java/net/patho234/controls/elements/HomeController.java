@@ -109,10 +109,9 @@ public class HomeController implements Initializable {
     
     public void setDisplay(IDataDisplay display){
         this.display = display;
-        this.viewIDs = new HashMap<>();
-        HashMap<Integer,String> views = this.display.getViews();
-        for(Integer id: views.keySet()){
-            this.viewIDs.put(views.get(id), id);
+        this.viewIDs = this.display.getViews();
+        for(String key:this.viewIDs.keySet()){
+            System.out.println(key);
         }
     }
 }

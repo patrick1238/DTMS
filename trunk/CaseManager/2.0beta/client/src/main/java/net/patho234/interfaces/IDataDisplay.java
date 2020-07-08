@@ -12,6 +12,6 @@ import java.util.HashMap;
  * @author patri
  */
 public interface IDataDisplay {
-    public HashMap<Integer,String> getViews();
-    public boolean setVisible(Integer id);
+    public HashMap<String,Integer> getViews();
+    public void setVisible(Integer id);
 }

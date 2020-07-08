@@ -13,6 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import net.patho234.entities.ClientCase;
@@ -30,36 +32,11 @@ import org.jboss.logging.Logger;
  */
 public class TableViewerController implements Initializable, IDtmsSearchListener {
 
-    @FXML
-    private MenuItem addCaseMenuItem;
-    @FXML
     private MenuItem closeMenuItem;
-    @FXML
-    private MenuItem preferencesMenuItem;
-    @FXML
-    private MenuItem profileMenuItem;
-    @FXML
-    private MenuItem aboutMenuItem;
-    @FXML
-    private Menu userMenu;
-    @FXML
-    private MenuItem changeUserMenuItem;
-    @FXML
-    private MenuItem logoutMenuItem;
     @FXML
     private StackPane tableStack;
     @FXML
-    private AnchorPane casePane;
-    @FXML
-    private AnchorPane twoDimPane;
-    @FXML
-    private AnchorPane threeDimPane;
-    @FXML
-    private AnchorPane fourDimPane;
-    @FXML
-    private AnchorPane genomicsPane;
-    @FXML
-    private AnchorPane methPane;
+    private TextField searchField;
 
     /**
      * Initializes the controller class.
@@ -109,5 +86,9 @@ public class TableViewerController implements Initializable, IDtmsSearchListener
         for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
             System.out.println("todo: display case "+resultCase);
         }
+    }
+    
+    public void addTableView(AnchorPane view){
+        this.tableStack.getChildren().add(view);
     }
 }
