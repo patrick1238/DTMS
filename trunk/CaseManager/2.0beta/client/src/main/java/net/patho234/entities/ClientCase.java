@@ -132,6 +132,8 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
             Logger.getLogger("global").warn("Could not parse entryDate string: "+getOriginalJson().getString("entryDate"));
         }
         clinicID.setValue(getOriginalJson().getInt("clinicId"));
+        Logger.getLogger("global").info("getOriginalJson(): "+getOriginalJson());
+        Logger.getLogger("global").info("getOriginalJson().getInt(\"submitterId\": "+getOriginalJson().getInt("submitterId"));
         submitterID.setValue( getOriginalJson().getInt("submitterId") );
         Logger.getLogger("global").info("------------ resetCase() called -------------");
         Logger.getLogger("global").info("caseOriginal: "+original.toString());

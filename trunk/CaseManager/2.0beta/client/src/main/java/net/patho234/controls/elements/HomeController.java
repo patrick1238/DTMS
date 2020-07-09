@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import net.patho234.interfaces.IDataDisplay;
+import net.patho234.interfaces.MainViewController;
 
 /**
  * FXML Controller class

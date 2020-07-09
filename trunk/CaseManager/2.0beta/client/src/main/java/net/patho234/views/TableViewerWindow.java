@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.patho234.controls.TableViewerController;
+import net.patho234.elements.CaseTableController;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.interfaces.IDataDisplay;
@@ -33,7 +34,7 @@ import net.patho234.webapp_client.FxmlManager;
 public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearchListener{
     
     TableViewerController controller;
-    HashMap<Integer,String> views;
+    HashMap<String,Integer> views;
     HashMap<Integer,AnchorPane> viewableWindows;
     HashMap<Integer,TableView> tableViews;
     Integer currentlyVisible;
@@ -59,8 +60,6 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
         setWidth(APPLICATION_DEFAULTS.MAIN_WINDOW_WIDTH);
         setHeight(APPLICATION_DEFAULTS.MAIN_WINDOW_HEIGHT);
         setScene(scene);
-        
-        bindTableViewToSearchManger();
     }
     
     public void initializeTables(){
@@ -75,6 +74,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
         }
         viewableWindows.get(0).setVisible(true);
         this.currentlyVisible = 0;
+        
+        bindTableViewToSearchManger();
     }
     
     private AnchorPane buildUpTable(String service){
@@ -115,18 +116,24 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
 
     @Override
     public void receiveSearchResults(ClientObjectList newResults) {
+        if(views==null){ 
+            Logger.getLogger("global").warning("TableViewerWindow received SearchResult before finished loading...skipping");
+            return;
+        }
+        
         
         // ========= CaseTableView ===========
         for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
             System.out.println("todo: display case "+resultCase);
             
         }
-        tableViews.get(1).setItems(newResults);
-        ((TableView<ClientCase>)tableViews.get("Case")).setRowFactory((caseForRow) -> {
-            TableRow<ClientCase> row = new TableRow<ClientCase>();
-            
-            return row; 
-        });
+        
+        Integer caseViewIndex=views.get("Case");
+        System.out.println("caseViewIndex: "+caseViewIndex);
+        TableView caseView = tableViews.get(caseViewIndex);
+        System.out.println("caseView: "+caseView);
+        CaseTableController newController = new CaseTableController(caseView, (ClientObjectList<ClientCase>)newResults);
+        
         // ========= 2DTableView ===========
         // *TODO
         // ========= 3DTableView ===========
