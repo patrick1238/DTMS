@@ -1,20 +1,31 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package net.patho234.controls;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import net.patho234.controls.elements.HomeController;
+import net.patho234.views.RegistrationWindow;
+import net.patho234.webapp_client.FxmlManager;
 
 /**
  * FXML Controller class
@@ -29,9 +40,9 @@ public class MainPaneController implements Initializable {
     private Menu userMenu;
     @FXML
     private StackPane displayStack;
-    
+
     Integer currentlyVisible;
-    HashMap<Integer,AnchorPane> mainViewHandler;
+    HashMap<Integer, AnchorPane> mainViewHandler;
 
     /**
      * Initializes the controller class.
@@ -39,8 +50,7 @@ public class MainPaneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Todo
-    }    
-
+    }
 
     @FXML
     private void caseAddProp(ActionEvent event) {
@@ -134,39 +144,44 @@ public class MainPaneController implements Initializable {
     private void closeClicked(ActionEvent event) {
     }
 
-
     @FXML
     private void profileClicked(ActionEvent event) {
+        
     }
 
     @FXML
     private void logoutClicked(ActionEvent event) {
     }
-    
+
     @FXML
     private void homeButtonClicked(ActionEvent event) {
+        this.mainViewHandler.get(currentlyVisible).setVisible(false);
+        this.mainViewHandler.get(0).setVisible(true);
+        currentlyVisible = 0;
     }
 
     @FXML
     private void filterButtonClicked(ActionEvent event) {
+        this.mainViewHandler.get(currentlyVisible).setVisible(false);
+        this.mainViewHandler.get(1).setVisible(true);
+        currentlyVisible = 1;
     }
 
     @FXML
     private void exportButtonClicked(ActionEvent event) {
+        this.mainViewHandler.get(currentlyVisible).setVisible(false);
+        this.mainViewHandler.get(2).setVisible(true);
+        currentlyVisible = 2;
     }
 
-    
-    
-    public void setEnabled( boolean enable ){ 
-        if( this.statusLabel.getScene() != null ){
-            this.statusLabel.getScene().getRoot().setDisable(!enable);
-        }
-    }
-    public StackPane getDisplayStack(){
+    public StackPane getDisplayStack() {
         return this.displayStack;
-    }  
-    
-    public void setPossibleDisplays(){
-        
+    }
+
+    public void setPossibleDisplays(HashMap<Integer, AnchorPane> mainViewHandler) {
+        this.mainViewHandler = mainViewHandler;
+        mainViewHandler.get(0).setVisible(true);
+        this.currentlyVisible = 0;
+        this.displayStack.getChildren().addAll(this.mainViewHandler.values());
     }
 }
