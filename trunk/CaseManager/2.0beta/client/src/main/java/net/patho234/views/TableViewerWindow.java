@@ -8,11 +8,13 @@ package net.patho234.views;
 import com.sun.scenario.Settings;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
@@ -66,6 +68,7 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
         viewableWindows = new HashMap<>();
         tableViews = new HashMap<>();
         String[] availableServices = Settings.get("dtms.services").split(":");
+        this.currentlyVisible = 0;
         Integer iterator = 0;
         for(String service:availableServices){
             AnchorPane anchor = buildUpTable(service);
@@ -73,13 +76,16 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
             iterator += 1;
         }
         viewableWindows.get(0).setVisible(true);
-        this.currentlyVisible = 0;
+        
         
         bindTableViewToSearchManger();
     }
     
     private AnchorPane buildUpTable(String service){
         TableView view = new TableView<Object>();
+        CaseTableController newController = new CaseTableController(view, new ClientObjectList<ClientCase>());
+        newController.initialize(null, null);
+        
         this.tableViews.put(currentlyVisible, view);
         AnchorPane tableAnchor = new AnchorPane(view);
         tableAnchor.setVisible(false);
@@ -116,7 +122,7 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
 
     @Override
     public void receiveSearchResults(ClientObjectList newResults) {
-        if(views==null){ 
+        if(tableViews==null){ 
             Logger.getLogger("global").warning("TableViewerWindow received SearchResult before finished loading...skipping");
             return;
         }
@@ -128,18 +134,27 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
             
         }
         
-        Integer caseViewIndex=views.get("Case");
+        //Integer caseViewIndex=views.get("Case");
+        Integer caseViewIndex=0;
+        for (Entry e : tableViews.entrySet()){
+            System.out.println("---- "+e.getKey() + " > " + e.getValue());
+        }
+        
         System.out.println("caseViewIndex: "+caseViewIndex);
         TableView caseView = tableViews.get(caseViewIndex);
         System.out.println("caseView: "+caseView);
-        CaseTableController newController = new CaseTableController(caseView, (ClientObjectList<ClientCase>)newResults);
-        
+        caseView.setItems(newResults);
+        currentCaseList = newResults;
         // ========= 2DTableView ===========
         // *TODO
         // ========= 3DTableView ===========
         // *TODO
         // ========= 4DTableView ===========
         // *TODO
+        
+        caseView.refresh();
+        caseView.sort();
+        System.out.println("caseViewTable now has "+caseView.getItems().size()+"items");
     }
 
     @Override

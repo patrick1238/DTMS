@@ -14,8 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.interfaces.IDataDisplay;
-import net.patho234.interfaces.MainViewController;
 
 /**
  * FXML Controller class
@@ -54,6 +54,8 @@ public class HomeController implements Initializable {
         final Node source = (Node) event.getSource();
         String id = source.getId();
         this.display.setVisible(viewIDs.get(id));
+        // TODO: remove update, currently just for testing the SearchManager function
+        ClientObjectSearchManager.create().getSearch("global").updateSearchResult();
     }
 
     @FXML
