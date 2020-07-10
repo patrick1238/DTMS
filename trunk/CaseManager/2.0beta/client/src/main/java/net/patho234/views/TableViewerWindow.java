@@ -26,6 +26,7 @@ import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.interfaces.IDataDisplay;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearchListener;
+import net.patho234.utils.TableViewerControllerFactory;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
@@ -36,7 +37,7 @@ import net.patho234.webapp_client.FxmlManager;
 public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearchListener{
     
     TableViewerController controller;
-    HashMap<String,Integer> views;
+    HashMap<String,Integer> views = new HashMap<>();
     HashMap<Integer,AnchorPane> viewableWindows;
     HashMap<Integer,TableView> tableViews;
     Integer currentlyVisible;
@@ -82,11 +83,12 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     }
     
     private AnchorPane buildUpTable(String service){
-        TableView view = new TableView<Object>();
-        CaseTableController newController = new CaseTableController(view, new ClientObjectList<ClientCase>());
-        newController.initialize(null, null);
+        TableView view = new TableView<>();
         
-        this.tableViews.put(currentlyVisible, view);
+        TableViewerControllerFactory.generateController(service, view);
+        Logger.getLogger( getClass().getCanonicalName() ).info( "Initializing table "+service+" with index "+views.keySet().size() );
+        views.put( service, tableViews.keySet().size() );
+        this.tableViews.put(tableViews.keySet().size(), view);
         AnchorPane tableAnchor = new AnchorPane(view);
         tableAnchor.setVisible(false);
         AnchorPane.setTopAnchor(view, 0.0);
@@ -129,13 +131,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
         
         
         // ========= CaseTableView ===========
-        for( ClientCase resultCase : (ClientObjectList<ClientCase>)newResults ){
-            System.out.println("todo: display case "+resultCase);
-            
-        }
         
-        //Integer caseViewIndex=views.get("Case");
-        Integer caseViewIndex=0;
+        Integer caseViewIndex=views.get("Case");
         for (Entry e : tableViews.entrySet()){
             System.out.println("---- "+e.getKey() + " > " + e.getValue());
         }
