@@ -6,7 +6,6 @@
 package net.patho234.views;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -19,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import net.patho234.controls.MainPaneController;
 import net.patho234.controls.StatusWindowController;
 import net.patho234.controls.elements.ExportController;
@@ -29,7 +29,6 @@ import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
-import net.patho234.interfaces.IDataDisplay;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
@@ -77,6 +76,7 @@ public class MainWindow extends Stage {
         StatusWindowController statusControl = statusLoader.getController();
 
         Stage rootStage = new Stage();
+        rootStage.initStyle(StageStyle.UNDECORATED);
         Scene statusScene = new Scene(rootStatus);
         rootStage.setScene(statusScene);
         rootStage.setAlwaysOnTop(true);

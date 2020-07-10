@@ -16,16 +16,14 @@
         <menus>
             <Menu mnemonicParsing="false" text=" DTMS ">
               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#addCaseClicked" text="Add case" />
+                  <Menu mnemonicParsing="false" text="Add">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#addCaseClicked" text="Case" />
+                      <MenuItem mnemonicParsing="false" onAction="#addClinicClicked" text="Clinic" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text=" Properties ">
                   <items>
-                        <Menu mnemonicParsing="false" text="Case">
-                          <items>
-                              <MenuItem mnemonicParsing="false" onAction="#caseAddProp" text="Add property" />
-                              <MenuItem mnemonicParsing="false" onAction="#caseEditProp" text="Edit property" />
-                              <MenuItem mnemonicParsing="false" onAction="#caseDelProp" text="Delete property" />
-                          </items>
-                        </Menu>
                         <Menu mnemonicParsing="false" text="2D Image">
                           <items>
                           <MenuItem mnemonicParsing="false" onAction="#twoDimAddProp" text="Add property" />

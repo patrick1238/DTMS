@@ -7,10 +7,16 @@ package net.patho234.controls;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -22,15 +28,17 @@ public class CaseController implements Initializable {
     @FXML
     private GridPane casePane;
     @FXML
-    private AnchorPane twoDimePane;
+    private ComboBox<?> clinicBox;
     @FXML
-    private AnchorPane threeDimPane;
+    private TextField caseIDField;
     @FXML
-    private AnchorPane fourDimPane;
+    private DatePicker entryDatePicker;
     @FXML
-    private AnchorPane genomicsPane;
+    private ComboBox<?> diagnoseBox;
     @FXML
-    private AnchorPane methPane;
+    private ScrollPane fileViewerScrollPane;
+    @FXML
+    private VBox fileViewerBox;
 
     /**
      * Initializes the controller class.
@@ -39,5 +47,33 @@ public class CaseController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void addTwoDimClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void addThreeDimClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void addFourDimClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void addGenomicsClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void addMethylationClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void saveButtonClicked(ActionEvent event) {
+    }
+    
+    public void loadCase(){
+        
+    }
     
 }
