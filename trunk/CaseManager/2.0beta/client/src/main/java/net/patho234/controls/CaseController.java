@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import net.patho234.entities.ClientCase;
 
 /**
  * FXML Controller class
@@ -40,6 +41,8 @@ public class CaseController implements Initializable {
     @FXML
     private VBox fileViewerBox;
 
+    ClientCase dataObject;
+    
     /**
      * Initializes the controller class.
      */
@@ -72,8 +75,9 @@ public class CaseController implements Initializable {
     private void saveButtonClicked(ActionEvent event) {
     }
     
-    public void loadCase(){
-        
+    public void loadCase( ClientCase caseToLoad ){
+        dataObject = caseToLoad;
+        this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
     }
     
 }

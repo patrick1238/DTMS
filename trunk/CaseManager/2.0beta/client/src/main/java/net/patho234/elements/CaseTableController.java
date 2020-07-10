@@ -6,6 +6,7 @@
 package net.patho234.elements;
 
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,6 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import net.patho234.entities.ClientCase;
+import net.patho234.views.CaseWindow;
 import org.jboss.logging.Logger;
 
 /**
@@ -66,7 +68,12 @@ public class CaseTableController implements Initializable{
                 lastClick = System.currentTimeMillis();
                 if( diff <= doubleClickTime ){
                     Logger.getLogger(getClass()).info("Double click on row performed. TODO: call CaseWindow");
-                    
+                    System.out.println("EventSrc = "+event.getSource());
+                    TableRow<ClientCase> row = (TableRow)event.getSource();
+                    ClientCase selectedCase = row.getItem();
+                    try { new CaseWindow(selectedCase).show(); }catch(IOException ioEx){
+                        Logger.getLogger(getClass()).warn("Could not load CaseWindow for selected case '"+selectedCase.getCaseNumber()+"'", ioEx);
+                    }
                 }else{
                     Logger.getLogger(getClass()).info("no double click (diff = "+diff+" ms)");
                 }
