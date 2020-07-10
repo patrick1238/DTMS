@@ -52,17 +52,6 @@ public class MainPaneController implements Initializable {
         //Todo
     }
 
-    @FXML
-    private void caseAddProp(ActionEvent event) {
-    }
-
-    @FXML
-    private void caseEditProp(ActionEvent event) {
-    }
-
-    @FXML
-    private void caseDelProp(ActionEvent event) {
-    }
 
     @FXML
     private void twoDimAddProp(ActionEvent event) {
@@ -183,5 +172,9 @@ public class MainPaneController implements Initializable {
         mainViewHandler.get(0).setVisible(true);
         this.currentlyVisible = 0;
         this.displayStack.getChildren().addAll(this.mainViewHandler.values());
+    }
+
+    @FXML
+    private void addClinicClicked(ActionEvent event) {
     }
 }
