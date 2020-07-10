@@ -463,7 +463,7 @@ public class ServicesResource {
     public JsonObjectBuilder getServiceDefinitionBuilderForService(IService service){
         IServiceDefinition def = service.getServiceDefinition();
         
-        return ServiceDefinitionsResource.getServiceDefinitionBuilder(def);
+        return ServiceDefinitionsResource.getServiceDefinitionBuilder(def, true);
     }
     
 //    public JsonArrayBuilder getServiceMetadataBuilderForService(IService service){

@@ -5,6 +5,8 @@
  */
 package net.patho234.boundary;
 
+import java.util.HashMap;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -21,6 +23,7 @@ import javax.ws.rs.core.UriInfo;
 import net.patho234.boundary.utils.DefaultResponse;
 import net.patho234.control.ErrorRepository;
 import net.patho234.control.LocalServiceDefinitionRepository;
+import net.patho234.interfaces.IMetadataValue;
 import net.patho234.interfaces.IServiceDefinition;
 import net.patho234.utils.LocalUUIDManager;
 import org.jboss.logging.Logger;
@@ -49,7 +52,7 @@ public class ServiceDefinitionsResource {
         System.out.println("definition_repo: "+definitionRepo);
         Logger.getLogger(getClass()).warn( "searching ALL ServiceDefinitions " );
         for(IServiceDefinition c : definitionRepo.getServiceDefinitions()){
-            arrayBuilder.add( getServiceDefinitionBuilder(c) );
+            arrayBuilder.add( getServiceDefinitionBuilder(c, true) );
         }
         
         return DefaultResponse.createOKResponse( arrayBuilder.build() );
@@ -69,28 +72,41 @@ public class ServiceDefinitionsResource {
             Logger.getLogger(getClass()).info( String.format( "ServiceDefinition[%d] does not exist...returning NOT_FOUND_ERROR (404)", new Object[]{id}) );
             return DefaultResponse.createNotFoundResponse(response);
         }
-        return DefaultResponse.createOKResponse( getServiceDefinitionBuilder(serviceDefToBuild).build() );
+        return DefaultResponse.createOKResponse( getServiceDefinitionBuilder(serviceDefToBuild, true).build() );
     }
     
-    static public JsonObjectBuilder getServiceDefinitionBuilder(IServiceDefinition serviceDef){
+    static public JsonObjectBuilder getServiceDefinitionBuilder(IServiceDefinition serviceDef, boolean includeFields){
         IServiceDefinition parentServiceDef=serviceDef.getParentDefinition();
         JsonObjectBuilder parentBuilder;
         if( parentServiceDef==null ){
             parentBuilder=null;
         }else{
-            parentBuilder=getServiceDefinitionBuilder(parentServiceDef);
+            parentBuilder=getServiceDefinitionBuilder(parentServiceDef, false);
         }
         
         JsonObjectBuilder serviceDefBuilder = Json.createObjectBuilder();
-        serviceDefBuilder.add("id", serviceDef.getId())
-                .add("name", serviceDef.getName())
-                .add("description", serviceDef.getDescription());
+        serviceDefBuilder.add( "id", serviceDef.getId() )
+                .add( "name", serviceDef.getName() )
+                .add( "description", serviceDef.getDescription() );
         if(parentBuilder==null){
-            serviceDefBuilder.add("parentDefinition", -1);
+            serviceDefBuilder.add( "parentDefinition", -1 );
         }else{
-            serviceDefBuilder.add("parentDefinition", parentBuilder);
+            serviceDefBuilder.add( "parentDefinition", parentBuilder );
         }
-        
+        serviceDefBuilder.add( "fields", getServiceDefinitionFieldsBuilder(serviceDef) );
         return serviceDefBuilder;
     }
+    
+    static public JsonArrayBuilder getServiceDefinitionFieldsBuilder(IServiceDefinition serviceDef){
+        HashMap<IServiceDefinition, List<IMetadataValue>> fields =  serviceDef.getMetadataValues();
+        JsonArrayBuilder fieldsJsonArrayBuilder = Json.createArrayBuilder();
+        for( IServiceDefinition def : fields.keySet() ){
+            for(IMetadataValue v : fields.get(def)){
+                fieldsJsonArrayBuilder.add(MetadataValuesResource.getMetadataValueBuilderJson(v, null));
+            }
+        }
+        return fieldsJsonArrayBuilder;
+    }
+    
+    
 }

@@ -14,6 +14,7 @@ import javax.persistence.Query;
 import javax.validation.ValidationException;
 import net.patho234.entity.MetadataValueEntity;
 import net.patho234.interfaces.IMetadataValue;
+import net.patho234.interfaces.IServiceDefinition;
 import org.netbeans.rest.application.config.AppPersistenceManager;
 
 /**
@@ -41,7 +42,7 @@ public class MetadataValueRepository extends AbstractFacade<MetadataValueEntity>
         findAll().forEach( entity -> { allMetadataValues.add(entity); } );
         return allMetadataValues;
     }
-
+    
     @Override
     public void updateMetadataValue(IMetadataValue metadataValueToUpdate) throws ValidationException {
         validate( (MetadataValueEntity)metadataValueToUpdate );
@@ -85,5 +86,4 @@ public class MetadataValueRepository extends AbstractFacade<MetadataValueEntity>
         
         return true;
     }
-    
 }
