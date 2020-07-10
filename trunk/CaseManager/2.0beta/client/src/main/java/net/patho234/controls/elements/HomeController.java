@@ -5,6 +5,7 @@
  */
 package net.patho234.controls.elements;
 
+import com.sun.xml.internal.ws.api.server.ServiceDefinition;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -15,7 +16,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import net.patho234.entities.filter.ClientObjectSearchManager;
+import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.interfaces.IDataDisplay;
+import net.patho234.interfaces.IMetadataValue;
 
 /**
  * FXML Controller class
@@ -56,6 +59,9 @@ public class HomeController implements Initializable {
         this.display.setVisible(viewIDs.get(id));
         // TODO: remove update, currently just for testing the SearchManager function
         ClientObjectSearchManager.create().getSearch("global").updateSearchResult();
+        for(IMetadataValue mv : ServiceDefinitionPool.createPool().getEntity(3).getFields() ){
+            System.out.println("oooOOO000 "+mv.getKey()+" TYPE="+mv.getValueType());
+        }
     }
 
     @FXML
