@@ -177,4 +177,12 @@ public class MainPaneController implements Initializable {
     @FXML
     private void addClinicClicked(ActionEvent event) {
     }
+
+    @FXML
+    private void importTwoDimClicked(ActionEvent event) {
+    }
+
+    @FXML
+    private void importDTMSFolderClicked(ActionEvent event) {
+    }
 }

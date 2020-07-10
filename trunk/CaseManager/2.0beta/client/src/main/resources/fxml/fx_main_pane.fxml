@@ -10,18 +10,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="701.0" prefWidth="429.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.MainPaneController">
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="701.0" prefWidth="334.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.MainPaneController">
    <children>
-      <MenuBar prefHeight="30.0" prefWidth="98.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="185.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
             <Menu mnemonicParsing="false" text=" DTMS ">
               <items>
-                  <Menu mnemonicParsing="false" text="Add">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#addCaseClicked" text="Case" />
-                      <MenuItem mnemonicParsing="false" onAction="#addClinicClicked" text="Clinic" />
-                    </items>
-                  </Menu>
                 <Menu mnemonicParsing="false" text=" Properties ">
                   <items>
                         <Menu mnemonicParsing="false" text="2D Image">
@@ -61,16 +55,32 @@
                         </Menu>
                   </items>
                 </Menu>
-                <MenuItem mnemonicParsing="false" onAction="#reloadDatabaseClicked" text="Reload database" />
+                <MenuItem mnemonicParsing="false" onAction="#reloadDatabaseClicked" text="Reload" />
                   <MenuItem mnemonicParsing="false" onAction="#preferencesClicked" text="Preferences" />
               <MenuItem mnemonicParsing="false" onAction="#aboutClicked" text="About" />
                   <MenuItem mnemonicParsing="false" onAction="#closeClicked" text="Close" />
               </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Database">
+              <items>
+                  <Menu mnemonicParsing="false" text="Add">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#addCaseClicked" text="Case" />
+                      <MenuItem mnemonicParsing="false" onAction="#addClinicClicked" text="Clinic" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Import">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#importTwoDimClicked" text="2D images" />
+                        <MenuItem mnemonicParsing="false" onAction="#importDTMSFolderClicked" text="DTMS Folder" />
+                    </items>
+                  </Menu>
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
-      <Label fx:id="statusLabel" layoutX="1.0" layoutY="30.0" prefHeight="30.0" prefWidth="380.0" text=" Status" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
-      <MenuBar layoutX="99.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="148.0" AnchorPane.leftAnchor="97.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label fx:id="statusLabel" layoutX="1.0" layoutY="30.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="380.0" text=" Status" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0" />
+      <MenuBar layoutX="186.0" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="30.0" prefWidth="243.0" AnchorPane.leftAnchor="186.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu fx:id="userMenu" mnemonicParsing="false" text="Patrick Wurzel">
             <items>
@@ -80,7 +90,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <HBox layoutY="60.0" prefHeight="45.0" prefWidth="266.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox layoutY="60.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="266.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
           <Button mnemonicParsing="false" onAction="#homeButtonClicked" text="Home">
                <HBox.margin>
@@ -96,6 +106,6 @@
                </HBox.margin></Button>
          </children>
       </HBox>
-      <StackPane fx:id="displayStack" minHeight="-Infinity" minWidth="-Infinity" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="106.0" />
+      <StackPane fx:id="displayStack" minHeight="-Infinity" minWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="106.0" />
    </children>
 </AnchorPane>
