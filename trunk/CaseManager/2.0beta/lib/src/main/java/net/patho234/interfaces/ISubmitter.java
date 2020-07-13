@@ -12,7 +12,7 @@ import java.util.List;
  * @author HS
  */
 public interface ISubmitter {
-    public int getId();
+    public Integer getId();
     
     
     public String getSurname();

@@ -10,7 +10,7 @@ package net.patho234.interfaces;
  * @author HS
  */
 public interface IMetadataValue {
-    public int getId();
+    public Integer getId();
     public String getValueType();
     public String getKey();
     public Boolean isDepricated();

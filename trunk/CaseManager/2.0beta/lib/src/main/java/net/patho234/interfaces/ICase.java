@@ -13,7 +13,7 @@ import java.util.List;
  * @author HS
  */
 public interface ICase extends IClinicReceiver{
-    public int getId();
+    public Integer getId();
     
     public String getCaseNumber();
     public IClinic getClinic();

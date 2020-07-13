@@ -12,7 +12,7 @@ import java.util.List;
  * @author HS
  */
 public interface IClinic {
-    public int getId();
+    public Integer getId();
     public String getName();
     public String getZipCode();    
     public String getCity();

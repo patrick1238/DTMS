@@ -39,7 +39,7 @@ public abstract class ClientObjectBase<T extends IClientObject> implements IClie
     }
 
     @Override
-    public int getId(){ return ID.getValue(); }
+    public Integer getId(){ return ID.getValue(); }
     
     
     @Override

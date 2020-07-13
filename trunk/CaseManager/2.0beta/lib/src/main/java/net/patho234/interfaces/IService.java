@@ -12,7 +12,7 @@ import java.util.List;
  * @author HS
  */
 public interface IService {
-    public int getId();
+    public Integer getId();
     public IServiceDefinition getServiceDefinition();
     public ICase getCase();
     public void setCase(ICase caseValue);

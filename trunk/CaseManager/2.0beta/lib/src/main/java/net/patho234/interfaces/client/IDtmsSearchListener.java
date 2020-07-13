@@ -10,5 +10,5 @@ package net.patho234.interfaces.client;
  * @author rehkind
  */
 public interface IDtmsSearchListener {
-    public void receiveSearchResults( ClientObjectList newResults );
+    public void receiveSearchResults( ClientObjectList newResults, String searchIdentifier );
 }

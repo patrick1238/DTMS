@@ -12,7 +12,7 @@ import java.util.Date;
  * @author HS
  */
 public interface ILogEntry {
-    public int getId();
+    public Integer getId();
     public Date getTimestamp();
     public String getAffectedTable();
     public String getMessage();

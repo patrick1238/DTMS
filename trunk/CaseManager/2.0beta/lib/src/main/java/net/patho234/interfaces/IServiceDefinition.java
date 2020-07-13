@@ -13,7 +13,7 @@ import java.util.List;
  * @author HS
  */
 public interface IServiceDefinition {
-    public int getId();
+    public Integer getId();
     public IServiceDefinition getParentDefinition();
     public String getName();
     public String getDescription();

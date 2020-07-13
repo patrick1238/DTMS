@@ -24,7 +24,7 @@ public interface IClientObject<T extends IClientObject> extends ObservableValue<
     public JsonObject getOriginalJson();
     public void setOriginalJson( JsonObject obj );
     public boolean hasLocalChanges();
-    public int getId();
+    public Integer getId();
     public T getLocalClone();
     public JsonObject toJson();
     public void merge(T toMergeWith);
