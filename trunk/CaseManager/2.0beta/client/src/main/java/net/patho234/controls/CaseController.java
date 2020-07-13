@@ -70,7 +70,7 @@ public class CaseController implements Initializable {
                 = fileChooser.showOpenMultipleDialog(new Stage());
         if (list != null) {
             for (File file : list) {
-                HashMap<String, String> info = FilenameParser.twoDim_Frankfurt_parser(file.getName());
+                HashMap<String, String> info = FilenameParser.twoDimFrankfurtParser(file.getName());
             }
         }
     }
