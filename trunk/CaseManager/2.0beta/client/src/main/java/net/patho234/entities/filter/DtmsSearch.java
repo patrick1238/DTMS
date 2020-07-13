@@ -73,7 +73,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         for(IDtmsSearchListener resultReceiver : this.resultListener){ notifyResultListener(resultReceiver); }
     }
     private void notifyResultListener(IDtmsSearchListener resultReceiver){
-        resultReceiver.receiveSearchResults(resultList);
+        resultReceiver.receiveSearchResults(resultList, identifier);
     }
     
     

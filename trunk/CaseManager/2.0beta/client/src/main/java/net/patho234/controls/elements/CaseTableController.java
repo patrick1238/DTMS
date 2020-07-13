@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.patho234.elements;
+package net.patho234.controls.elements;
 
 import java.awt.event.MouseEvent;
 import java.io.IOException;

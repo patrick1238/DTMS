@@ -5,7 +5,6 @@
  */
 package net.patho234.controls.elements;
 
-import com.sun.xml.internal.ws.api.server.ServiceDefinition;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -58,10 +57,7 @@ public class HomeController implements Initializable {
         String id = source.getId();
         this.display.setVisible(viewIDs.get(id));
         // TODO: remove update, currently just for testing the SearchManager function
-        ClientObjectSearchManager.create().getSearch("global").updateSearchResult();
-        for(IMetadataValue mv : ServiceDefinitionPool.createPool().getEntity(3).getFields() ){
-            System.out.println("oooOOO000 "+mv.getKey()+" TYPE="+mv.getValueType());
-        }
+        ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
     }
 
     @FXML
@@ -69,6 +65,9 @@ public class HomeController implements Initializable {
         final Node source = (Node) event.getSource();
         String id = source.getId();
         this.display.setVisible(viewIDs.get(id));
+        
+        // TODO: remove update, currently just for testing the SearchManager function
+        ClientObjectSearchManager.create().getSearch("global_2D").updateSearchResult();
     }
 
     @FXML

@@ -8,20 +8,17 @@ package net.patho234.views;
 import com.sun.scenario.Settings;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import net.patho234.controls.TableViewerController;
-import net.patho234.elements.CaseTableController;
 import net.patho234.entities.ClientCase;
+import net.patho234.entities.ClientService;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.interfaces.IDataDisplay;
 import net.patho234.interfaces.client.ClientObjectList;
@@ -43,6 +40,7 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     Integer currentlyVisible;
     
     ClientObjectList<ClientCase> currentCaseList;
+    ClientObjectList<ClientService> current2DServiceList;
     
     public TableViewerWindow(){       
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_table_viewer_pane.fxml"));
@@ -119,39 +117,46 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     }
     
     private void bindTableViewToSearchManger(){
-        ClientObjectSearchManager.create().getSearch("global").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_cases").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
     }
 
     @Override
-    public void receiveSearchResults(ClientObjectList newResults) {
+    public void receiveSearchResults(ClientObjectList newResults, String searchIdentifier) {
         if(tableViews==null){ 
             Logger.getLogger("global").warning("TableViewerWindow received SearchResult before finished loading...skipping");
             return;
         }
         
+        switch( searchIdentifier ){
         
-        // ========= CaseTableView ===========
-        
-        Integer caseViewIndex=views.get("Case");
-        for (Entry e : tableViews.entrySet()){
-            System.out.println("---- "+e.getKey() + " > " + e.getValue());
-        }
-        
-        System.out.println("caseViewIndex: "+caseViewIndex);
-        TableView caseView = tableViews.get(caseViewIndex);
-        System.out.println("caseView: "+caseView);
-        caseView.setItems(newResults);
-        currentCaseList = newResults;
-        // ========= 2DTableView ===========
-        // *TODO
+            case "global_cases":
+                // ========= CaseTableView ===========
+                Integer caseViewIndex=views.get("Case");
+                System.out.println("caseViewIndex: "+caseViewIndex);
+                TableView caseView = tableViews.get(caseViewIndex);
+                System.out.println("caseView: "+caseView);
+                caseView.setItems(newResults);
+                currentCaseList = newResults;
+                System.out.println("caseViewTable now has "+caseView.getItems().size()+"items");
+                break;
+            case "global_2D":
+                // ========= 2DTableView ===========
+                Integer image2DViewIndex=views.get("2D");
+                System.out.println("image2dViewIndex: "+image2DViewIndex);
+                TableView image2DView = tableViews.get(image2DViewIndex);
+                System.out.println("image2DView: "+image2DView);
+                image2DView.setItems(newResults);
+                current2DServiceList = newResults;
+                System.out.println("image2DViewTable now has "+image2DView.getItems().size()+"items");
+                break;
         // ========= 3DTableView ===========
         // *TODO
         // ========= 4DTableView ===========
         // *TODO
-        
-        caseView.refresh();
-        caseView.sort();
-        System.out.println("caseViewTable now has "+caseView.getItems().size()+"items");
+            default:
+                Logger.getLogger("TableViewerWindow").warning("TableViewerWindow.receiveSearchResults() for unknown search result ("+searchIdentifier+")");
+        }
     }
 
     @Override
