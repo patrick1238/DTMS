@@ -70,7 +70,7 @@ public class MetadataValuesResource {
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         
         for(IMetadataValue mv : metadataValueRepo.getMetadataValues()){
-            arrayBuilder.add( getMetadataValueBuilderJson(mv) );
+            arrayBuilder.add( getMetadataValueBuilderJson(mv, uriInfo) );
         }
         return DefaultResponse.createOKResponse( arrayBuilder.build() );
     }
@@ -181,11 +181,11 @@ public class MetadataValuesResource {
     }
     
     public Response buildMetadataValueJson(IMetadataValue submitterToConvert){
-        JsonObjectBuilder jsonSubmitterBuilder=getMetadataValueBuilderJson(submitterToConvert);
+        JsonObjectBuilder jsonSubmitterBuilder=getMetadataValueBuilderJson(submitterToConvert, uriInfo);
         return DefaultResponse.createOKResponse(jsonSubmitterBuilder.build() );
     }
     
-    public JsonObjectBuilder getMetadataValueBuilderJson(IMetadataValue metadataValueToBuild){
+    static public JsonObjectBuilder getMetadataValueBuilderJson(IMetadataValue metadataValueToBuild, UriInfo uriInfo){
         String url = MetadataValuesURLResource.getURL(metadataValueToBuild, uriInfo);
         
         JsonObjectBuilder jsonMetadataValueBuilder = Json.createObjectBuilder();

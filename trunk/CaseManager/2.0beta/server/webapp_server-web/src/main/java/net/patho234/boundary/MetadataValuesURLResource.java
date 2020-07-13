@@ -34,6 +34,8 @@ class MetadataValuesURLResource {
     }
     
     static public String getURL(int metaId, UriInfo uriInfo){
+        if(uriInfo==null){ return ""; }
+        
         URI serviceUri = uriInfo.getBaseUriBuilder()
             .path(MetadataValuesResource.class)
             .path(MetadataValuesResource.class, "getMetadataValue")

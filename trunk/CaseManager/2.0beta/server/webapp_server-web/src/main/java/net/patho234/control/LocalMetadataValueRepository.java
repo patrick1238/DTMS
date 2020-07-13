@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.validation.ValidationException;
 import net.patho234.interfaces.IMetadataValue;
+import net.patho234.interfaces.IServiceDefinition;
 
 /**
  *
@@ -19,7 +20,7 @@ public interface LocalMetadataValueRepository {
     public IMetadataValue getMetadataValue(int metadataValueId);
     
     public List<IMetadataValue> getMetadataValues();
-
+    
     public void updateMetadataValue(IMetadataValue metadataValueToUpdate) throws ValidationException ;
     public boolean createMetadataValue(IMetadataValue metadataValueToCreate) throws ValidationException ;
     public boolean deleteMetadataValue(IMetadataValue metadataValueToDelete) throws ValidationException ;

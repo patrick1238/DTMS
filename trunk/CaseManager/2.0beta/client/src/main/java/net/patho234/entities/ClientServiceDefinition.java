@@ -5,6 +5,8 @@
  */
 package net.patho234.entities;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javafx.beans.property.IntegerProperty;
@@ -14,7 +16,10 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IMetadataValue;
@@ -35,7 +40,8 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
             .add("id", -1)
             .add("name", "[TEMPLATE] TemplateServiceDefinition")
             .add("description", "[TEMPLATE] No actual service...please replace name and description.")
-            .add("parentDefinition", 1).build(); // setting to parent to Service
+            .add("parentDefinition", 1)
+            .add("fields",Json.createArrayBuilder()).build(); // setting to parent to Service
         return new ClientServiceDefinition(asJson);
     }
     
@@ -43,7 +49,7 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
     StringProperty name = new SimpleStringProperty();
     StringProperty description = new SimpleStringProperty();
     IntegerProperty parentDefId = new SimpleIntegerProperty();
-    
+    List<IMetadataValue> fields;
     
     public ClientServiceDefinition(JsonObject defAsJson){
         original.setValue( defAsJson );
@@ -87,7 +93,11 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
     public HashMap<IServiceDefinition, List<IMetadataValue>> getMetadataValues() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    public List<IMetadataValue> getFields() {
+        return fields;
+    }
+    
     @Override
     public void setName(String name) {
         this.name.setValue(name);
@@ -151,10 +161,19 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
                 .add("id", ID.getValue())
                 .add("name", name.getValue())
                 .add("description", description.getValue())
-                .add("parentDefinition", parentDefId.getValue()).build();
+                .add("parentDefinition", parentDefId.getValue())
+                .add("fields", fieldsToJsonArray()).build();
         return asJson;
     }
-
+    
+    private JsonArrayBuilder fieldsToJsonArray(){
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        for(IMetadataValue mv : fields){
+            builder.add(((ClientMetadataValue)mv).toJson());
+        }
+        return builder;
+    }
+    
     private void resetServiceDefinition() {
         ID.setValue(original.getValue().getInt("id"));
         name.setValue(original.getValue().getString("name"));
@@ -163,6 +182,11 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
             parentDefId.setValue(getParentDefIDFromJson(original.getValue()));
         }catch(ClassCastException ex){
             parentDefId.setValue(original.getValue().getInt("parentDefinition"));
+        }
+        fields = new ArrayList<>();
+        JsonArray fieldsAsJsonArray = original.getValue().getJsonArray("fields");
+        if( fieldsAsJsonArray != null  ){
+            fieldsAsJsonArray.forEach( (f) -> fields.add( new ClientMetadataValue((JsonObject)f) ) );
         }
     }
     
