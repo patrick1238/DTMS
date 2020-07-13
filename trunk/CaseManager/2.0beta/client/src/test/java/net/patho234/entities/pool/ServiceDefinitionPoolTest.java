@@ -88,7 +88,7 @@ public class ServiceDefinitionPoolTest {
     @Test
     public void testGetEntity() {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-        int serviceDefId = 0;
+        Integer serviceDefId = 0;
         ServiceDefinitionPool pool = ServiceDefinitionPoolTest.SERVICE_DEF_POOL;
         ClientServiceDefinition nonExistingResult = pool.getEntity(serviceDefId);
         assertTrue(serviceDefId != nonExistingResult.getId());

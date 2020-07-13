@@ -50,11 +50,6 @@ public class ClientSubmitter extends ClientObjectBase<ClientSubmitter> implement
     }
     
     @Override
-    public int getId() {
-        return ID.getValue();
-    }
-
-    @Override
     public String getSurname() {
         return surname.getValue();
     }

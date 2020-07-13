@@ -5,10 +5,6 @@
  */
 package net.patho234.entities.pool;
 
-import net.patho234.entities.pool.ServicePool;
-import net.patho234.entities.pool.ServiceDefinitionPool;
-import net.patho234.entities.pool.CasePool;
-import com.sun.scenario.Settings;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -156,7 +152,7 @@ public class ServicePoolTest {
     @Test
     public void testGetEntity() {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-        int serviceId = 1;
+        Integer serviceId = 1;
         ServicePool pool = ServicePoolTest.SERVICE_POOL;
         ClientService result = pool.getEntity(serviceId);
         assertEquals(serviceId, result.getId());

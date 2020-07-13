@@ -5,8 +5,6 @@
  */
 package net.patho234.entities;
 
-import com.sun.webkit.perf.WCFontPerfLogger;
-import java.math.BigDecimal;
 import java.util.Objects;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,7 +12,6 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import net.patho234.interfaces.IMetadataValue;
-import net.patho234.interfaces.client.IClientObject;
 import org.jboss.logging.Logger;
 
 /**
@@ -75,7 +72,7 @@ public class ClientMetadataValue extends ClientObjectBase<ClientMetadataValue> i
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return -1;
     }
 

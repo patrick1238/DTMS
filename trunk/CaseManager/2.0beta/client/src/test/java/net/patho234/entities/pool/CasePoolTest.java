@@ -92,7 +92,7 @@ public class CasePoolTest {
     @Test
     public void testGetEntity() {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-        int caseId = 1;
+        Integer caseId = 1;
         CasePool instance = CasePoolTest.CASE_POOL;
         ClientCase result = instance.getEntity(caseId, false);
         assertEquals(caseId, result.getId());

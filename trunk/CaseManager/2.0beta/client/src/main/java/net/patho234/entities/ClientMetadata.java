@@ -75,7 +75,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     }
     
     @Override
-    public int getId(){
+    public Integer getId(){
         if( this.ID.getValue() == null ){ generateId(); }
         return super.getId();
     }

@@ -94,7 +94,7 @@ public class ClinicPoolTest {
     @Test
     public void testGetEntity() {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-        int clinicId = 1;
+        Integer clinicId = 1;
         ClinicPool pool = ClinicPoolTest.CLINIC_POOL;
         ClientClinic result = pool.getEntity(clinicId);
         assertEquals(clinicId, result.getId());

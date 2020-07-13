@@ -5,8 +5,6 @@
  */
 package net.patho234.entities.pool;
 
-import net.patho234.entities.pool.SubmitterPool;
-import com.sun.scenario.Settings;
 import java.util.concurrent.TimeoutException;
 import net.patho234.entities.ClientSubmitter;
 import net.patho234.entities.UserLogin;
@@ -83,7 +81,7 @@ public class SubmitterPoolTest {
     @Test
     public void testGetEntity() {
         System.out.println("\n\n########################## getEntity ###################>>>>>\n\n");
-        int caseId = 1;
+        Integer caseId = 1;
         SubmitterPool instance = SubmitterPoolTest.SUBMITTER_POOL;
         ClientSubmitter result = instance.getEntity(caseId, false);
         assertEquals(caseId, result.getId());
