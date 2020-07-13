@@ -91,8 +91,9 @@ public class MainWindow extends Stage {
                 } catch (IOException ioEx) {
                 } finally {
                     ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
-                    searchManager.createSearch("global", (ClientObjectList) CasePool.createPool().getAllEntities());
-
+                    searchManager.createSearch("global_cases", (ClientObjectList) CasePool.createPool().getAllEntities());
+                    searchManager.createSearch("global_2D", (ClientObjectList) ServicePool.createPool().getAllEntities());
+                    
                     loadTableViewerWindow();
                 }
             }

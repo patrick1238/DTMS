@@ -11,17 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import net.patho234.entities.ClientCase;
-import net.patho234.entities.UserLogin;
-import net.patho234.entities.filter.ClientObjectSearchManager;
-import net.patho234.interfaces.client.ClientObjectList;
-import net.patho234.interfaces.client.IDtmsSearchListener;
 import net.patho234.webapp_client.FxmlManager;
 import org.jboss.logging.Logger;
 
