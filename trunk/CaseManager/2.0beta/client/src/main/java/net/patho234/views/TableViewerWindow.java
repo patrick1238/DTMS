@@ -44,6 +44,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     
     ClientObjectList<ClientCase> currentCaseList;
     ClientObjectList<ClientService> current2DServiceList;
+    ClientObjectList<ClientService> current3DServiceList;
+    ClientObjectList<ClientService> current4DServiceList;
     
     public TableViewerWindow(){       
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fx_table_viewer_pane.fxml"));
@@ -122,6 +124,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     private void bindTableViewToSearchManger(){
         ClientObjectSearchManager.create().getSearch("global_cases").addDtmsSearchResultListener(this);
         ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_3D").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_4D").addDtmsSearchResultListener(this);
     }
 
     @Override
@@ -162,10 +166,20 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 System.out.println("image3DView: "+image3DView);
                 ReadOnlyClientObjectList<ClientService> filtered3D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_3D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
                 image3DView.setItems(filtered3D);
-                current2DServiceList = (ClientObjectList)filtered3D;
-                System.out.println("image2DViewTable now has "+image3DView.getItems().size()+"items");
+                current3DServiceList = (ClientObjectList)filtered3D;
+                System.out.println("image3DViewTable now has "+image3DView.getItems().size()+"items");
                 break;
-        // ========= 4DTableView ===========
+            case "global_4D":
+                // ========= 4DTableView ===========
+                Integer image4DViewIndex=views.get("3D");
+                System.out.println("image3dViewIndex: "+image4DViewIndex);
+                TableView image4DView = tableViews.get(image4DViewIndex);
+                System.out.println("image3DView: "+image4DView);
+                ReadOnlyClientObjectList<ClientService> filtered4D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_3D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
+                image4DView.setItems(filtered4D);
+                current4DServiceList = (ClientObjectList)filtered4D;
+                System.out.println("image3DViewTable now has "+image4DView.getItems().size()+"items");
+                break;
         // *TODO
             default:
                 Logger.getLogger("TableViewerWindow").warning("TableViewerWindow.receiveSearchResults() for unknown search result ("+searchIdentifier+")");
@@ -175,13 +189,25 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     @Override
     public Integer getVisibleDataCount(Integer id) {
         switch ( id ) {
-            case 1:
+            case 0:
                 if(currentCaseList != null){
                     return currentCaseList.size();
                 }
+            case 1:
+                if(currentCaseList != null){
+                    return current2DServiceList.size();
+                }
+            case 2:
+                if(currentCaseList != null){
+                    return current3DServiceList.size();
+                }
+            case 3:
+                if(currentCaseList != null){
+                    return current4DServiceList.size();
+                }
             default:
                 Logger.getLogger("global").warning("getVisibleDataCount(Integer id) can not handle id="+id+" yet.");
-                return 5;
+                return 0;
         }
         
     }

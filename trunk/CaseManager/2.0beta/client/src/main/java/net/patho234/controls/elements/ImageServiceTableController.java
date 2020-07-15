@@ -38,7 +38,7 @@ import org.jboss.logging.Logger;
  *
  * @author rehkind
  */
-public class Image2DTableController implements Initializable{
+public class ImageServiceTableController implements Initializable{
 
     private TableView<ClientService> tableView;
     private TableColumn<ClientService, String> caseNumber;
@@ -55,10 +55,11 @@ public class Image2DTableController implements Initializable{
     
     ObservableList<ClientService> serviceList;
     
-    private ClientServiceDefinition serviceDef2D;
+    private ClientServiceDefinition serviceDefinition;
     
-    public Image2DTableController(TableView view, ObservableList<ClientService> items){
+    public ImageServiceTableController(TableView view, ObservableList<ClientService> items, ClientServiceDefinition serviceDef){
         super();
+        serviceDefinition=serviceDef;
         
         this.textCellCallback = new Callback<TableColumn<ClientService, String>, TableCell<ClientService, String>>() {
             @Override
@@ -96,7 +97,6 @@ public class Image2DTableController implements Initializable{
         tableView = view;
         serviceList = items;
         
-        serviceDef2D = ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D);
     }
     
     @Override
@@ -171,13 +171,13 @@ public class Image2DTableController implements Initializable{
         
         initializeMetadataFields();
         System.out.println("ALL SERVICES "+serviceList.size());
-        ReadOnlyClientObjectList<ClientService> filtered = new ClientServicesForDefinitionFilter(serviceDef2D).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)serviceList);
-        System.out.println("SERVICE DEF 2D "+filtered.size());
+        ReadOnlyClientObjectList<ClientService> filtered = new ClientServicesForDefinitionFilter(serviceDefinition).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)serviceList);
+        System.out.println("SERVICE DEF FILTERED "+filtered.size());
         tableView.setItems(filtered);
     }
     
     private void initializeMetadataFields(){
-        List<IMetadataValue> fields = this.serviceDef2D.getFields();
+        List<IMetadataValue> fields = this.serviceDefinition.getFields();
         for( IMetadataValue mv : fields ){
             Logger.getLogger(getClass()).info("Adding new column to 2D ListView for metadata '"+mv.getKey()+"'");
             entryDate = new TableColumn<>("Entry date");
@@ -198,17 +198,13 @@ public class Image2DTableController implements Initializable{
         
         @Override
         public ObservableValue<String> call(TableColumn.CellDataFeatures<ClientService, String> param) {
-            //System.out.println("__________________PPPooOOPOPOPOPOPOPOPOPOPO______________");
-            //System.out.println("ööööööööööööööööö "+param.getValue().getMetadata().size()+" metadatavalues found.");
             for (IMetadata md : param.getValue().getMetadata() ){
                 if( md.getName().equals(key) ){ 
-                    //System.out.println("__________________KEY "+md.getName()+" FOUND______________");
                     return new SimpleStringProperty(  ""+md.getData() );
                 }else{
                     //System.out.println(key+" != "+md.getName());
                 }
             }
-            //System.out.println("__________________KEY "+param.getTableColumn().getText()+" NONEXISTENT______________");
             return new SimpleStringProperty(  );
         }
     }
