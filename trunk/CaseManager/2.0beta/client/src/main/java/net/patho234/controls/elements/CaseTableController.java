@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -71,8 +72,12 @@ public class CaseTableController implements Initializable{
                     System.out.println("EventSrc = "+event.getSource());
                     TableRow<ClientCase> row = (TableRow)event.getSource();
                     ClientCase selectedCase = row.getItem();
-                    try { new CaseWindow(selectedCase).show(); }catch(IOException ioEx){
-                        Logger.getLogger(getClass()).warn("Could not load CaseWindow for selected case '"+selectedCase.getCaseNumber()+"'", ioEx);
+                    try {
+                        CaseWindow caseWindow = new CaseWindow(selectedCase);
+                        caseWindow.show();
+                        caseWindow.initView();
+                    } catch (IOException ex) {
+                        java.util.logging.Logger.getLogger(CaseTableController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }else{
                     Logger.getLogger(getClass()).info("no double click (diff = "+diff+" ms)");

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.CaseController">
+<AnchorPane id="AnchorPane" prefHeight="618.0" prefWidth="715.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.CaseController">
    <children>
       <MenuBar layoutX="5.0" layoutY="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -31,7 +31,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <GridPane fx:id="casePane" layoutX="10.0" layoutY="32.0" prefHeight="123.0" prefWidth="590.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="27.0">
+      <GridPane fx:id="casePane" layoutX="15.0" layoutY="37.0" prefHeight="162.0" prefWidth="695.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="32.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="103.80000000000001" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="486.99999999999994" />
@@ -49,7 +49,7 @@
             <Label text="Clinic:" GridPane.rowIndex="3" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <TextField fx:id="caseIDField" layoutX="41.0" layoutY="6.0" promptText="Enter the Case ID" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TextField fx:id="caseIDField" layoutX="41.0" layoutY="6.0" promptText="Enter the Case ID" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -57,7 +57,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
-                  <DatePicker fx:id="entryDatePicker" editable="false" layoutX="23.0" layoutY="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <DatePicker fx:id="entryDatePicker" editable="false" layoutX="23.0" layoutY="6.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -65,7 +65,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <ComboBox fx:id="diagnoseBox" editable="true" layoutX="33.0" layoutY="6.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ComboBox fx:id="diagnoseBox" editable="true" layoutX="33.0" layoutY="6.0" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -73,7 +73,7 @@
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <children>
-                  <ComboBox fx:id="clinicBox" layoutX="31.0" layoutY="2.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ComboBox fx:id="clinicBox" layoutX="31.0" layoutY="2.0" prefWidth="150.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -81,12 +81,16 @@
             </AnchorPane>
          </children>
       </GridPane>
-      <ScrollPane fx:id="fileViewerScrollPane" layoutX="10.0" layoutY="164.0" prefHeight="206.0" prefWidth="590.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="159.0">
-         <content>
-            <VBox fx:id="fileViewerBox" prefHeight="253.0" prefWidth="600.0" />
-         </content>
-      </ScrollPane>
       <Button layoutX="36.0" layoutY="380.0" minHeight="18.0" mnemonicParsing="false" onAction="#saveButtonClicked" prefHeight="30.0" prefWidth="562.0" text="Save" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ScrollPane layoutX="12.0" layoutY="199.0" prefHeight="377.0" prefWidth="694.0" AnchorPane.bottomAnchor="36.39999999999998" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="199.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="370.0" prefWidth="704.0">
+               <children>
+                  <VBox fx:id="fileViewerBox" prefHeight="194.0" prefWidth="567.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

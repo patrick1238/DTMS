@@ -23,7 +23,6 @@ public class CasePane extends AnchorPane {
     ClientCase myCase;
     
     public CasePane () throws IOException {
-        // fill in a template ClienCase object
         this( ClientCase.getCaseTemplate() );
     }
     

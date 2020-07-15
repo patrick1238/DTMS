@@ -1,8 +1,5 @@
 package net.patho234.utils;
 
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -11,11 +8,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 public class AutoCompleteBox implements EventHandler {
 
-    private ComboBox comboBox;
+    private final ComboBox comboBox;
     final private ObservableList data;
     private Integer sid;
 
@@ -37,7 +33,7 @@ public class AutoCompleteBox implements EventHandler {
     private void doAutoCompleteBox() {
         this.comboBox.setEditable(true);
         this.comboBox.getEditor().focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue) {//mean onfocus
+            if (newValue) {
                 this.comboBox.show();
             }
         });
@@ -96,12 +92,12 @@ public class AutoCompleteBox implements EventHandler {
     private void setItems() {
         ObservableList list = FXCollections.observableArrayList();
 
-        for (Object entry : this.data) {
+        this.data.forEach((entry) -> {
             String s = this.comboBox.getEditor().getText().toLowerCase();
             if (entry.toString().toLowerCase().contains(s.toLowerCase())) {
                 list.add(entry.toString());
             }
-        }
+        });
         this.comboBox.setItems(list);
         if (list.isEmpty()) {
             this.comboBox.hide();
