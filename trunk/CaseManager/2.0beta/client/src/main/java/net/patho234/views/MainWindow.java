@@ -27,6 +27,7 @@ import net.patho234.controls.elements.HomeController;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
+import net.patho234.entities.pool.MetadataPool;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.client.ClientObjectList;
@@ -138,7 +139,7 @@ public class MainWindow extends Stage {
 
             System.exit(1);
         }
-        Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading services...", 56));
+        Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading services...", 51));
         ServicePool.createPool().getAllEntities(true);
         try {
             ServicePool.createPool().waitFor(30000);
@@ -154,7 +155,7 @@ public class MainWindow extends Stage {
 
             System.exit(1);
         }
-        Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading cases...", 69));
+        Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading cases...", 61));
         CasePool.createPool().getAllEntities(true);
         try {
             CasePool.createPool().waitFor(30000);
@@ -170,7 +171,22 @@ public class MainWindow extends Stage {
 
             System.exit(1);
         }
+        Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading metadata...", 90));
+        MetadataPool.createPool().getAllEntities(true);
+        try {
+            MetadataPool.createPool().waitFor(30000);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
+            ex.printStackTrace();
 
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Timeout during start-up");
+            alert.setHeaderText("Connection to wildfly server could not be established.");
+            alert.setContentText(ex.getMessage());
+            alert.showAndWait();
+
+            System.exit(1);
+        }
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Launching...", 100));
 
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Terminate status", -1));

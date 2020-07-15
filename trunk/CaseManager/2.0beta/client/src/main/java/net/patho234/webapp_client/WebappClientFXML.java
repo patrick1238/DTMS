@@ -10,24 +10,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import jfxtras.styles.jmetro8.JMetro;
-import net.patho234.controls.StatusWindowController;
 import net.patho234.entities.UserLogin;
-import net.patho234.entities.pool.CasePool;
-import net.patho234.entities.pool.ClinicPool;
-import net.patho234.entities.pool.ServiceDefinitionPool;
-import net.patho234.entities.pool.ServicePool;
 
 /**
  *

@@ -20,9 +20,12 @@ import net.patho234.controls.TableViewerController;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientService;
 import net.patho234.entities.filter.ClientObjectSearchManager;
+import net.patho234.entities.filter.ClientServicesForDefinitionFilter;
+import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.interfaces.IDataDisplay;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearchListener;
+import net.patho234.interfaces.client.ReadOnlyClientObjectList;
 import net.patho234.utils.TableViewerControllerFactory;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
@@ -146,12 +149,22 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 System.out.println("image2dViewIndex: "+image2DViewIndex);
                 TableView image2DView = tableViews.get(image2DViewIndex);
                 System.out.println("image2DView: "+image2DView);
-                image2DView.setItems(newResults);
-                current2DServiceList = newResults;
+                ReadOnlyClientObjectList<ClientService> filtered2D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
+                image2DView.setItems(filtered2D);
+                current2DServiceList = (ClientObjectList)filtered2D;
                 System.out.println("image2DViewTable now has "+image2DView.getItems().size()+"items");
                 break;
-        // ========= 3DTableView ===========
-        // *TODO
+            case "global_3D":
+                // ========= 3DTableView ===========
+                Integer image3DViewIndex=views.get("3D");
+                System.out.println("image3dViewIndex: "+image3DViewIndex);
+                TableView image3DView = tableViews.get(image3DViewIndex);
+                System.out.println("image3DView: "+image3DView);
+                ReadOnlyClientObjectList<ClientService> filtered3D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_3D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
+                image3DView.setItems(filtered3D);
+                current2DServiceList = (ClientObjectList)filtered3D;
+                System.out.println("image2DViewTable now has "+image3DView.getItems().size()+"items");
+                break;
         // ========= 4DTableView ===========
         // *TODO
             default:

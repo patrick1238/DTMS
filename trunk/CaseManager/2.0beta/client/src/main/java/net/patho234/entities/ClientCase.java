@@ -99,7 +99,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
     public IntegerProperty getClinicIDProperty(){ return clinicID; }
     @Override
     public ClientClinic getClinic(){
-        Logger.getLogger(getClass()).info("XXX requesting clinic with id="+clinicID.getValue());
+        //Logger.getLogger(getClass()).info("XXX requesting clinic with id="+clinicID.getValue());
         return ClinicPool.createPool().getEntity( clinicID.getValue() );
     }
     

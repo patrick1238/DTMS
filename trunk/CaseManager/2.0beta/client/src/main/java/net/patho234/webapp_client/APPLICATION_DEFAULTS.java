@@ -16,4 +16,11 @@ public class APPLICATION_DEFAULTS {
     public static int MAIN_WINDOW_WIDTH=900;
     public static int MAIN_WINDOW_HEIGHT=700;
     
+    final public static int SERVICE_DEFINITION_ID_2D=3;
+    final public static int SERVICE_DEFINITION_ID_3D=4;
+    final public static int SERVICE_DEFINITION_ID_4D=5;
+    final public static int SERVICE_DEFINITION_ID_GENOMIC=6;
+    final public static int SERVICE_DEFINITION_ID_METHYLATION=7;
+    
+    
 }

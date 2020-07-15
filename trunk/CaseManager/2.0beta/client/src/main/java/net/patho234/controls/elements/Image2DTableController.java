@@ -7,6 +7,8 @@ package net.patho234.controls.elements;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -22,8 +24,14 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientService;
+import net.patho234.entities.ClientServiceDefinition;
+import net.patho234.entities.filter.ClientServicesForDefinitionFilter;
+import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.interfaces.IMetadata;
+import net.patho234.interfaces.IMetadataValue;
+import net.patho234.interfaces.client.ReadOnlyClientObjectList;
 import net.patho234.views.CaseWindow;
+import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 
 /**
@@ -39,13 +47,15 @@ public class Image2DTableController implements Initializable{
     private TableColumn<ClientService, String> entryDate;
     private TableColumn<ClientService, String> serviceName;
     private TableColumn<ClientService, String> serviceNotes;
-    
+    private List<TableColumn<ClientService, String>> metadataColumns=new ArrayList<>();
     
     Callback<TableColumn<ClientService, String>, TableCell<ClientService, String>> textCellCallback;
     
     EventHandler<Event> rowDoubleClickedHandler;
     
     ObservableList<ClientService> serviceList;
+    
+    private ClientServiceDefinition serviceDef2D;
     
     public Image2DTableController(TableView view, ObservableList<ClientService> items){
         super();
@@ -85,6 +95,8 @@ public class Image2DTableController implements Initializable{
         
         tableView = view;
         serviceList = items;
+        
+        serviceDef2D = ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D);
     }
     
     @Override
@@ -145,16 +157,6 @@ public class Image2DTableController implements Initializable{
         });
         serviceName.setCellFactory( textCellCallback );
         
-        serviceNotes.setCellValueFactory( new Callback<TableColumn.CellDataFeatures<ClientService, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ClientService, String> param) {
-                for (IMetadata md : param.getValue().getMetadata() ){
-                    if( md.getName().equals("Notes") ){ return new SimpleStringProperty((String)md.getData()); }
-                }
-                return new SimpleStringProperty(  );
-            }
-        });
-        serviceName.setCellFactory( textCellCallback );
         
         // TODO: row listener maybe on click event open editor for case or show whole case view?
         tableView.setRowFactory(new Callback<TableView<ClientService>, TableRow<ClientService>>() {
@@ -167,7 +169,47 @@ public class Image2DTableController implements Initializable{
             }
         });
         
-        tableView.setItems(serviceList);
+        initializeMetadataFields();
+        System.out.println("ALL SERVICES "+serviceList.size());
+        ReadOnlyClientObjectList<ClientService> filtered = new ClientServicesForDefinitionFilter(serviceDef2D).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)serviceList);
+        System.out.println("SERVICE DEF 2D "+filtered.size());
+        tableView.setItems(filtered);
     }
     
+    private void initializeMetadataFields(){
+        List<IMetadataValue> fields = this.serviceDef2D.getFields();
+        for( IMetadataValue mv : fields ){
+            Logger.getLogger(getClass()).info("Adding new column to 2D ListView for metadata '"+mv.getKey()+"'");
+            entryDate = new TableColumn<>("Entry date");
+            
+            TableColumn<ClientService, String> newMetaColumn = new TableColumn<>(mv.getKey());
+            newMetaColumn.setCellValueFactory( new MetadataCallback(mv.getKey()) );
+            tableView.getColumns().add(newMetaColumn);
+            metadataColumns.add(newMetaColumn);
+        }
+    }
+    
+    
+    private class MetadataCallback implements Callback<TableColumn.CellDataFeatures<ClientService, String>, ObservableValue<String>> {
+        String key;
+        private MetadataCallback( String metaKey ){
+            key=metaKey;
+        }
+        
+        @Override
+        public ObservableValue<String> call(TableColumn.CellDataFeatures<ClientService, String> param) {
+            //System.out.println("__________________PPPooOOPOPOPOPOPOPOPOPOPO______________");
+            //System.out.println("ööööööööööööööööö "+param.getValue().getMetadata().size()+" metadatavalues found.");
+            for (IMetadata md : param.getValue().getMetadata() ){
+                if( md.getName().equals(key) ){ 
+                    //System.out.println("__________________KEY "+md.getName()+" FOUND______________");
+                    return new SimpleStringProperty(  ""+md.getData() );
+                }else{
+                    //System.out.println(key+" != "+md.getName());
+                }
+            }
+            //System.out.println("__________________KEY "+param.getTableColumn().getText()+" NONEXISTENT______________");
+            return new SimpleStringProperty(  );
+        }
+    }
 }

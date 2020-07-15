@@ -35,7 +35,7 @@ import org.jboss.logging.Logger;
  * @author rehkind
  */
 public class ClientService extends ClientObjectBase<ClientService> implements IService{
-    ClientObjectList<ClientMetadata> metadata = new ClientObjectList<>();
+    //ClientObjectList<ClientMetadata> metadata = new ClientObjectList<>();
     IntegerProperty caseId = new SimpleIntegerProperty();
     IntegerProperty definitionId = new SimpleIntegerProperty();
     
@@ -92,6 +92,7 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
 
     @Override
     public List<IMetadata> getMetadata() {
+        //System.out.println("ggggggggggggggg "+MetadataPool.createPool().getMetadataForService(this, Boolean.FALSE).size()+" metadata found");
         return new ArrayList( MetadataPool.createPool().getMetadataForService(this, Boolean.FALSE) );
     }
     public JsonArray getMetadataJsonArray() {
@@ -158,10 +159,10 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
             ID.setValue(toMergeWith.getId());
             caseId.setValue(toMergeWith.getCase().getId());
             definitionId.setValue(toMergeWith.getServiceDefinition().getId());
-            metadata.clear();
-            toMergeWith.getMetadata().forEach(
-                    (item) -> { metadata.add( (ClientMetadata)item ); }
-            );
+//            metadata.clear();
+//            toMergeWith.getMetadata().forEach(
+//                    (item) -> { metadata.add( (ClientMetadata)item ); }
+//            );
             
             Logger.getLogger(getClass()).info("Successfully merged...");
         }
