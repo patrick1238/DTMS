@@ -7,9 +7,12 @@ package net.patho234.controls;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import net.patho234.entities.ClientCase;
 import net.patho234.io.FilenameParser;
+import net.patho234.utils.AutoCompleteBox;
 
 /**
  * FXML Controller class
@@ -94,6 +98,17 @@ public class CaseController implements Initializable {
     public void loadCase(ClientCase caseToLoad) {
         dataObject = caseToLoad;
         this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
+        setUpDisplay();
+    }
+    
+    private void setUpDisplay(){
+        ArrayList diagnosis = new ArrayList();
+        diagnosis.add("HL(MT)");
+        diagnosis.add("HL(NS)");
+        diagnosis.add("LA unspezifische Pulpa");
+        diagnosis.add("FL Grad 1");
+        this.diagnoseBox.setItems(FXCollections.observableArrayList(diagnosis));
+        new AutoCompleteBox(this.diagnoseBox);
     }
 
 }
