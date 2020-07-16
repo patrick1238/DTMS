@@ -171,11 +171,11 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 break;
             case "global_4D":
                 // ========= 4DTableView ===========
-                Integer image4DViewIndex=views.get("3D");
-                System.out.println("image3dViewIndex: "+image4DViewIndex);
+                Integer image4DViewIndex=views.get("4D");
+                System.out.println("image4dViewIndex: "+image4DViewIndex);
                 TableView image4DView = tableViews.get(image4DViewIndex);
                 System.out.println("image3DView: "+image4DView);
-                ReadOnlyClientObjectList<ClientService> filtered4D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_3D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
+                ReadOnlyClientObjectList<ClientService> filtered4D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_4D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
                 image4DView.setItems(filtered4D);
                 current4DServiceList = (ClientObjectList)filtered4D;
                 System.out.println("image3DViewTable now has "+image4DView.getItems().size()+"items");
@@ -194,15 +194,15 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                     return currentCaseList.size();
                 }
             case 1:
-                if(currentCaseList != null){
+                if(current2DServiceList != null){
                     return current2DServiceList.size();
                 }
             case 2:
-                if(currentCaseList != null){
+                if(current3DServiceList != null){
                     return current3DServiceList.size();
                 }
             case 3:
-                if(currentCaseList != null){
+                if(current4DServiceList != null){
                     return current4DServiceList.size();
                 }
             default:

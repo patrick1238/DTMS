@@ -106,7 +106,6 @@ public class ImageServiceTableController implements Initializable{
         entryDate = new TableColumn<>("Entry date");
         diagnosis = new TableColumn<>("Diagnosis");
         serviceName = new TableColumn<>("Name");
-        serviceNotes = new TableColumn<>("Notes");
         
         tableView.getColumns().clear();
         tableView.getColumns().add(caseNumber);
@@ -114,7 +113,6 @@ public class ImageServiceTableController implements Initializable{
         tableView.getColumns().add(diagnosis);
         tableView.getColumns().add(entryDate);
         tableView.getColumns().add(serviceName);
-        tableView.getColumns().add(serviceNotes);
         
         
         caseNumber.setCellValueFactory( new Callback<TableColumn.CellDataFeatures<ClientService, String>, ObservableValue<String>>() {

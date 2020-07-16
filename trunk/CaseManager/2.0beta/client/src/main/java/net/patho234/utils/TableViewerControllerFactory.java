@@ -30,11 +30,11 @@ public class TableViewerControllerFactory {
                 createServiceTableViewController(table, ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D) );
                 break;
             case "3D":
-                Logger.getLogger(TableViewerControllerFactory.class.getClass()).warn( "Setting TableView controller to: Image3DTableViewController(3d service def)" );
+                Logger.getLogger(TableViewerControllerFactory.class.getClass()).warn( "Setting TableView controller to: ImageServiceTablewController(3d service def)" );
                 createServiceTableViewController(table, ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_3D) );
                 break;
             case "4D":
-                Logger.getLogger(TableViewerControllerFactory.class.getClass()).warn( "Setting TableView controller to: Image2DTableViewController(4d service def)" );
+                Logger.getLogger(TableViewerControllerFactory.class.getClass()).warn( "Setting TableView controller to: ImageServiceTablewController(4d service def)" );
                 createServiceTableViewController(table, ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_4D) );
                 break;
             default:
