@@ -15,10 +15,25 @@ import net.patho234.interfaces.client.ReadOnlyClientObjectList;
  * @author rehkind
  */
 abstract public class ClientObjectFilterBase<T extends ClientObjectBase> implements IClientObjectFilter<T>{
+    IClientObjectFilter preFilter;
+    
+    @Override
+    public void setPrefilter(IClientObjectFilter preFilter){
+        this.preFilter=preFilter;
+    }
+
+    
     @Override
     synchronized public ReadOnlyClientObjectList<T> filterClientObjectList(ReadOnlyClientObjectList<T> originalList) {
+        ReadOnlyClientObjectList<T> prefilteredList;
+        if( preFilter != null ){
+            prefilteredList = (ReadOnlyClientObjectList<T>)preFilter.filterClientObjectList(originalList);
+        }else{
+            prefilteredList=originalList;
+        }
+        
         ClientObjectList<T> filteredList= new ClientObjectList<>();
-        for(T clientObject : originalList.getAll()){
+        for(T clientObject : prefilteredList.getAll()){
             if(isClientObjectInScope(clientObject)){
                 filteredList.add(clientObject);
             }

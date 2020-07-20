@@ -23,13 +23,6 @@ public class ClientServicesForDefinitionFilter extends ClientObjectFilterBase<Cl
         this.filterDef = filterDefinition;
         
     }
-
-    @Override
-    public ReadOnlyClientObjectList<ClientService> filterClientObjectList(ReadOnlyClientObjectList<ClientService> originalList) {
-        return super.filterClientObjectList(originalList); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
     
     @Override
     public boolean isClientObjectInScope(ClientService clientObject) {

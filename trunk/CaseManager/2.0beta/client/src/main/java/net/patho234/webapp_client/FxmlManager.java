@@ -7,11 +7,9 @@ package net.patho234.webapp_client;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.WindowEvent;
-import javax.swing.event.HyperlinkEvent;
 import jfxtras.styles.jmetro8.JMetro;
 import org.jboss.logging.Logger;
 

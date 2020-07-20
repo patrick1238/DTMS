@@ -14,18 +14,8 @@ import net.patho234.interfaces.client.ReadOnlyClientObjectList;
  *
  * @author rehkind
  */
-public class ClientObjectLocalChangesFilter<T extends ClientObjectBase> implements IClientObjectFilter<T>{
-    @Override
-    public ReadOnlyClientObjectList<T> filterClientObjectList(ReadOnlyClientObjectList<T> originalList) {
-        ClientObjectList<T> filteredList= new ClientObjectList<>();
-        for(T clientObject : originalList.getAll()){
-            if(isClientObjectInScope(clientObject)){
-                filteredList.add(clientObject);
-            }
-        }
-        return filteredList;
-    } 
-
+public class ClientObjectLocalChangesFilter<T extends ClientObjectBase> extends ClientObjectFilterBase<T>{
+    
     @Override
     public boolean isClientObjectInScope(T clientObject) {
         return clientObject.hasLocalChanges();
