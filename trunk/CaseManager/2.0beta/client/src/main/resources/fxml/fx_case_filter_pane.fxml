@@ -7,8 +7,32 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.CaseFilterPaneController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="net.patho234.controls.elements.CaseFilterPaneController">
     <stylesheets>
-        <URL value="@/styles/application_style.css"/>
+        <URL value="@/styles/application_style.css" />
     </stylesheets>
+   <children>
+      <VBox layoutY="6.0" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="600.0" text="Case number:" />
+                  <TextField fx:id="txtCaseNumber" prefWidth="600.0" promptText="K120-12" />
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="600.0" text="Diagnosis:" />
+                  <ComboBox fx:id="cbDiagnosis" editable="true" prefWidth="600.0" promptText="enter diagnosis" />
+               </children>
+            </HBox>
+            <HBox prefHeight="40.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label maxHeight="40.0" minHeight="40.0" prefHeight="40.0" prefWidth="600.0" text="Clinic" />
+                  <ComboBox fx:id="cbClinic" editable="true" prefWidth="600.0" promptText="enter clinic" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>

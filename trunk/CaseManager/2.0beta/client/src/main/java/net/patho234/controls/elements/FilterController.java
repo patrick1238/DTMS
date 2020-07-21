@@ -5,14 +5,18 @@
  */
 package net.patho234.controls.elements;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import net.patho234.elements.CaseFilterPane;
 
 /**
  * FXML Controller class
@@ -53,7 +57,22 @@ public class FilterController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        CaseFilterPane caseFilterPane=null;
+        
+        try {
+            caseFilterPane=new CaseFilterPane();
+            AnchorPane.setBottomAnchor(caseFilterPane, 0.);
+            AnchorPane.setLeftAnchor(caseFilterPane, 0.);
+            AnchorPane.setTopAnchor(caseFilterPane, 0.);
+            AnchorPane.setRightAnchor(caseFilterPane, 0.);
+        } catch (IOException ex) {
+            Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load CaseFilterPane from fxml file.", ex);
+        }
+        
+        System.out.println("casePane"+casePane);
+        System.out.println("chlidren"+casePane.getChildren());
+        
+        casePane.getChildren().add( caseFilterPane );
     }    
 
     @FXML

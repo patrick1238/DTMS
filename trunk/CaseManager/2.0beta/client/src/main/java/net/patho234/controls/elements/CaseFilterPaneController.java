@@ -7,7 +7,10 @@ package net.patho234.controls.elements;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -15,7 +18,13 @@ import javafx.fxml.Initializable;
  * @author rehkind
  */
 public class CaseFilterPaneController implements Initializable {
-
+    @FXML
+    TextField txtCaseNumber;
+    @FXML
+    ComboBox cbDiagnosis;
+    @FXML
+    ComboBox cbClinic;
+    
     /**
      * Initializes the controller class.
      */
