@@ -69,9 +69,6 @@ public class FilterController implements Initializable {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load CaseFilterPane from fxml file.", ex);
         }
         
-        System.out.println("casePane"+casePane);
-        System.out.println("chlidren"+casePane.getChildren());
-        
         casePane.getChildren().add( caseFilterPane );
     }    
 
