@@ -74,6 +74,7 @@ public class FilterController implements Initializable {
 
     @FXML
     private void casesClicked(ActionEvent event) {
+        casePane.toFront();
     }
 
     @FXML

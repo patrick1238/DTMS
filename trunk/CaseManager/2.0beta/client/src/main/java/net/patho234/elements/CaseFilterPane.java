@@ -32,5 +32,7 @@ public class CaseFilterPane extends AnchorPane {
         AnchorPane.setLeftAnchor(caseFilterPane, 0.);
         AnchorPane.setTopAnchor(caseFilterPane, 0.);
         AnchorPane.setRightAnchor(caseFilterPane, 0.);
+        
+        setDisable(false);
     }
 }

@@ -60,12 +60,13 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         Logger.getLogger(getClass()).info("Updating search result - original list has "+originalList.size()+" entries.");
         ClientObjectList<T> workingList=new ClientObjectList<>();
         workingList.addAll(originalList);
+        
         for( IClientObjectFilter filter : filterList ){
             workingList = (ClientObjectList<T>)filter.filterClientObjectList(workingList);
             Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
         }
         Logger.getLogger(getClass()).info("Updating search result - filtered list has "+workingList.size()+" entries.");
-        
+        resultList = workingList;
         notifyAllResultListener();
     }
 
@@ -73,6 +74,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         for(IDtmsSearchListener resultReceiver : this.resultListener){ notifyResultListener(resultReceiver); }
     }
     private void notifyResultListener(IDtmsSearchListener resultReceiver){
+        Logger.getLogger(getClass()).info("Notifying search result updated to listener of class: "+resultReceiver.getClass().getName());
         resultReceiver.receiveSearchResults(resultList, identifier);
     }
     
