@@ -18,6 +18,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import net.patho234.entities.ClientCase;
+import net.patho234.entities.filter.CaseClinicFilter;
+import net.patho234.entities.filter.CaseDiagnosisFilter;
 import net.patho234.entities.filter.CaseNumberFilter;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.filter.DtmsSearch;
@@ -40,6 +42,8 @@ public class CaseFilterPaneController implements Initializable {
     UpdateFilterThread updateThread;
     
     CaseNumberFilter filterCaseNumber=new CaseNumberFilter();
+    CaseDiagnosisFilter filterDiagnosis=new CaseDiagnosisFilter();
+    CaseClinicFilter filterClinic=new CaseClinicFilter();
     
     /**
      * Initializes the controller class.
@@ -68,12 +72,31 @@ public class CaseFilterPaneController implements Initializable {
             }
         };
         txtCaseNumber.textProperty().addListener(caseNumberChangedListener);
+        
+        ChangeListener<String> diagnosisChangedListener=new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                filterDiagnosis.setSearch(newValue);
+                updateThread.update();
+            }
+        };
+        cbDiagnosis.getEditor().textProperty().addListener(diagnosisChangedListener);
+        
+        ChangeListener<String> clinicChangedListener=new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                filterClinic.setSearch(newValue);
+                updateThread.update();
+            }
+        };
+        cbClinic.getEditor().textProperty().addListener(clinicChangedListener);
     }    
     
     public List<IClientObjectFilter<ClientCase>> getFilter(){
         ArrayList<IClientObjectFilter<ClientCase>> currentFilterItems=new ArrayList<>();
         currentFilterItems.add(filterCaseNumber);
-        // TODO: add more filter here
+        currentFilterItems.add(filterDiagnosis);
+        currentFilterItems.add(filterClinic);
         return currentFilterItems;
     }
     
