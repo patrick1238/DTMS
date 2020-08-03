@@ -5,7 +5,7 @@
  */
 package net.patho234.entities.filter;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import javafx.collections.ListChangeListener;
@@ -22,7 +22,7 @@ import org.jboss.logging.Logger;
  */
 public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
     String identifier;
-    List<IClientObjectFilter<? super ClientObjectBase>> filterList;
+    HashMap<String, List<IClientObjectFilter<? super ClientObjectBase>>> filterList;
     ClientObjectList<T> originalList;
     ClientObjectList<T> resultList;
     
@@ -32,7 +32,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
     
     public DtmsSearch(String name, ClientObjectList<T> originalList){
         this.identifier=name;
-        filterList = new ArrayList<>();
+        filterList = new HashMap<>();
         this.originalList=originalList;
         this.resultList = new ClientObjectList<>();
         this.resultList.addAll(originalList);
@@ -47,10 +47,12 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         setOriniginalList(originalList);
     }
     
-    public List<IClientObjectFilter<? super ClientObjectBase>> getFilterItems(){
+    @Override
+    public HashMap<String, List<IClientObjectFilter<? super ClientObjectBase>>> getFilterItems(){
         return filterList;
     }
     
+    @Override
     public ClientObjectList getSearchResult(){
         return resultList;
     }
@@ -60,10 +62,11 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         Logger.getLogger(getClass()).info("Updating search result - original list has "+originalList.size()+" entries.");
         ClientObjectList<T> workingList=new ClientObjectList<>();
         workingList.addAll(originalList);
-        
-        for( IClientObjectFilter filter : filterList ){
-            workingList = (ClientObjectList<T>)filter.filterClientObjectList(workingList);
-            Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
+        for( List<IClientObjectFilter<? super ClientObjectBase>> categoryList : filterList.values() ){
+            for( IClientObjectFilter filter : categoryList ){
+                workingList = (ClientObjectList<T>)filter.filterClientObjectList(workingList);
+                Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
+            }
         }
         Logger.getLogger(getClass()).info("Updating search result - filtered list has "+workingList.size()+" entries.");
         resultList = workingList;
@@ -97,17 +100,20 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         if(originalList!=null){
             originalList.removeListener( originalListListener );
         }
-            
+        
         this.originalList = newOriginalItems;
         originalList.addListener( originalListListener );
         updateSearchResult();
     }
 
     @Override
-    public void setFilterItems(List<IClientObjectFilter<? super ClientObjectBase>> newFilterItems) {
-        this.filterList.clear();
-        this.filterList.addAll(newFilterItems);
-        
+    public void setFilterItems(String category, List<IClientObjectFilter<? super ClientObjectBase>> newFilterItems) {
+        if( filterList.get(category)==null ){
+            filterList.put(category, newFilterItems);
+        }else{
+            this.filterList.get(category).clear();
+            this.filterList.get(category).addAll(newFilterItems);
+        }
         updateSearchResult();
     }
 }

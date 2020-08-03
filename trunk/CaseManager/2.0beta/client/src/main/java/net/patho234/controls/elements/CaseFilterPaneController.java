@@ -121,7 +121,7 @@ public class CaseFilterPaneController implements Initializable {
                     performUpdate=false;
                     IDtmsSearch caseSearch=ClientObjectSearchManager.create().getSearch("global_cases");
                     
-                    caseSearch.setFilterItems(parent.getFilter());
+                    caseSearch.setFilterItems("case_filter",parent.getFilter());
                 }else{
                     try {
                         Thread.sleep(100);
