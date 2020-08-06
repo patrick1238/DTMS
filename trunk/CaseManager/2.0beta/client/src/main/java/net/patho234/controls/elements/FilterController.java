@@ -13,9 +13,16 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import net.patho234.elements.Case2DFilterPane;
 import net.patho234.elements.CaseFilterPane;
 
 /**
@@ -51,7 +58,8 @@ public class FilterController implements Initializable {
     private Button genomicsCounter;
     @FXML
     private Button methCounter;
-
+    
+    private Pane backPane;
     /**
      * Initializes the controller class.
      */
@@ -70,15 +78,43 @@ public class FilterController implements Initializable {
         }
         
         casePane.getChildren().add( caseFilterPane );
+        
+        Case2DFilterPane case2DFilterPane=null;
+        
+        try {
+            case2DFilterPane=new Case2DFilterPane();
+            AnchorPane.setBottomAnchor(case2DFilterPane, 0.);
+            AnchorPane.setLeftAnchor(case2DFilterPane, 0.);
+            AnchorPane.setTopAnchor(case2DFilterPane, 0.);
+            AnchorPane.setRightAnchor(case2DFilterPane, 0.);
+        } catch (Exception ex) {
+            Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
+        }
+        
+        twoDimPane.getChildren().add( case2DFilterPane );
+        
+        backPane=new Pane();
+        AnchorPane.setBottomAnchor(backPane, 0.);
+        AnchorPane.setLeftAnchor(backPane, 0.);
+        AnchorPane.setTopAnchor(backPane, 0.);
+        AnchorPane.setRightAnchor(backPane, 0.);
+        backPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, CornerRadii.EMPTY, Insets.EMPTY)));
+        filterStack.getChildren().add(backPane);
+        
+        casesClicked(null);
     }    
 
     @FXML
     private void casesClicked(ActionEvent event) {
+        backPane.toFront();
         casePane.toFront();
     }
 
     @FXML
     private void twoDimClicked(ActionEvent event) {
+        Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing 2D filter pane to front.");
+        backPane.toFront();
+        twoDimPane.toFront();
     }
 
     @FXML

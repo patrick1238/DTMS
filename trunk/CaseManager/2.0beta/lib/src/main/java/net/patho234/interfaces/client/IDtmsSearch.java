@@ -5,6 +5,7 @@
  */
 package net.patho234.interfaces.client;
 
+import java.util.HashMap;
 import java.util.List;
 import net.patho234.entities.ClientObjectBase;
 
@@ -14,8 +15,8 @@ import net.patho234.entities.ClientObjectBase;
  */
 public interface IDtmsSearch<T extends ClientObjectBase> {
     public void setOriniginalList( ClientObjectList<T> newOriginalItems);
-    public void setFilterItems( List<IClientObjectFilter<? super ClientObjectBase>> newFilterItems);
-    public List<IClientObjectFilter<? super ClientObjectBase>> getFilterItems();
+    public void setFilterItems( String category, List<IClientObjectFilter<? super ClientObjectBase>> newFilterItems);
+    public HashMap<String, List<IClientObjectFilter<? super ClientObjectBase>>> getFilterItems();
     public ClientObjectList getSearchResult();
     public void updateSearchResult();
     public void addDtmsSearchResultListener(IDtmsSearchListener l);

@@ -2,7 +2,7 @@
 # create database:
 CREATE SCHEMA IF NOT EXISTS `linfo_open_db` ;
 # 02 create user & grant rights
-GRANT ALL PRIVILEGES ON linfo_open_db.* TO 'linfo_user'@'%' IDENTIFIED BY 'l1nf0_pwd';
+#GRANT ALL PRIVILEGES ON linfo_open_db.* TO 'linfo_user'@'%' IDENTIFIED BY 'l1nf0_pwd';
 
 # 03 create tables
 CREATE TABLE IF NOT EXISTS `linfo_open_db`.`contact_person` (
@@ -42,23 +42,34 @@ CREATE TABLE IF NOT EXISTS `linfo_open_db`.`contact_for_clinic` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `linfo_open_db`.`submitter` (
+  `idsubmitter` INT UNSIGNED NOT NULL,
+  `surname` VARCHAR(45) NULL,
+  `forename` VARCHAR(45) NULL,
+  `title` VARCHAR(45) NULL,
+  `login` VARCHAR(45) NULL,
+  `password` VARCHAR(45) NULL,
+  PRIMARY KEY (`idsubmitter`))
+ENGINE = InnoDB;
+
+
 CREATE TABLE IF NOT EXISTS `linfo_open_db`.`clinic_case` (
   `idcase` INT UNSIGNED NOT NULL,
   `case_number` VARCHAR(45) NOT NULL,
   `fkey_case_clinic` INT UNSIGNED NOT NULL,
   `case_entry_date` DATE NULL,
   `case_diagnosis` VARCHAR(100) NULL,
-  `case_submitter` INT UNSIGNED NULL,
+  `fkey_case_submitter` INT UNSIGNED NULL,
   PRIMARY KEY (`idcase`),
   INDEX `clinic_idx` (`fkey_case_clinic` ASC),
-  INDEX `fkey_case_submitter_idx` (`case_submitter` ASC),
+  INDEX `fkey_case_submitter_idx` (`fkey_case_submitter` ASC),
   CONSTRAINT `fkey_case_clinic`
     FOREIGN KEY (`fkey_case_clinic`)
     REFERENCES `linfo_open_db`.`clinic` (`idclinic`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fkey_case_submitter`
-    FOREIGN KEY (`case_submitter`)
+    FOREIGN KEY (`fkey_case_submitter`)
     REFERENCES `linfo_open_db`.`submitter` (`idsubmitter`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -201,16 +212,6 @@ CREATE TABLE IF NOT EXISTS `linfo_open_db`.`metadata_url` (
 ENGINE = InnoDB;
 
 # user accounts and logging:
-CREATE TABLE IF NOT EXISTS `linfo_open_db`.`submitter` (
-  `idsubmitter` INT UNSIGNED NOT NULL,
-  `surname` VARCHAR(45) NULL,
-  `forename` VARCHAR(45) NULL,
-  `title` VARCHAR(45) NULL,
-  `login` VARCHAR(45) NULL,
-  `password` VARCHAR(45) NULL,
-  PRIMARY KEY (`idsubmitter`))
-ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS `linfo_open_db`.`logs` (
   `idlog` INT UNSIGNED NOT NULL,
   `timestamp` DATE NOT NULL,
@@ -229,11 +230,11 @@ ENGINE = InnoDB;
 # 04 insert data
 
 # SUBMITTER
-INSERT INTO `linfo_open_db`.`submitter` (`idsubmitter`, `surname`, `forename`, `title`, `login`, `password`) VALUES (2, 'Root', 'Root', 'Root', 'admin', 'H0dgkin');
+INSERT INTO `linfo_open_db`.`submitter` (`idsubmitter`, `surname`, `forename`, `title`, `login`, `password`) VALUES (1, 'Root', 'Root', 'Root', 'admin', 'H0dgkin');
 
 # CLINIC
 INSERT INTO `linfo_open_db`.`clinic` (`idclinic`, `name`, `city`, `street`, `zipcode`) VALUES (1, 'Uniklinkum Frankfurt', 'Frankfurt am Main', 'Theodor-Stern-Kai 7', '60590');
-INSERT INTO `linfo_open_db`.`clinic` (`idclinic`, `name`, `city`, `street`, `zipcode`) VALUES (1, 'Uniklinkum Innsbruck', 'Innsbruck', 'not set', '00000');
+INSERT INTO `linfo_open_db`.`clinic` (`idclinic`, `name`, `city`, `street`, `zipcode`) VALUES (2, 'Uniklinkum Innsbruck', 'Innsbruck', 'not set', '00000');
 
 #METADATA VALUES
 INSERT INTO `linfo_open_db`.`metadata_value` (`metadata_value_id`, `value_type`, `meta_key`, `depricated`, `unit`) VALUES (1, 'string', 'Capture date', 0, NULL);
@@ -261,9 +262,9 @@ INSERT INTO `linfo_open_db`.`metadata_value` (`metadata_value_id`, `value_type`,
 #SERVICE DEFINITIONS
 INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (1, 'Service', 'General service', NULL);
 INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (2, 'Image', 'Digital scan of a tissue section', 1);
-INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (3, '2D Image', '2D scan of a tissue section, e.g. a WSI', 2);
-INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (4, '3D Image', '3D scan of a tissue section', 2);
-INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (5, '4D Image', 'Time lapsed data of a tissue section', 2);
+INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (3, '2D', '2D scan of a tissue section, e.g. a WSI', 2);
+INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (4, '3D', '3D scan of a tissue section', 2);
+INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (5, '4D', 'Time lapsed data of a tissue section', 2);
 INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (6, 'Genomics', 'NGS data - raw sequences, alignment, and variant calls', 1);
 INSERT INTO `linfo_open_db`.`service_definition` (`idservice_definition`, `name`, `description`, `parent_definition_id`) VALUES (7, 'Methylation', 'Methylation data', 1);
 

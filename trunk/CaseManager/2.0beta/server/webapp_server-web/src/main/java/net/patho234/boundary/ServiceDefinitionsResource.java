@@ -93,7 +93,9 @@ public class ServiceDefinitionsResource {
         }else{
             serviceDefBuilder.add( "parentDefinition", parentBuilder );
         }
-        serviceDefBuilder.add( "fields", getServiceDefinitionFieldsBuilder(serviceDef) );
+        if(includeFields){
+            serviceDefBuilder.add( "fields", getServiceDefinitionFieldsBuilder(serviceDef) );
+        }
         return serviceDefBuilder;
     }
     

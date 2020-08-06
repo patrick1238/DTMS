@@ -5,7 +5,6 @@
  */
 package net.patho234.controls.elements;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +25,9 @@ import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientService;
 import net.patho234.entities.ClientServiceDefinition;
 import net.patho234.entities.filter.ClientServicesForDefinitionFilter;
-import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.interfaces.IMetadata;
 import net.patho234.interfaces.IMetadataValue;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
-import net.patho234.views.CaseWindow;
-import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 
 /**
@@ -176,6 +172,8 @@ public class ImageServiceTableController implements Initializable{
     
     private void initializeMetadataFields(){
         List<IMetadataValue> fields = this.serviceDefinition.getFields();
+        Logger.getLogger(getClass()).info("Creating columns for Metadata fields of service definition '"+serviceDefinition.getName()+"'. Will add "+fields.size()+" columns.");
+        Logger.getLogger(getClass()).info("ServiceDef Json="+serviceDefinition.getOriginalJson().toString());
         for( IMetadataValue mv : fields ){
             Logger.getLogger(getClass()).info("Adding new column to 2D ListView for metadata '"+mv.getKey()+"'");
             entryDate = new TableColumn<>("Entry date");

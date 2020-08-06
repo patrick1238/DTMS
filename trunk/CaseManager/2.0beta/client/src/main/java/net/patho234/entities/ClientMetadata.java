@@ -46,10 +46,10 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         switch( type.getValue() ){
             case "integer":
             case "int":
-                this.data.setValue( asJson.getInt("value") );
+                this.data.setValue( Integer.valueOf( asJson.getString("value") ) );
                 break;
             case "double":
-                this.data.setValue( asJson.getJsonNumber("value").doubleValue() );
+                this.data.setValue( Double.valueOf( asJson.getString("value") ) );
                 break;
             case "string":
             case "text":
