@@ -69,7 +69,7 @@ public class ClinicEntity implements Serializable, IClinic {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return idclinic;
     }
 

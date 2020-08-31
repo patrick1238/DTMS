@@ -117,7 +117,7 @@ public class ServiceEntity implements Serializable, IService {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return this.idservice;
     }
 

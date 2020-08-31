@@ -75,7 +75,7 @@ public class ServiceDefinitionEntity implements Serializable, IServiceDefinition
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return idServiceDefinition;
     }
 

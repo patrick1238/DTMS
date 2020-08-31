@@ -41,9 +41,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>net.patho234</groupId>
             <artifactId>webapp_server_lib</artifactId>
-            <version>${project.version}</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

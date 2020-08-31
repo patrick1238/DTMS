@@ -78,7 +78,7 @@ public class LogEntryEntity implements Serializable, ILogEntry {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return idlog;
     }
 

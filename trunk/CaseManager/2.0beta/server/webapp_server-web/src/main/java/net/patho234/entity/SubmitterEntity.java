@@ -62,7 +62,7 @@ public class SubmitterEntity implements Serializable, ISubmitter {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return idsubmitter;
     }
 

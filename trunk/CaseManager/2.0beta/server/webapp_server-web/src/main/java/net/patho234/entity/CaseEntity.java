@@ -81,7 +81,7 @@ public class CaseEntity implements Serializable, ICase {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return idcase;
     }
 
