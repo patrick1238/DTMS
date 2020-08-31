@@ -22,7 +22,10 @@ public class ServiceMetaEqualsFilter extends ClientObjectFilterBase<ClientServic
         this.filterObject = filterObject;
     }
     
-    public void setFilterObject( Object newFilterObject ){ this.filterObject = newFilterObject; }
+    public void setFilterObject( Object newFilterObject ){ 
+        this.filterObject = newFilterObject;
+        notifyAllListeners();
+    }
     
     @Override
     public boolean isClientObjectInScope(ClientService clientObject) {

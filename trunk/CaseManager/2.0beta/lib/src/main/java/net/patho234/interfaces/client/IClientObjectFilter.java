@@ -16,4 +16,6 @@ public interface IClientObjectFilter<T extends ClientObjectBase> {
     public void setPrefilter(IClientObjectFilter preFilter);
     public List<T> filterClientObjectList(ReadOnlyClientObjectList<T> originalList);
     public boolean isClientObjectInScope( T clientObject);
+    public void addFilterUpdatedListener( IFilterUpdatedListener listener );
+    public void removeFilterUpdatedListener( IFilterUpdatedListener listener );
 }

@@ -50,6 +50,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
     public void setSearch(String newSearchTerm){
         newSearchTerm = (newSearchTerm==null) ? "" : newSearchTerm;
         this.searchTerm = newSearchTerm;
+        notifyAllListeners();
     }
     
     @Override

@@ -14,17 +14,23 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import net.patho234.entities.ClientCase;
 import net.patho234.entities.filter.ClientObjectFilterBase;
 import net.patho234.entities.filter.ClientObjectSearchManager;
+import net.patho234.interfaces.client.IClientObjectFilter;
+import net.patho234.interfaces.client.IFilterUpdatedListener;
 
 /**
  *
  * @author rehkind
  */
-public class Case2DFilterPane extends AnchorPane{
+public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListener{
     List<FilterPane> filterPanes;
     List<ClientObjectFilterBase> filters;
     private VBox box;
+    
+    
+    
     public Case2DFilterPane(){
         filterPanes = Case2DFilterFactory.create2DFilterPanes();
         filters = new ArrayList<>();
@@ -39,11 +45,19 @@ public class Case2DFilterPane extends AnchorPane{
         for (FilterPane fp : filterPanes){
             this.box.getChildren().add(fp);
             filters.add(fp.getFilter());
+            
         }
         
         ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("2D", filters);
         this.getChildren().add(box);
     }
+    
+    @Override
+    public void filterUpdatedEvent( Object srcFilter ){
+        ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
+    }
 
-
+    public List<ClientObjectFilterBase> getFilter(){
+        return filters;
+    }
 }

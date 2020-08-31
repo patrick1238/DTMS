@@ -5,9 +5,11 @@
  */
 package net.patho234.entities.filter;
 
+import java.util.HashSet;
 import net.patho234.entities.ClientObjectBase;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IClientObjectFilter;
+import net.patho234.interfaces.client.IFilterUpdatedListener;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
 
 /**
@@ -16,6 +18,8 @@ import net.patho234.interfaces.client.ReadOnlyClientObjectList;
  */
 abstract public class ClientObjectFilterBase<T extends ClientObjectBase> implements IClientObjectFilter<T>{
     IClientObjectFilter preFilter;
+    
+    HashSet<IFilterUpdatedListener> listeners=new HashSet<>();
     
     @Override
     public void setPrefilter(IClientObjectFilter preFilter){
@@ -39,5 +43,14 @@ abstract public class ClientObjectFilterBase<T extends ClientObjectBase> impleme
             }
         }
         return filteredList;
-    } 
+    }
+    
+    @Override
+    public void addFilterUpdatedListener(IFilterUpdatedListener l){ listeners.add(l); }
+    @Override
+    public void removeFilterUpdatedListener(IFilterUpdatedListener l){ listeners.remove(l); }
+    
+    protected void notifyAllListeners(){
+        for(IFilterUpdatedListener l : listeners){ l.filterUpdatedEvent(this); }
+    }
 }

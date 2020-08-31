@@ -17,6 +17,7 @@ public class CaseNumberFilter  extends ClientObjectFilterBase<ClientCase>{
     public void setSearch(String newSearchTerm){
         newSearchTerm = (newSearchTerm==null) ? "" : newSearchTerm;
         this.searchTerm = newSearchTerm.toLowerCase();
+        notifyAllListeners();
     }
     
     @Override

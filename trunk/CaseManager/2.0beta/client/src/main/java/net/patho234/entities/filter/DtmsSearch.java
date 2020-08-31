@@ -8,7 +8,9 @@ package net.patho234.entities.filter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.collections.ListChangeListener;
+import net.patho234.controls.elements.CaseFilterPaneController;
 import net.patho234.entities.ClientObjectBase;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IClientObjectFilter;
@@ -29,6 +31,8 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
     HashSet<IDtmsSearchListener> resultListener = new HashSet<IDtmsSearchListener>();
     
     ListChangeListener originalListListener;
+    
+    UpdateFilterThread updateThread; 
     
     public DtmsSearch(String name, ClientObjectList<T> originalList){
         this.identifier=name;
@@ -57,8 +61,27 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         return resultList;
     }
     
+    /**
+     * queues an update via updateThread (will be performed immediatly if not update currently running or triggered afterwards)
+    */
     @Override
     public void updateSearchResult(){
+        System.out.println("UPDATE");
+        if(updateThread == null){
+            updateThread = new UpdateFilterThread(this);
+
+            Thread terminateUpdateThread = new TerminateUpdateFilterThread( updateThread );
+            Runtime.getRuntime().addShutdownHook(terminateUpdateThread);
+
+            updateThread.start();
+        }
+        updateThread.update();
+    }
+    
+    /**
+     * performs the actual update, cannot be called directly -> updateSearchResult will forward update calls to updateThread which then calls the internalUpdate method
+     */
+    private void internalSearchResultUpdate(){
         Logger.getLogger(getClass()).info("Updating search result - original list has "+originalList.size()+" entries.");
         ClientObjectList<T> workingList=new ClientObjectList<>();
         workingList.addAll(originalList);
@@ -115,5 +138,58 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
             this.filterList.get(category).addAll(newFilterItems);
         }
         updateSearchResult();
+    }
+    
+    private class UpdateFilterThread extends Thread{
+        boolean isRunning=true;
+        boolean performUpdate=true;
+        DtmsSearch parent;
+        
+        public UpdateFilterThread(DtmsSearch parent){
+            this.parent=parent;
+        }
+        
+        public void update(){
+            performUpdate=true;
+        }
+        
+        @Override
+        public void run(){
+
+            while( isRunning ){
+                if(performUpdate){
+                    performUpdate=false;
+                    Logger.getLogger(getClass()).info("Updating DtmsSearch with identifier "+parent.identifier);
+                    parent.internalSearchResultUpdate();
+                }else{
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException ex) {
+                        java.util.logging.Logger.getLogger(CaseFilterPaneController.class.getName()).log(Level.SEVERE, "Thread could not sleep...", ex);
+                    }
+                }
+            }
+        }
+    }
+    
+    private class TerminateUpdateFilterThread extends Thread{
+        UpdateFilterThread threadToTerminate;
+        public TerminateUpdateFilterThread(UpdateFilterThread threadToTerminate){
+            this.threadToTerminate = threadToTerminate;
+        }
+        
+        @Override
+        public void run(){
+            threadToTerminate.isRunning=false;
+            threadToTerminate.interrupt();
+            while (threadToTerminate.isAlive() && ! threadToTerminate.isInterrupted() ){
+                java.util.logging.Logger.getLogger(getClass().getName()).info("Waiting for shut down of CaseFilterUpdateThread.");
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                    java.util.logging.Logger.getLogger(CaseFilterPaneController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 }

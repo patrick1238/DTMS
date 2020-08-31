@@ -39,57 +39,45 @@ public class CaseFilterPaneController implements Initializable {
     @FXML
     ComboBox cbClinic;
     
-    UpdateFilterThread updateThread;
-    
     CaseNumberFilter filterCaseNumber=new CaseNumberFilter();
     CaseDiagnosisFilter filterDiagnosis=new CaseDiagnosisFilter();
     CaseClinicFilter filterClinic=new CaseClinicFilter();
+    
+    IDtmsSearch caseSearch=ClientObjectSearchManager.create().getSearch("global_cases");
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txtCaseNumber.setDisable(false);
-        cbDiagnosis.setDisable(false);
-        cbClinic.setDisable(false);
-        txtCaseNumber.setEditable(true);
-        cbDiagnosis.setEditable(true);
-        cbClinic.setEditable(true);
-        
-        updateThread = new UpdateFilterThread( this );
-        
-        Thread terminateUpdateThread = new TerminateUpdateFilterThread( updateThread );
-        Runtime.getRuntime().addShutdownHook(terminateUpdateThread);
-        
-        updateThread.start();
-        
-        ChangeListener<String> caseNumberChangedListener=new ChangeListener<String>() {
+        ChangeListener<String> caseNumberSearchListener=new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 filterCaseNumber.setSearch(newValue);
-                updateThread.update();
+                caseSearch.updateSearchResult();
             }
         };
-        txtCaseNumber.textProperty().addListener(caseNumberChangedListener);
+        txtCaseNumber.textProperty().addListener(caseNumberSearchListener);
         
-        ChangeListener<String> diagnosisChangedListener=new ChangeListener<String>() {
+        ChangeListener<String> caseDiagnoseSearchListener=new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 filterDiagnosis.setSearch(newValue);
-                updateThread.update();
+                caseSearch.updateSearchResult();
             }
         };
-        cbDiagnosis.getEditor().textProperty().addListener(diagnosisChangedListener);
+        cbDiagnosis.getEditor().textProperty().addListener(caseDiagnoseSearchListener);
         
-        ChangeListener<String> clinicChangedListener=new ChangeListener<String>() {
+        ChangeListener<String> caseClinicSearchListener=new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 filterClinic.setSearch(newValue);
-                updateThread.update();
+                caseSearch.updateSearchResult();
             }
         };
-        cbClinic.getEditor().textProperty().addListener(clinicChangedListener);
+        cbClinic.getEditor().textProperty().addListener(caseClinicSearchListener);
+        
+        caseSearch.setFilterItems("case_filter", getFilter());
     }    
     
     public List<IClientObjectFilter<ClientCase>> getFilter(){
@@ -100,57 +88,4 @@ public class CaseFilterPaneController implements Initializable {
         return currentFilterItems;
     }
     
-    private class UpdateFilterThread extends Thread{
-        boolean isRunning=true;
-        boolean performUpdate=true;
-        CaseFilterPaneController parent;
-        
-        public UpdateFilterThread(CaseFilterPaneController parent){
-            this.parent=parent;
-        }
-        
-        public void update(){
-            performUpdate=true;
-        }
-        
-        @Override
-        public void run(){
-
-            while( isRunning ){
-                if(performUpdate){
-                    performUpdate=false;
-                    IDtmsSearch caseSearch=ClientObjectSearchManager.create().getSearch("global_cases");
-                    
-                    caseSearch.setFilterItems("case_filter",parent.getFilter());
-                }else{
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(CaseFilterPaneController.class.getName()).log(Level.SEVERE, "Thread could not sleep...", ex);
-                    }
-                }
-            }
-        }
-        
-        
-    }
-    private class TerminateUpdateFilterThread extends Thread{
-        UpdateFilterThread threadToTerminate;
-        public TerminateUpdateFilterThread(UpdateFilterThread threadToTerminate){
-            this.threadToTerminate = threadToTerminate;
-        }
-        
-        @Override
-        public void run(){
-            threadToTerminate.isRunning=false;
-            while (threadToTerminate.isAlive() ){
-                Logger.getLogger(getClass().getName()).info("Waiting for shut down of CaseFilterUpdateThread.");
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(CaseFilterPaneController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }
 }
