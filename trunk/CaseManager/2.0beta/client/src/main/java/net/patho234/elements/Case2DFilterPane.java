@@ -7,17 +7,10 @@ package net.patho234.elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Insets;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import net.patho234.entities.ClientCase;
 import net.patho234.entities.filter.ClientObjectFilterBase;
 import net.patho234.entities.filter.ClientObjectSearchManager;
-import net.patho234.interfaces.client.IClientObjectFilter;
 import net.patho234.interfaces.client.IFilterUpdatedListener;
 
 /**
@@ -45,7 +38,7 @@ public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListen
         for (FilterPane fp : filterPanes){
             this.box.getChildren().add(fp);
             filters.add(fp.getFilter());
-            
+            fp.getFilter().addFilterUpdatedListener(this);
         }
         
         ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("2D", filters);
@@ -54,6 +47,7 @@ public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListen
     
     @Override
     public void filterUpdatedEvent( Object srcFilter ){
+        System.out.println("REQUESTING UPDATE 2D");
         ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
     }
 

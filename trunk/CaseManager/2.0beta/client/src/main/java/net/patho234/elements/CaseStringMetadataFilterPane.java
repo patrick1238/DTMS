@@ -5,15 +5,12 @@
  */
 package net.patho234.elements;
 
-import javafx.geometry.Insets;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import net.patho234.entities.filter.CaseServiceMetadataStringFilter;
 import net.patho234.entities.filter.ClientObjectFilterBase;
 
@@ -46,6 +43,14 @@ public class CaseStringMetadataFilterPane extends FilterPane{
         this.metadataFieldName = metadataFieldName;
         this.serviceType = serviceType;
         initGui();
+        
+        txtSearchTerm.textProperty().addListener( new ChangeListener<String>(){
+            @Override
+            public void changed(ObservableValue<? extends String> ov, String t, String t1) {
+                filter.setSearch(t1);
+            }
+        
+        } );
         //setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
     }
     
