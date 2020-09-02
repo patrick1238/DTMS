@@ -34,6 +34,7 @@ public class WebappClientFXML extends Application {
         Settings.set("server.address", "http://192.168.31.1:8585/webapp/resources/");
         Settings.set("client.login", "guest");
         Settings.set("client.password", "123456");
+        Settings.set("dtms.string_filters", "");
         // DEFAULT SETTINGS <<<
         Logger.getLogger("global").info("Checking user settings file: "+f.getAbsolutePath());
         

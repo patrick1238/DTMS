@@ -5,9 +5,10 @@
  */
 package net.patho234.elements;
 
+import com.sun.scenario.Settings;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.layout.VBox;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -18,8 +19,26 @@ public class Case2DFilterFactory {
     static List<FilterPane> create2DFilterPanes(){
         // TODO parse correct service def and create all required filters
         ArrayList<FilterPane> createdFilters = new ArrayList<>();
-        CaseStringMetadataFilterPane redFilter = new CaseStringMetadataFilterPane("Red", "2D", "contains");
-        createdFilters.add(redFilter);
+        Logger.getLogger(Case2DFilterFactory.class).info("create2DFilterPanes()");
+        String allStringFilterAsString = Settings.get("dtms.string_filters");
+        if (allStringFilterAsString != "" && allStringFilterAsString != null){
+            Logger.getLogger(Case2DFilterFactory.class).info("Loading 2D filter GUI elements from settings.");
+            String[] splitFilter = allStringFilterAsString.split(";");
+            
+            for(String filter : splitFilter){
+                String[] filterValues=filter.split(":");
+                if(filterValues.length>2){
+                    if(filterValues[1].equals("2D")){
+                        Logger.getLogger(Case2DFilterFactory.class).info("Adding new 2D filter GUI element. (loading from config entry: '"+filter+"')");
+                        CaseStringMetadataFilterPane newFilter = new CaseStringMetadataFilterPane(filterValues[0], filterValues[1], filterValues[2]);
+                        createdFilters.add(newFilter);
+                    }
+                }else{
+                    Logger.getLogger(Case2DFilterFactory.class).info("Strange filter value found: '"+filter+"' will be ignored.");
+                }
+            }
+        }
+        
         return createdFilters;
     }
 }
