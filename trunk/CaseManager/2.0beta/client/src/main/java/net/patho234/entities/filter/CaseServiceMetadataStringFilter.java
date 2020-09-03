@@ -89,7 +89,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
         tmpValueToCheck=(this.filterMode.endsWith("_cs"))?tmpValueToCheck:tmpValueToCheck.toLowerCase();
         
         String[] tmpSplitSearchTerm = tmpSearchTerm.split(";");
-        if(tmpSearchTerm.endsWith(";")){ tmpSearchTerm=tmpSearchTerm.substring(0, tmpSearchTerm.length()-1); }
+        while(tmpSearchTerm.endsWith(";")){ tmpSearchTerm=tmpSearchTerm.substring(0, tmpSearchTerm.length()-1); }
         switch( filterMode ){
             case MODE_CONTAINS:
             case MODE_CONTAINS_CASE_SENSITIVE:
