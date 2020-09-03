@@ -55,7 +55,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
     
     @Override
     public boolean isClientObjectInScope(ClientCase clientObject) {
-        if(searchTerm == ""){ return true; }
+        if(searchTerm.equals("")){ return true; }
         List<IService> services = clientObject.getServices();
         for(IService service:services){
             for(IMetadata m : service.getMetadata()){
@@ -87,16 +87,47 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
             return false;
         }
         tmpValueToCheck=(this.filterMode.endsWith("_cs"))?tmpValueToCheck:tmpValueToCheck.toLowerCase();
+        
+        String[] tmpSplitSearchTerm = tmpSearchTerm.split(";");
+        if(tmpSearchTerm.endsWith(";")){ tmpSearchTerm=tmpSearchTerm.substring(0, tmpSearchTerm.length()-1); }
         switch( filterMode ){
             case MODE_CONTAINS:
             case MODE_CONTAINS_CASE_SENSITIVE:
-                return tmpValueToCheck.contains(tmpSearchTerm);
+                if(tmpSplitSearchTerm.length==1){
+                    
+                    return tmpValueToCheck.contains(tmpSearchTerm);
+                }else{
+                    for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
+                        System.out.println("Checking: '"+oneOfMultipleSearchTerms+"'");
+                        if( oneOfMultipleSearchTerms.equals("") ){ continue; }
+                        if( tmpValueToCheck.contains(oneOfMultipleSearchTerms) ){ return true; }else{
+                            System.out.println("not found in '"+tmpValueToCheck+"'");
+                        }
+                    }
+                    return false;
+                }
             case MODE_STARTS_WITH:
             case MODE_STARTS_WITH_CASE_SENSITIVE:
-                return tmpValueToCheck.startsWith(tmpSearchTerm);
+                if(tmpSplitSearchTerm.length==1){
+                    return tmpValueToCheck.startsWith(tmpSearchTerm);
+                }else{
+                    for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
+                        if( oneOfMultipleSearchTerms.equals("") ){ continue; }
+                        if( tmpValueToCheck.startsWith(oneOfMultipleSearchTerms) ){ return true; }
+                    }
+                    return false;
+                }
             case MODE_EQUALS:
             case MODE_EQUALS_CASE_SENSITIVE:
-                return tmpValueToCheck.equals(tmpSearchTerm);
+                if(tmpSplitSearchTerm.length==1){
+                    return tmpValueToCheck.equals(tmpSearchTerm);
+                }else{
+                    for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
+                        if( oneOfMultipleSearchTerms.equals("") ){ continue; }
+                        if( tmpValueToCheck.startsWith(oneOfMultipleSearchTerms) ){ return true; }
+                    }
+                    return false;
+                }
             default:
                 Logger.getLogger(getClass()).warn("filterMode of CaseServiceMetadataStringFilter is set to an unknown value ('"+filterMode+"'), will return false by default for all items.");
                 return false;
