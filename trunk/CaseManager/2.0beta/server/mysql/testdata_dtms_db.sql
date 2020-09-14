@@ -37,9 +37,24 @@ INSERT INTO `linfo_open_db`.`contact_person` (`idcontact_person`, `title`, `fore
 
 # SERVICE
 INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (1, 1, 3);
-INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (2, 1, 4);
-INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (3, 2, 3);
-INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (4, 2, 5);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (2, 1, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (3, 1, 4);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (4, 1, 4);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (5, 2, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (6, 2, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (7, 2, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (8, 2, 4);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (9, 2, 5);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (10, 2, 5);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (11, 3, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (12, 3, 4);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (13, 3, 5);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (14, 4, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (15, 4, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (16, 4, 4);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (17, 4, 4);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (18, 5, 3);
+INSERT INTO `linfo_open_db`.`service` (`idservice`, `fkey_case`, `fkey_service_definition`) VALUES (19, 5, 3);
 
 # CLINIC_CONTACTS
 INSERT INTO `linfo_open_db`.`contact_for_clinic` (`fkey_cfc_clinic`, `fkey_cfc_contact`, `notes`) VALUES (1, 3, 'Allgemeiner Ansprechpartner und so');
@@ -50,6 +65,21 @@ INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta
 INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Capture date', '2020-01-05 15:23 MEZ');
 INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Capture date', '2020-02-14 15:10 MEZ');
 INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Capture date', '2020-03-08 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Capture date', '2020-03-07 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Capture date', '2020-06-07 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Capture date', '2020-06-07 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Capture date', '2020-06-07 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Capture date', '2020-07-08 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Capture date', '2020-07-09 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Capture date', '2020-07-09 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Capture date', '2020-07-09 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Capture date', '2020-07-09 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Capture date', '2020-08-09 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Capture date', '2020-08-10 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Capture date', '2020-08-10 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (17, 'Capture date', '2020-09-10 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (18, 'Capture date', '2020-09-11 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Capture date', '2020-09-14 15:10 MEZ');
 
 
 #METADATA TEXT
@@ -57,25 +87,94 @@ INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_v
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Comment', 'Testservice-2');
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Comment', 'Testservice-3');
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Comment', 'Testservice-4');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Comment', 'Testservice-1b');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Comment', 'Testservice-2b');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Comment', 'Testservice-3b');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Comment', 'Testservice-4b');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Comment', 'Testservice-1v');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Comment', 'Testservice-2v');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Comment', 'Testservice-3v');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Comment', 'Testservice-4v');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Comment', 'Testservice-1c');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Comment', 'Testservice-2c');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Comment', 'Testservice-3c');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Comment', 'Testservice-4c');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (17, 'Comment', 'Testservice-1k');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (18, 'Comment', 'Testservice-2k');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Comment', 'Testservice-3k');
+
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Blue', 'hematoxilin');
-INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Blue', 'DAPI');
-INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Blue', 'DAPI');
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (17, 'Blue', 'DAPI');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (18, 'Blue', 'hematoxilin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Blue', 'hematoxilin');
+
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Red', 'CD30');
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Red', 'CD4');
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Red', 'CD20');
 INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Red', 'Actin');
-INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Green', 'CD20');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Red', 'CD34');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Red', 'CD4');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Red', 'CD20');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Red', 'Actin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Red', 'CD8');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Red', 'CD4');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Red', 'CD20');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Red', 'Actin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Red', 'CD30');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Red', 'CD4');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Red', 'CD20');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Red', 'Actin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (17, 'Red', 'CD30');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (18, 'Red', 'CD34');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Red', 'CD168');
 
-
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Green', 'CD168');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Green', 'Giemsa');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Green', 'Actin');
+INSERT INTO `linfo_open_db`.`metadata_text` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Green', 'Actin');
 #METADATA INT
 INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Block', 1);
 INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Block', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Block', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Block', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Block', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Block', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Block', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Block', 1);
 
 INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Rating', 4);
 INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Rating', 5);
 INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Rating', 3);
 INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Rating', 4);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Rating', 2);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Rating', 2);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Rating', 3);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Rating', 4);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Rating', 4);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Rating', 5);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Rating', 1);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Rating', 4);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Rating', 2);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Rating', 5);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Rating', 3);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Rating', 4);
+INSERT INTO `linfo_open_db`.`metadata_int` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Rating', 5);
+
 #METADATA DOUBLE
 INSERT INTO `linfo_open_db`.`metadata_double` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Fraction', 0.25);
 INSERT INTO `linfo_open_db`.`metadata_double` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Fraction', 0.75);
