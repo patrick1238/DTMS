@@ -135,11 +135,18 @@ public class MetadataResource {
                 default:
                     type="UNDEFINED";
             }
-                    
+            
+            String unitAsString = "NO_UNIT";
+            if(metaValue!=null){
+                if(metaValue.getUnit()!=null){
+                    unitAsString=metaValue.getUnit();
+                    if( unitAsString==null ){ unitAsString = "NO_UNIT"; }
+                }
+            }
             metadataObjectBuilder.add("name", m.getName())
                 .add("value", ""+m.getData())
                 .add("type", type)
-                .add("unit", (metaValue.getUnit()==null)?"NO_UNIT":metaValue.getUnit())
+                .add("unit", unitAsString)
                 .add("serviceId", m.getService().getId())
                 .add("category", m.getService().getServiceDefinition().getName());
             
