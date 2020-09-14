@@ -69,6 +69,7 @@ public class ClientObjectSearchManager implements ListChangeListener<ClientObjec
     }
     
     public IDtmsSearch getSearch( String name ){
+        Logger.getLogger(getClass()).info("DtmsSearch[ '"+name+"' ] was requested.");
         return dtmsSearches.get(name);
     }
     

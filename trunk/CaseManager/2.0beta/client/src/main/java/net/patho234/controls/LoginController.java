@@ -101,7 +101,7 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         // start MainWindow here
         usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
         usernameField.getScene().getWindow().hide();
-        System.out.println("login '"+user+"/"+pwd+"' is valid TODO: now starting main window");
+        System.out.println("login '"+user+"/"+pwd+"' is valid, now starting main window");
         MainWindow mainWnd = new MainWindow();
         //mainWnd.show();
     }

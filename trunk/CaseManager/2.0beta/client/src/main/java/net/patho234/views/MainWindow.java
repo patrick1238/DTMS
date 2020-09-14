@@ -11,6 +11,9 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -44,8 +47,18 @@ public class MainWindow extends Stage {
     HomeController homeController;
     TableViewerWindow tableviewer;
 
+    private SimpleBooleanProperty preloadingFinished=new SimpleBooleanProperty(false);
+    
     public MainWindow() {
-
+        preloadingFinished.addListener( new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if( newValue ){
+                    loadTableViewerWindow();
+                }
+            }
+        } );
+        
         try {
             startClientObjectPoolPreloading();
         } catch (IOException ioEx) {
@@ -84,34 +97,56 @@ public class MainWindow extends Stage {
         rootStage.show();
 
         Thread preloadThread = new Thread(
-                new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    preloadClientObjectPools(statusControl);
-                } catch (IOException ioEx) {
-                } finally {
-                    ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
-                    searchManager.createSearch("global_cases", (ClientObjectList) CasePool.createPool().getAllEntities());
-                    searchManager.createSearch("global_2D", (ClientObjectList) ServicePool.createPool().getAllEntities());
-                    searchManager.createSearch("global_3D", (ClientObjectList) ServicePool.createPool().getAllEntities());
-                    searchManager.createSearch("global_4D", (ClientObjectList) ServicePool.createPool().getAllEntities());
-                    loadTableViewerWindow();
+            new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        preloadClientObjectPools(statusControl);
+                    } catch (IOException ioEx) {
+                    } finally {
+                        Logger.getLogger(getClass().getName()).info("Creating DtmsSearch objects for TabelViewer...");
+                        long startTime = System.currentTimeMillis();
+                        ClientObjectSearchManager searchManager = ClientObjectSearchManager.create();
+                        searchManager.createSearch("global_cases", (ClientObjectList) CasePool.createPool().getAllEntities());
+                        String timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
+                        Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime Cases: "+timeStamp);
+                        searchManager.createSearch("global_2D", (ClientObjectList) ServicePool.createPool().getAllEntities());
+                        timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
+                        Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime 2D: "+timeStamp);
+                        searchManager.createSearch("global_3D", (ClientObjectList) ServicePool.createPool().getAllEntities());
+                        timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
+                        Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime 3D: "+timeStamp);
+                        searchManager.createSearch("global_4D", (ClientObjectList) ServicePool.createPool().getAllEntities());
+                        timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
+                        Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime 4D: "+timeStamp);
+                        loadTableViewerWindow();
+                        timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
+                        Logger.getLogger(getClass().getName()).info("TableViewerWindow.load() runtime: "+timeStamp);
+                    }
                 }
             }
-        }
         );
 
         preloadThread.start();
+        
+//        while( preloadThread.isAlive() ){
+//            try{
+//                System.out.println("waiting for preloader thread to finish");
+//                Thread.sleep(200);
+//            }catch(InterruptedException ex){
+//            
+//            }
+//        }
     }
 
     private void preloadClientObjectPools(StatusWindowController wndControl) throws IOException {
         // calls @GET_ALL for all entity_pools for intitial caching
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading clinics...", 5));
+        long startTime = System.currentTimeMillis();
         ClinicPool.createPool().getAllEntities(true);
         try {
             ClinicPool.createPool().waitFor(30000);
-            Logger.getLogger(getClass().getName()).info("ClinicPool preloaded...");
+            Logger.getLogger(getClass().getName()).info("ClinicPool preloaded..."+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -126,10 +161,11 @@ public class MainWindow extends Stage {
         }
 
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading service definitions...", 24));
+        startTime = System.currentTimeMillis();
         ServiceDefinitionPool.createPool().getAllEntities(true);
         try {
             ServiceDefinitionPool.createPool().waitFor(30000);
-            Logger.getLogger(getClass().getName()).info("ServiceDefinitionPool preloaded...");
+            Logger.getLogger(getClass().getName()).info("ServiceDefinitionPool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -143,10 +179,11 @@ public class MainWindow extends Stage {
             System.exit(1);
         }
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading services...", 51));
+        startTime = System.currentTimeMillis();
         ServicePool.createPool().getAllEntities(true);
         try {
             ServicePool.createPool().waitFor(30000);
-            Logger.getLogger(getClass().getName()).info("ServicePool preloaded...");
+            Logger.getLogger(getClass().getName()).info("ServicePool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -160,9 +197,10 @@ public class MainWindow extends Stage {
             System.exit(1);
         }
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading cases...", 61));
+        startTime = System.currentTimeMillis();
         CasePool.createPool().getAllEntities(true);
         try {
-            Logger.getLogger(getClass().getName()).info("CasePool preloaded...");
+            Logger.getLogger(getClass().getName()).info("CasePool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
             CasePool.createPool().waitFor(30000);
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
@@ -177,10 +215,11 @@ public class MainWindow extends Stage {
             System.exit(1);
         }
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading metadata...", 90));
+        startTime = System.currentTimeMillis();
         MetadataPool.createPool().getAllEntities(true);
         try {
             MetadataPool.createPool().waitFor(30000);
-            Logger.getLogger(getClass().getName()).info("MetadataPool preloaded...");
+            Logger.getLogger(getClass().getName()).info("MetadataPool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -196,6 +235,7 @@ public class MainWindow extends Stage {
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Launching...", 100));
 
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Terminate status", -1));
+        this.preloadingFinished.set(true);
     }
 
     private class StatusUpdate implements Runnable {
@@ -221,25 +261,19 @@ public class MainWindow extends Stage {
     }
 
     public boolean loadTableViewerWindow() {
-
+        tableviewer = new TableViewerWindow();
+        Logger.getLogger(getClass().getName()).info("Initializing TableViewer tables...");
+        tableviewer.initializeTables();
+        Logger.getLogger(getClass().getName()).info("Showing TableViewer GUI...");
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                tableviewer = new TableViewerWindow();
-                Logger.getLogger(getClass().getName()).info("Initializing TableViewer tables...");
-                tableviewer.initializeTables();
-                Logger.getLogger(getClass().getName()).info("Showing TableViewer GUI...");
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Logger.getLogger(getClass().getName()).info("Showing TableViewer GUI...platform call");
-                        tableviewer.show();
-                    }
-                });
-                Logger.getLogger(getClass().getName()).info("Loading subpanes...");
-                loadSubpanes();
+                Logger.getLogger(getClass().getName()).info("Showing TableViewer GUI...platform call");
+                tableviewer.show();
             }
         });
+        Logger.getLogger(getClass().getName()).info("Loading subpanes...");
+        loadSubpanes();
         return true;
     }
 

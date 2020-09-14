@@ -66,7 +66,6 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
     */
     @Override
     public void updateSearchResult(){
-        System.out.println("UPDATE");
         if(updateThread == null){
             updateThread = new UpdateFilterThread(this);
 
@@ -82,6 +81,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
      * performs the actual update, cannot be called directly -> updateSearchResult will forward update calls to updateThread which then calls the internalUpdate method
      */
     private void internalSearchResultUpdate(){
+        long timestamp = System.currentTimeMillis();
         Logger.getLogger(getClass()).info("Updating search result - original list has "+originalList.size()+" entries.");
         ClientObjectList<T> workingList=new ClientObjectList<>();
         workingList.addAll(originalList);
@@ -96,6 +96,9 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         }
         Logger.getLogger(getClass()).info("Updating search result - filtered list has "+workingList.size()+" entries.");
         resultList = workingList;
+        Double totalTime = (System.currentTimeMillis() - timestamp) / 1000.d;
+        String strTotalTime = String.format("%.3f", totalTime);
+        Logger.getLogger(getClass()).info("Search request took "+strTotalTime+" seconds to finish.");
         notifyAllResultListener();
     }
 
@@ -183,6 +186,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         
         @Override
         public void run(){
+            java.util.logging.Logger.getLogger(getClass().getName()).info("Shutting down CaseFilterUpdateThread.");
             threadToTerminate.isRunning=false;
             threadToTerminate.interrupt();
             while (threadToTerminate.isAlive() && ! threadToTerminate.isInterrupted() ){

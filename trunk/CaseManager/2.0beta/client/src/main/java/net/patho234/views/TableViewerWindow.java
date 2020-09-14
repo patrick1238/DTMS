@@ -122,8 +122,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     }
     
     private void bindTableViewToSearchManger(){
-//        ClientObjectSearchManager.create().getSearch("global_cases").addDtmsSearchResultListener(this);
-//        ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_cases").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
 //        ClientObjectSearchManager.create().getSearch("global_3D").addDtmsSearchResultListener(this);
 //        ClientObjectSearchManager.create().getSearch("global_4D").addDtmsSearchResultListener(this);
     }
@@ -135,20 +135,25 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
             return;
         }
         Logger.getLogger(getClass().getName()).warning("TableViewerWindow received SearchResult for "+searchIdentifier);
+        long startTime;
+        String strTime;
         switch( searchIdentifier ){
         
             case "global_cases":
                 // ========= CaseTableView ===========
+                startTime = System.currentTimeMillis();
                 Integer caseViewIndex=views.get("Case");
                 System.out.println("caseViewIndex: "+caseViewIndex);
                 TableView caseView = tableViews.get(caseViewIndex);
                 System.out.println("caseView: "+caseView);
                 caseView.setItems(newResults);
                 currentCaseList = newResults;
-                System.out.println("caseViewTable now has "+caseView.getItems().size()+" items");
+                strTime = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d);
+                System.out.println("caseViewTable now has "+caseView.getItems().size()+" items (Search result processed in "+strTime+" seconds)");
                 break;
             case "global_2D":
                 // ========= 2DTableView ===========
+                startTime = System.currentTimeMillis();
                 Integer image2DViewIndex=views.get("2D");
                 System.out.println("image2dViewIndex: "+image2DViewIndex);
                 TableView image2DView = tableViews.get(image2DViewIndex);
@@ -156,7 +161,8 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 ReadOnlyClientObjectList<ClientService> filtered2D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
                 image2DView.setItems(filtered2D);
                 current2DServiceList = (ClientObjectList)filtered2D;
-                System.out.println("image2DViewTable now has "+image2DView.getItems().size()+" items");
+                strTime = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d);
+                System.out.println("image2DViewTable now has "+image2DView.getItems().size()+" items (Search result processed in "+strTime+" seconds)");
                 break;
             case "global_3D":
                 // ========= 3DTableView ===========
