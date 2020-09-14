@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import net.patho234.elements.Case2DFilterPane;
+import net.patho234.elements.Case3DFilterPane;
 import net.patho234.elements.CaseFilterPane;
 
 /**
@@ -93,6 +94,18 @@ public class FilterController implements Initializable {
         
         twoDimPane.getChildren().add( case2DFilterPane );
         
+        Case3DFilterPane case3DFilterPane=null;
+        try {
+            case3DFilterPane=new Case3DFilterPane();
+            AnchorPane.setBottomAnchor(case3DFilterPane, 0.);
+            AnchorPane.setLeftAnchor(case3DFilterPane, 0.);
+            AnchorPane.setTopAnchor(case3DFilterPane, 0.);
+            AnchorPane.setRightAnchor(case3DFilterPane, 0.);
+        } catch (Exception ex) {
+            Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
+        }
+        threeDimPane.getChildren().add( case3DFilterPane );
+        
         backPane=new Pane();
         AnchorPane.setBottomAnchor(backPane, 0.);
         AnchorPane.setLeftAnchor(backPane, 0.);
@@ -119,6 +132,9 @@ public class FilterController implements Initializable {
 
     @FXML
     private void threeDimClicked(ActionEvent event) {
+        Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing 3D filter pane to front.");
+        backPane.toFront();
+        threeDimPane.toFront();
     }
 
     @FXML

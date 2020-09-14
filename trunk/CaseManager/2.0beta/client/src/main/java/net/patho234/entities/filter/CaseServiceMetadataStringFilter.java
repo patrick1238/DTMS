@@ -94,15 +94,11 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
             case MODE_CONTAINS:
             case MODE_CONTAINS_CASE_SENSITIVE:
                 if(tmpSplitSearchTerm.length==1){
-                    
                     return tmpValueToCheck.contains(tmpSearchTerm);
                 }else{
                     for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
-                        System.out.println("Checking: '"+oneOfMultipleSearchTerms+"'");
                         if( oneOfMultipleSearchTerms.equals("") ){ continue; }
-                        if( tmpValueToCheck.contains(oneOfMultipleSearchTerms) ){ return true; }else{
-                            System.out.println("not found in '"+tmpValueToCheck+"'");
-                        }
+                        if( tmpValueToCheck.contains(oneOfMultipleSearchTerms) ){ return true; }
                     }
                     return false;
                 }

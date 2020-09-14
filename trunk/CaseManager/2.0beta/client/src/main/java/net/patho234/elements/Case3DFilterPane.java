@@ -17,15 +17,15 @@ import net.patho234.interfaces.client.IFilterUpdatedListener;
  *
  * @author rehkind
  */
-public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListener{
+public class Case3DFilterPane extends AnchorPane implements IFilterUpdatedListener{
     List<FilterPane> filterPanes;
     List<ClientObjectFilterBase> filters;
     private VBox box;
     
     
     
-    public Case2DFilterPane(){
-        filterPanes = CaseFilterFactory.create2DFilterPanes();
+    public Case3DFilterPane(){
+        filterPanes = CaseFilterFactory.create3DFilterPanes();
         filters = new ArrayList<>();
         
         box = new VBox();
@@ -41,13 +41,12 @@ public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListen
             fp.getFilter().addFilterUpdatedListener(this);
         }
         
-        ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("2D", filters);
+        ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("3D", filters);
         this.getChildren().add(box);
     }
     
     @Override
     public void filterUpdatedEvent( Object srcFilter ){
-        System.out.println("REQUESTING UPDATE 2D");
         ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
     }
 

@@ -86,7 +86,10 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         ClientObjectList<T> workingList=new ClientObjectList<>();
         workingList.addAll(originalList);
         for( List<IClientObjectFilter<? super ClientObjectBase>> categoryList : filterList.values() ){
+            int count=0;
             for( IClientObjectFilter filter : categoryList ){
+                count++;
+                Logger.getLogger(getClass()).info("internalSearchResultUpdate(): Applying filter "+filter.toString()+" ("+count+"/"+categoryList.size()+")");
                 workingList = (ClientObjectList<T>)filter.filterClientObjectList(workingList);
                 Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
             }

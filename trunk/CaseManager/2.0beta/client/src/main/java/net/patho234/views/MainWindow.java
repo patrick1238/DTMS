@@ -111,6 +111,7 @@ public class MainWindow extends Stage {
         ClinicPool.createPool().getAllEntities(true);
         try {
             ClinicPool.createPool().waitFor(30000);
+            Logger.getLogger(getClass().getName()).info("ClinicPool preloaded...");
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -128,6 +129,7 @@ public class MainWindow extends Stage {
         ServiceDefinitionPool.createPool().getAllEntities(true);
         try {
             ServiceDefinitionPool.createPool().waitFor(30000);
+            Logger.getLogger(getClass().getName()).info("ServiceDefinitionPool preloaded...");
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -144,6 +146,7 @@ public class MainWindow extends Stage {
         ServicePool.createPool().getAllEntities(true);
         try {
             ServicePool.createPool().waitFor(30000);
+            Logger.getLogger(getClass().getName()).info("ServicePool preloaded...");
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -159,6 +162,7 @@ public class MainWindow extends Stage {
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading cases...", 61));
         CasePool.createPool().getAllEntities(true);
         try {
+            Logger.getLogger(getClass().getName()).info("CasePool preloaded...");
             CasePool.createPool().waitFor(30000);
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
@@ -176,6 +180,7 @@ public class MainWindow extends Stage {
         MetadataPool.createPool().getAllEntities(true);
         try {
             MetadataPool.createPool().waitFor(30000);
+            Logger.getLogger(getClass().getName()).info("MetadataPool preloaded...");
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -221,8 +226,17 @@ public class MainWindow extends Stage {
             @Override
             public void run() {
                 tableviewer = new TableViewerWindow();
+                Logger.getLogger(getClass().getName()).info("Initializing TableViewer tables...");
                 tableviewer.initializeTables();
-                tableviewer.show();
+                Logger.getLogger(getClass().getName()).info("Showing TableViewer GUI...");
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Logger.getLogger(getClass().getName()).info("Showing TableViewer GUI...platform call");
+                        tableviewer.show();
+                    }
+                });
+                Logger.getLogger(getClass().getName()).info("Loading subpanes...");
                 loadSubpanes();
             }
         });
