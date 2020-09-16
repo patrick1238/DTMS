@@ -57,6 +57,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
     public boolean isClientObjectInScope(ClientCase clientObject) {
         if(searchTerm.equals("")){ return true; }
         List<IService> services = clientObject.getServices();
+        //if(services==null){ return false; }
         for(IService service:services){
             for(IMetadata m : service.getMetadata()){
                 if( m.getName().equals(metadataFieldName) ){

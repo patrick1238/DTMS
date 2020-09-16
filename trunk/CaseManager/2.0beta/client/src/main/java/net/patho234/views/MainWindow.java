@@ -119,9 +119,9 @@ public class MainWindow extends Stage {
                         searchManager.createSearch("global_4D", (ClientObjectList) ServicePool.createPool().getAllEntities());
                         timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
                         Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime 4D: "+timeStamp);
-                        loadTableViewerWindow();
-                        timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
-                        Logger.getLogger(getClass().getName()).info("TableViewerWindow.load() runtime: "+timeStamp);
+                        //loadTableViewerWindow();
+                        //timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
+                        //Logger.getLogger(getClass().getName()).info("TableViewerWindow.load() runtime: "+timeStamp);
                     }
                 }
             }
@@ -235,7 +235,10 @@ public class MainWindow extends Stage {
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Launching...", 100));
 
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Terminate status", -1));
-        this.preloadingFinished.set(true);
+        Platform.runLater(() -> { 
+            System.out.println("NO DONE PRELOADING");
+            this.preloadingFinished.set(true);} );
+        
     }
 
     private class StatusUpdate implements Runnable {

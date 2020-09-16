@@ -6,9 +6,7 @@
 package net.patho234.entities.pool;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.concurrent.TimeoutException;
-import javafx.application.Platform;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.patho234.entities.ClientCase;
@@ -39,6 +37,9 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     
     
     ClientObjectList<ClientService> cachedServiceList=new ClientObjectList();
+    
+    protected PerCaseMapUpdater perCaseMapUpdater=null;
+    private HashMap<Integer, ClientObjectList<ClientService>> perCaseMap = new HashMap<>();
     
     private ServicePool(){ }
     
@@ -80,8 +81,14 @@ public class ServicePool extends AClientObjectPool<ClientService> {
                 Logger.getLogger(getClass()).log(Level.WARN, "could not load services", ex);
             }
         }
-        ReadOnlyClientObjectList<ClientService> unfilteredList = getAllEntities(false);
-        return filter.filterClientObjectList(unfilteredList);
+        if( perCaseMap.isEmpty() ){
+            // TODO: check if we need this (should only be empty till first caching)
+            ReadOnlyClientObjectList<ClientService> unfilteredList = getAllEntities(false);
+            return filter.filterClientObjectList(unfilteredList);
+        }
+        ReadOnlyClientObjectList returnList = perCaseMap.get(requestCase.getId());
+        if (returnList == null){ returnList=new ClientObjectList<ClientService>(); }
+        return returnList;
     }
     
     public ReadOnlyClientObjectList getAllEntitiesForDefinition(ClientServiceDefinition requestDefinition) { return getAllEntitiesForDefinition(requestDefinition, false); }
@@ -215,6 +222,7 @@ public class ServicePool extends AClientObjectPool<ClientService> {
             for(int i=0; i<servicesToDelete.size(); i++){
                 cachedServiceList.removeById(servicesToDelete.get(i).getId());
             }
+            new PerCaseMapUpdater(this).start();
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL_FILTERED)){
             Logger.getLogger(getClass()).info("Received JsonArray for services, updating local service list");
             JsonArray servicesAsJsonArray = (JsonArray)response.getContent();
@@ -241,8 +249,11 @@ public class ServicePool extends AClientObjectPool<ClientService> {
             for(int i=0; i<servicesToDelete.size(); i++){
                 cachedServiceList.removeById(servicesToDelete.get(i).getId());
             }
+            new PerCaseMapUpdater(this).start();
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no service as response (deleted)
             Logger.getLogger(getClass().getName()).info("Service deleted successfully.");
+            //TODO: check if we need to remove locally cached service here
+            new PerCaseMapUpdater(this).start();
         } else{ // all other request result in a single service as JSON object
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single service, creating view...");
             JsonObject serviceAsJsonObject = (JsonObject)response.getContent();
@@ -255,4 +266,41 @@ public class ServicePool extends AClientObjectPool<ClientService> {
         }
     }
 
+    private class PerCaseMapUpdater extends Thread {
+        
+        ServicePool parent;
+        Boolean finished=false;
+        public PerCaseMapUpdater(ServicePool parent){
+            this.parent = parent;
+        }
+        
+        @Override
+        public void run(){
+            if( parent.perCaseMapUpdater != null ){
+                while( !parent.perCaseMapUpdater.finished ){
+                    try{
+                        Thread.sleep(100);
+                    }catch(InterruptedException iEx){
+                        // if current Thread was interrupted we just proceed
+                    }
+                }
+            }
+            
+            parent.perCaseMapUpdater = this;
+            
+            HashMap<Integer, ClientObjectList<ClientService>> tmpMap = new HashMap<>();
+            Integer caseId;
+            for( Object s : getAllEntities(false) ){
+                ClientService castS = (ClientService)s;
+                caseId = castS.getCaseID();
+                if( tmpMap.get(caseId) == null ){
+                    tmpMap.put(caseId, new ClientObjectList<>());
+                }
+                tmpMap.get(caseId).add(castS);
+            }
+            parent.perCaseMap = tmpMap;
+            finished=true;
+        }
+    }
+    
 }

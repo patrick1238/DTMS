@@ -79,7 +79,11 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         if( caseId.getValue() == -1 ){ System.out.println("CASE_ID FOR SERVICE IS -1"); }
         return CasePool.createPool().getEntity(caseId.getValue());
     }
-
+    
+    public Integer getCaseID() {
+        return caseId.getValue();
+    }
+    
     @Override
     public void setCase(ICase caseValue) {
         this.caseId.setValue( caseValue.getId() );
