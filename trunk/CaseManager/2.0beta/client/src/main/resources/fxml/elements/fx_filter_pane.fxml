@@ -22,7 +22,7 @@
                      <children>
                         <HBox prefHeight="45.0" prefWidth="418.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#casesClicked" prefHeight="32.0" prefWidth="78.0" text="Case">
+                              <Button mnemonicParsing="false" onAction="#casesClicked" text="Case">
                                  <HBox.margin>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                  </HBox.margin></Button>
@@ -50,9 +50,9 @@
                         </HBox>
                         <AnchorPane prefHeight="257.0" prefWidth="418.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <ScrollPane prefHeight="253.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane prefHeight="253.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="416.0">
+                                  <AnchorPane minHeight="100.0" minWidth="150.0" prefHeight="250.0" prefWidth="350.0">
                                        <children>
                                           <StackPane fx:id="filterStack" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <children>

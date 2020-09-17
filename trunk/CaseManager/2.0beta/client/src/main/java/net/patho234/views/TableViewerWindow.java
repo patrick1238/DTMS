@@ -123,7 +123,7 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     
     private void bindTableViewToSearchManger(){
         ClientObjectSearchManager.create().getSearch("global_cases").addDtmsSearchResultListener(this);
-//        ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
 //        ClientObjectSearchManager.create().getSearch("global_3D").addDtmsSearchResultListener(this);
 //        ClientObjectSearchManager.create().getSearch("global_4D").addDtmsSearchResultListener(this);
     }
@@ -153,6 +153,7 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 break;
             case "global_2D":
                 // ========= 2DTableView ===========
+                System.out.println("----------------global_2D changed !!!----------------");
                 startTime = System.currentTimeMillis();
                 Integer image2DViewIndex=views.get("2D");
                 System.out.println("image2dViewIndex: "+image2DViewIndex);

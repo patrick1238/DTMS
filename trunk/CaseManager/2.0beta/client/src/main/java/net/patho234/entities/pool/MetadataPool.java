@@ -42,6 +42,9 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
     ClientObjectList<ClientMetadata> cachedMetadataPerCaseList=new ClientObjectList();
     ClientObjectList<ClientMetadata> cachedMetadataList=new ClientObjectList();
     
+    PerServiceMapUpdater perServiceMapUpdater;
+    HashMap<Integer, ClientObjectList<ClientMetadata>> perServiceMap;
+    
     private MetadataPool(){
         defaultMetadata=ClientMetadata.createTemplate("template", -1);
     }
@@ -85,6 +88,8 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
                 Logger.getLogger(getClass()).log(Level.WARN, "could not load metadata", ex);
             }
         }
+        
+        /* old stuff - take all Metadata and filter manually -> slows everything down, if new method works remove this
         ReadOnlyClientObjectList<ClientMetadata> unfilteredList = new ClientObjectList();
         ClientMetadata[] asArray = getAllEntities(false).toArray(new ClientMetadata[]{});
         for(ClientMetadata cm : asArray){
@@ -94,6 +99,8 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         //ReadOnlyClientObjectList<ClientMetadata> filteredList = filter.filterClientObjectList(unfilteredList);
         //System.out.println("Filtered metadata="+filteredList.size());
         return filter.filterClientObjectList(unfilteredList);
+        */
+        return perServiceMap.getOrDefault(requestService.getId(), new ClientObjectList<>());
     }
 
     public ReadOnlyClientObjectList<ClientMetadata> getMetadataForCase(ClientCase requestCase, Boolean updatePool){
@@ -163,6 +170,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
                 ClientMetadata newMetadata = new ClientMetadata( joMeta );                
                 cachedMetadataList.add(newMetadata);
             });
+            new PerServiceMapUpdater(this).start();
         }
         else if( requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL_FILTERED) ){
             Logger.getLogger(getClass()).info("Received JsonArray for metadata, updating local metadata list");
@@ -174,8 +182,10 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
                 ClientMetadata newMetadata = new ClientMetadata( joMeta );                
                 cachedMetadataList.add(newMetadata);
             });
+            new PerServiceMapUpdater(this).start();
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Metadata deleted successfully.");
+            new PerServiceMapUpdater(this).start();
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.UPDATE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Metadata updated successfully.");
         } else{ // all other request result in a single clinic as JSON object
@@ -240,10 +250,41 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         }
         
         return requestIdForReturn;
-
-
-
-
-
+    }
+    
+    private class PerServiceMapUpdater extends Thread {
+        MetadataPool parent;
+        Boolean finished=false;
+        public PerServiceMapUpdater(MetadataPool parent){
+            this.parent = parent;
+        }
+        
+        @Override
+        public void run(){
+            if( parent.perServiceMapUpdater != null ){
+                while( !parent.perServiceMapUpdater.finished ){
+                    try{
+                        Thread.sleep(100);
+                    }catch(InterruptedException iEx){
+                        // if current Thread was interrupted we just proceed
+                    }
+                }
+            }
+            
+            parent.perServiceMapUpdater = this;
+            
+            HashMap<Integer, ClientObjectList<ClientMetadata>> tmpMap = new HashMap<>();
+            Integer serviceId;
+            for( Object cm : getAllEntities(false) ){
+                ClientMetadata castCM = (ClientMetadata)cm;
+                serviceId = castCM.getServiceID();
+                if( tmpMap.get(serviceId) == null ){
+                    tmpMap.put(serviceId, new ClientObjectList<>());
+                }
+                tmpMap.get(serviceId).add(castCM);
+            }
+            parent.perServiceMap = tmpMap;
+            finished=true;
+        }
     }
 }

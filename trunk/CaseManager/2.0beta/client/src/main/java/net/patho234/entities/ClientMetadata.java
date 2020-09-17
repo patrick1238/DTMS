@@ -222,4 +222,8 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         }
         this.ID.setValue(id);
     }
+
+    public Integer getServiceID() {
+        return this.serviceId.getValue();
+    }
 }

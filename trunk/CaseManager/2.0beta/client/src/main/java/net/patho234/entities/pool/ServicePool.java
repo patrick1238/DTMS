@@ -267,7 +267,6 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
 
     private class PerCaseMapUpdater extends Thread {
-        
         ServicePool parent;
         Boolean finished=false;
         public PerCaseMapUpdater(ServicePool parent){

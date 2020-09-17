@@ -57,7 +57,7 @@ public class HomeController implements Initializable {
         String id = source.getId();
         this.display.setVisible(viewIDs.get(id));
         // TODO: remove update, currently just for testing the SearchManager function
-        ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
+        //ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
     }
 
     @FXML
@@ -67,7 +67,7 @@ public class HomeController implements Initializable {
         this.display.setVisible(viewIDs.get(id));
         
         // TODO: remove update, currently just for testing the SearchManager function
-        ClientObjectSearchManager.create().getSearch("global_2D").updateSearchResult();
+        //ClientObjectSearchManager.create().getSearch("global_2D").updateSearchResult();
     }
 
     @FXML

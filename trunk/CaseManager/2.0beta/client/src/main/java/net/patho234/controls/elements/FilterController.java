@@ -70,10 +70,10 @@ public class FilterController implements Initializable {
         
         try {
             caseFilterPane=new CaseFilterPane();
-            AnchorPane.setBottomAnchor(caseFilterPane, 0.);
+            //AnchorPane.setBottomAnchor(caseFilterPane, 0.);
             AnchorPane.setLeftAnchor(caseFilterPane, 0.);
             AnchorPane.setTopAnchor(caseFilterPane, 0.);
-            AnchorPane.setRightAnchor(caseFilterPane, 0.);
+            //AnchorPane.setRightAnchor(caseFilterPane, 0.);
         } catch (IOException ex) {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load CaseFilterPane from fxml file.", ex);
         }
@@ -84,10 +84,10 @@ public class FilterController implements Initializable {
         
         try {
             case2DFilterPane=new Case2DFilterPane();
-            AnchorPane.setBottomAnchor(case2DFilterPane, 0.);
+            //AnchorPane.setBottomAnchor(case2DFilterPane, 0.);
             AnchorPane.setLeftAnchor(case2DFilterPane, 0.);
             AnchorPane.setTopAnchor(case2DFilterPane, 0.);
-            AnchorPane.setRightAnchor(case2DFilterPane, 0.);
+            //AnchorPane.setRightAnchor(case2DFilterPane, 0.);
         } catch (Exception ex) {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
         }
@@ -97,21 +97,21 @@ public class FilterController implements Initializable {
         Case3DFilterPane case3DFilterPane=null;
         try {
             case3DFilterPane=new Case3DFilterPane();
-            AnchorPane.setBottomAnchor(case3DFilterPane, 0.);
+            //AnchorPane.setBottomAnchor(case3DFilterPane, 0.);
             AnchorPane.setLeftAnchor(case3DFilterPane, 0.);
             AnchorPane.setTopAnchor(case3DFilterPane, 0.);
-            AnchorPane.setRightAnchor(case3DFilterPane, 0.);
+            //AnchorPane.setRightAnchor(case3DFilterPane, 0.);
         } catch (Exception ex) {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
         }
         threeDimPane.getChildren().add( case3DFilterPane );
         
         backPane=new Pane();
-        AnchorPane.setBottomAnchor(backPane, 0.);
-        AnchorPane.setLeftAnchor(backPane, 0.);
+        //AnchorPane.setBottomAnchor(backPane, 0.);
+        //AnchorPane.setLeftAnchor(backPane, 0.);
         AnchorPane.setTopAnchor(backPane, 0.);
         AnchorPane.setRightAnchor(backPane, 0.);
-        backPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, CornerRadii.EMPTY, Insets.EMPTY)));
+        backPane.setBackground(new Background(new BackgroundFill(Color.grayRgb(245), CornerRadii.EMPTY, Insets.EMPTY)));
         filterStack.getChildren().add(backPane);
         
         casesClicked(null);

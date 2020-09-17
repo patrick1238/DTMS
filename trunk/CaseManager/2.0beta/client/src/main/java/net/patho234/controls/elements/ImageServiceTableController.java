@@ -197,8 +197,6 @@ public class ImageServiceTableController implements Initializable{
             for (IMetadata md : param.getValue().getMetadata() ){
                 if( md.getName().equals(key) ){ 
                     return new SimpleStringProperty(  ""+md.getData() );
-                }else{
-                    //System.out.println(key+" != "+md.getName());
                 }
             }
             return new SimpleStringProperty(  );
