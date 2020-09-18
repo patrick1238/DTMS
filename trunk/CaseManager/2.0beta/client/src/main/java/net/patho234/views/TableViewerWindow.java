@@ -22,6 +22,7 @@ import net.patho234.entities.ClientService;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.filter.ClientServicesForDefinitionFilter;
 import net.patho234.entities.pool.ServiceDefinitionPool;
+import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IDataDisplay;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearchListener;
@@ -143,13 +144,19 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 // ========= CaseTableView ===========
                 startTime = System.currentTimeMillis();
                 Integer caseViewIndex=views.get("Case");
-                System.out.println("caseViewIndex: "+caseViewIndex);
+                //System.out.println("caseViewIndex: "+caseViewIndex);
                 TableView caseView = tableViews.get(caseViewIndex);
-                System.out.println("caseView: "+caseView);
+                //System.out.println("caseView: "+caseView);
                 caseView.setItems(newResults);
                 currentCaseList = newResults;
                 strTime = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d);
-                System.out.println("caseViewTable now has "+caseView.getItems().size()+" items (Search result processed in "+strTime+" seconds)");
+                Logger.getLogger(getClass().getName()).info("caseViewTable now has "+caseView.getItems().size()+" items (Search result processed in "+strTime+" seconds)");
+                Logger.getLogger(getClass().getName()).info("Updating input list for global_2D...");
+                ClientObjectList<ClientService> serviceList2D = new ClientObjectList<>();
+                for(ClientCase c : currentCaseList){
+                    serviceList2D.addAll( ServicePool.createPool().getAllEntitiesForCase(c) );
+                }
+                ClientObjectSearchManager.create().getSearch("global_2D").setOriniginalList(serviceList2D);
                 break;
             case "global_2D":
                 // ========= 2DTableView ===========

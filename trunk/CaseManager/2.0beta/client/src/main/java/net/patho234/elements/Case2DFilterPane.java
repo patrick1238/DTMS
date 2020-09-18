@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import net.patho234.entities.filter.ClientObjectAndFilter;
 import net.patho234.entities.filter.ClientObjectFilterBase;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.interfaces.client.IFilterUpdatedListener;
@@ -27,7 +28,7 @@ public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListen
     public Case2DFilterPane(){
         filterPanes = CaseFilterFactory.create2DFilterPanes();
         filters = new ArrayList<>();
-        
+        List<ClientObjectFilterBase> andFilters2D = new ArrayList<>();
         box = new VBox();
         box.setSpacing(5.);
         AnchorPane.setBottomAnchor(box, 10.);
@@ -40,14 +41,15 @@ public class Case2DFilterPane extends AnchorPane implements IFilterUpdatedListen
             filters.add(fp.getFilter());
             fp.getFilter().addFilterUpdatedListener(this);
         }
-        
+        ClientObjectAndFilter service2DFilter=new ClientObjectAndFilter(filters);
+        andFilters2D.add(service2DFilter);
         ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("2D", filters);
+        ClientObjectSearchManager.create().getSearch("global_2D").setFilterItems("2D", andFilters2D);
         this.getChildren().add(box);
     }
     
     @Override
     public void filterUpdatedEvent( Object srcFilter ){
-        System.out.println("REQUESTING UPDATE 2D");
         ClientObjectSearchManager.create().getSearch("global_cases").updateSearchResult();
     }
 

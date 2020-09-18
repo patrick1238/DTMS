@@ -7,6 +7,8 @@ package net.patho234.entities.filter;
 
 import java.util.List;
 import net.patho234.entities.ClientCase;
+import net.patho234.entities.ClientObjectBase;
+import net.patho234.entities.ClientService;
 import net.patho234.interfaces.IMetadata;
 import net.patho234.interfaces.IService;
 import org.jboss.logging.Logger;
@@ -15,7 +17,7 @@ import org.jboss.logging.Logger;
  *
  * @author rehkind
  */
-public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<ClientCase>{
+public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
     String metadataFieldName=null;
     String searchTerm="";
     String serviceType=null;
@@ -54,19 +56,31 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase<Cli
     }
     
     @Override
-    public boolean isClientObjectInScope(ClientCase clientObject) {
+    public boolean isClientObjectInScope(ClientObjectBase clientObject) {
         if(searchTerm.equals("")){ return true; }
-        List<IService> services = clientObject.getServices();
-        //if(services==null){ return false; }
-        for(IService service:services){
+        
+        if( clientObject.getClass().equals(ClientCase.class) ){
+            List<IService> services = ((ClientCase)clientObject).getServices();
+            for(IService service:services){
+                for(IMetadata m : service.getMetadata()){
+                    if( m.getName().equals(metadataFieldName) ){
+                        return checkConstrained(m);
+                    }
+                }
+            }
+            return false;
+        } else if ( clientObject.getClass().equals(ClientService.class) ){
+            IService service = ((ClientService)clientObject);
             for(IMetadata m : service.getMetadata()){
                 if( m.getName().equals(metadataFieldName) ){
                     return checkConstrained(m);
                 }
             }
+            return false;
+        } else {
+            throw new ClassCastException("CaseServiceMetadataStringFilter only excepts ClientCase and ClientService objects. Filter item class: "+clientObject.getClass().getName());
         }
         
-        return false;
     }
     
     public void setSearchMode(String mode){ this.filterMode = mode; }
