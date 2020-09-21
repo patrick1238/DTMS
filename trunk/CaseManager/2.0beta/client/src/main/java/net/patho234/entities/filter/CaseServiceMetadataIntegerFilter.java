@@ -20,10 +20,10 @@ import org.jboss.logging.Logger;
  * @author rehkind
  */
 public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
-    public final int MODE_EQUALS=0;
-    public final int MODE_MIN=1;
-    public final int MODE_MAX=2;
-    public final int MODE_MIN_MAX=3;
+    static public final int MODE_EQUALS=0;
+    static public final int MODE_MIN=1;
+    static public final int MODE_MAX=2;
+    static public final int MODE_MIN_MAX=3;
     
     String metadataFieldName=null;
     
@@ -34,32 +34,48 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
     String serviceType=null;
     SimpleIntegerProperty filterMode = new SimpleIntegerProperty( MODE_MIN );
 
-    public CaseServiceMetadataIntegerFilter(String metadataFieldName){
-        this(metadataFieldName, 0);
+    public CaseServiceMetadataIntegerFilter(String metadataFieldName, String serviceType){
+        this(metadataFieldName, serviceType, 0);
     }
     
     /**
      *
      * @param metadataFieldName
+     * @param serviceType
      * @param filterMode
      */
-    public CaseServiceMetadataIntegerFilter(String metadataFieldName, Integer filterMode){
-        this(metadataFieldName, filterMode, new Integer[]{0, Integer.MAX_VALUE, null});
+    public CaseServiceMetadataIntegerFilter(String metadataFieldName, String serviceType, Integer filterMode){
+        this(metadataFieldName, serviceType, filterMode, new Integer[]{0, Integer.MAX_VALUE, null});
     }
     
-    public CaseServiceMetadataIntegerFilter(String metadataFieldName, Integer filterMode, Integer[] filterValues){
+    public CaseServiceMetadataIntegerFilter(String metadataFieldName, String serviceType, Integer filterMode, Integer[] filterValues){
         this.metadataFieldName = metadataFieldName;
         
         this.minValue = filterValues[0];
         this.maxValue = filterValues[1];
         this.eqValue = filterValues[2];
         
+        this.serviceType = serviceType;
+        
         filterMode = (filterMode==null) ? MODE_MIN : filterMode;
-        this.filterMode.setValue( filterMode );
+        setSearchMode( filterMode );
     }
     
     public void setMinValue(Integer newMin){
+        if( Objects.equals( this.minValue, newMin) ){ return; }
         this.minValue = newMin;
+        notifyAllListeners();
+    }
+    
+    public void setMaxValue(Integer newMax){
+        if( Objects.equals( this.maxValue, newMax) ){ return; }
+        this.maxValue = newMax;
+        notifyAllListeners();
+    }
+    
+    public void setEqualValue(Integer newEq){
+        if( Objects.equals( this.eqValue, newEq) ){ return; }
+        this.eqValue = newEq;
         notifyAllListeners();
     }
     
@@ -128,6 +144,22 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
             default:
                 Logger.getLogger(getClass()).warn("+++ filterMode of CaseServiceMetadataIntegerFilter is set to an unknown value ('"+filterMode+"'), will return false by default for all items.");
                 return false;
+        }
+    }
+    
+    static public Integer getModeFromString(String modeAsString){
+        switch ( modeAsString ){
+            case "min":
+                return MODE_MIN;
+            case "max":
+                return MODE_MAX;
+            case "min_max":
+                return MODE_MIN_MAX;
+            case "equals":
+                return MODE_EQUALS;
+            default:
+                Logger.getLogger(CaseServiceMetadataIntegerFilter.class).warn("String '"+modeAsString+"' cannot be converted into a proper filter mode -> returning NULL");
+                return null;
         }
     }
 }
