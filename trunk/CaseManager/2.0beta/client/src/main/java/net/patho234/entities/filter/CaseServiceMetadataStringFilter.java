@@ -64,7 +64,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
             for(IService service:services){
                 for(IMetadata m : service.getMetadata()){
                     if( m.getName().equals(metadataFieldName) ){
-                        return checkConstrained(m);
+                        if (checkConstrained(m)){ return true; }
                     }
                 }
             }
@@ -88,8 +88,10 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
     public void setServiceType(String serviceType){ this.serviceType = serviceType; }
     
     private boolean checkConstrained(IMetadata m) {
+//        Logger.getLogger(getClass()).info("+++ Checking contraint on "+m.getName()+" - values are: '"+searchTerm+"' & '"+m.getData().toString()+"'");
         if( serviceType != null ){
             if( !m.getService().getServiceDefinition().getName().equals(this.serviceType)){
+//                Logger.getLogger(getClass()).info("+++ ClientObject is rejected - wrong Service TYPE (found: "+m.getService().getServiceDefinition().getName()+" expected: "+this.serviceType+")");
                 return false;
             }
         }
@@ -109,6 +111,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
             case MODE_CONTAINS:
             case MODE_CONTAINS_CASE_SENSITIVE:
                 if(tmpSplitSearchTerm.length==1){
+//                    Logger.getLogger(getClass()).info("+++ CONTAINS: ["+tmpValueToCheck.contains(tmpSearchTerm)+"]");
                     return tmpValueToCheck.contains(tmpSearchTerm);
                 }else{
                     for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
@@ -120,6 +123,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
             case MODE_STARTS_WITH:
             case MODE_STARTS_WITH_CASE_SENSITIVE:
                 if(tmpSplitSearchTerm.length==1){
+//                    Logger.getLogger(getClass()).info("+++ STARTS_WITH: ["+tmpValueToCheck.startsWith(tmpSearchTerm)+"]");
                     return tmpValueToCheck.startsWith(tmpSearchTerm);
                 }else{
                     for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
@@ -131,6 +135,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
             case MODE_EQUALS:
             case MODE_EQUALS_CASE_SENSITIVE:
                 if(tmpSplitSearchTerm.length==1){
+//                    Logger.getLogger(getClass()).info("+++ EQUALS: ["+tmpValueToCheck.equals(tmpSearchTerm)+"]");
                     return tmpValueToCheck.equals(tmpSearchTerm);
                 }else{
                     for( String oneOfMultipleSearchTerms : tmpSplitSearchTerm ){
@@ -140,7 +145,7 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
                     return false;
                 }
             default:
-                Logger.getLogger(getClass()).warn("filterMode of CaseServiceMetadataStringFilter is set to an unknown value ('"+filterMode+"'), will return false by default for all items.");
+                Logger.getLogger(getClass()).warn("+++ filterMode of CaseServiceMetadataStringFilter is set to an unknown value ('"+filterMode+"'), will return false by default for all items.");
                 return false;
         }
     }

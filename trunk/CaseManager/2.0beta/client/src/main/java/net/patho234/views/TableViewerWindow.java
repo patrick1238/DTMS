@@ -21,9 +21,12 @@ import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientService;
 import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.filter.ClientServicesForDefinitionFilter;
+import net.patho234.entities.filter.ServiceTypeFilter;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IDataDisplay;
+import net.patho234.interfaces.IMetadata;
+import net.patho234.interfaces.IService;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearchListener;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
@@ -153,19 +156,28 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 Logger.getLogger(getClass().getName()).info("caseViewTable now has "+caseView.getItems().size()+" items (Search result processed in "+strTime+" seconds)");
                 Logger.getLogger(getClass().getName()).info("Updating input list for global_2D...");
                 ClientObjectList<ClientService> serviceList2D = new ClientObjectList<>();
+                ServiceTypeFilter only2DFilter = new ServiceTypeFilter("2D");
                 for(ClientCase c : currentCaseList){
-                    serviceList2D.addAll( ServicePool.createPool().getAllEntitiesForCase(c) );
+//                    System.out.println("adding services for case: "+c.getCaseNumber());
+                    for( Object s : ServicePool.createPool().getAllEntitiesForCase(c) ){
+                        ClientService cs = (ClientService)s;
+//                        System.out.println("--- | "+cs.getId()+" : "+cs.getServiceDefinition().getName());
+//                        for(IMetadata m : cs.getMetadata()){
+//                            System.out.println("    | --- "+m.getName()+" : "+m.getData());
+//                        }
+                    }
+                    serviceList2D.addAll( only2DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(c)) );
                 }
                 ClientObjectSearchManager.create().getSearch("global_2D").setOriniginalList(serviceList2D);
                 break;
             case "global_2D":
                 // ========= 2DTableView ===========
-                System.out.println("----------------global_2D changed !!!----------------");
+//                System.out.println("----------------global_2D changed !!!----------------");
                 startTime = System.currentTimeMillis();
                 Integer image2DViewIndex=views.get("2D");
-                System.out.println("image2dViewIndex: "+image2DViewIndex);
+//                System.out.println("image2dViewIndex: "+image2DViewIndex);
                 TableView image2DView = tableViews.get(image2DViewIndex);
-                System.out.println("image2DView: "+image2DView);
+//                System.out.println("image2DView: "+image2DView);
                 ReadOnlyClientObjectList<ClientService> filtered2D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
                 image2DView.setItems(filtered2D);
                 current2DServiceList = (ClientObjectList)filtered2D;

@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import javafx.collections.ListChangeListener;
 import net.patho234.controls.elements.CaseFilterPaneController;
 import net.patho234.entities.ClientObjectBase;
+import net.patho234.entities.ClientService;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IClientObjectFilter;
 import net.patho234.interfaces.client.IDtmsSearch;
@@ -132,6 +133,17 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         
         this.originalList = newOriginalItems;
         originalList.addListener( originalListListener );
+        if( newOriginalItems.size() > 0 ){
+            if(newOriginalItems.get(0).getClass().equals(ClientService.class)){
+                Logger.getLogger(getClass()).info("original_list for services changed (new size="+originalList.size()+")");
+                int index=0;
+//                for(ClientObjectBase cob : originalList){
+//                    System.out.println("--- ["+index+"]: "+cob.toString());
+//                }
+            }
+        }else{
+            Logger.getLogger(getClass()).info("original_list for services changed to EMPTY LIST");
+        }
         updateSearchResult();
     }
 
