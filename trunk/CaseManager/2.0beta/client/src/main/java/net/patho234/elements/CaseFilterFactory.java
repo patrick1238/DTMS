@@ -17,12 +17,11 @@ import org.jboss.logging.Logger;
 public class CaseFilterFactory {
     
     static List<FilterPane> create2DFilterPanes(){
-        // TODO parse correct service def and create all required filters
         ArrayList<FilterPane> createdFilters = new ArrayList<>();
         Logger.getLogger(CaseFilterFactory.class).info("create2DFilterPanes()");
         String allStringFilterAsString = Settings.get("dtms.string_filters");
         if (allStringFilterAsString != "" && allStringFilterAsString != null){
-            Logger.getLogger(CaseFilterFactory.class).info("Loading 2D filter GUI elements from settings.");
+            Logger.getLogger(CaseFilterFactory.class).info("Loading 2D string filter GUI elements from settings.");
             String[] splitFilter = allStringFilterAsString.split(";");
             
             for(String filter : splitFilter){

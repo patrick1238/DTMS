@@ -90,9 +90,9 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
             int count=0;
             for( IClientObjectFilter filter : categoryList ){
                 count++;
-                Logger.getLogger(getClass()).info("internalSearchResultUpdate(): Applying filter "+filter.toString()+" ("+count+"/"+categoryList.size()+")");
+                // Logger.getLogger(getClass()).info("internalSearchResultUpdate(): Applying filter "+filter.toString()+" ("+count+"/"+categoryList.size()+")");
                 workingList = (ClientObjectList<T>)filter.filterClientObjectList(workingList);
-                Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
+                // Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
             }
         }
         Logger.getLogger(getClass()).info("Updating search result - filtered list has "+workingList.size()+" entries.");
