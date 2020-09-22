@@ -22,13 +22,13 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
     String searchTerm="";
     String serviceType=null;
     String filterMode="contains";
-    public final String MODE_EQUALS="equals";
-    public final String MODE_EQUALS_CASE_SENSITIVE="equals_cs";
-    public final String MODE_STARTS_WITH="starts_with";
-    public final String MODE_STARTS_WITH_CASE_SENSITIVE="starts_with_cs";
-    public final String MODE_CONTAINS="contains";
-    public final String MODE_CONTAINS_CASE_SENSITIVE="contains_cs";
-    
+    public final static String MODE_EQUALS="equals";
+    public final static String MODE_EQUALS_CASE_SENSITIVE="equals_cs";
+    public final static String MODE_STARTS_WITH="starts_with";
+    public final static String MODE_STARTS_WITH_CASE_SENSITIVE="starts_with_cs";
+    public final static String MODE_CONTAINS="contains";
+    public final static String MODE_CONTAINS_CASE_SENSITIVE="contains_cs";
+    public final static String[] MODES=new String[]{MODE_EQUALS,MODE_STARTS_WITH,MODE_CONTAINS};
     public CaseServiceMetadataStringFilter(String metadataFieldName){
         this(metadataFieldName, "");
     }
@@ -83,7 +83,25 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
         
     }
     
-    public void setSearchMode(String mode){ this.filterMode = mode; }
+    public void setSearchMode(String mode){ this.filterMode = mode; notifyAllListeners(); }
+    public void setSearchMode(Integer mode){
+        setSearchMode( CaseServiceMetadataStringFilter.MODES[mode%3] );
+    }
+    public Integer getSearchMode(){
+        switch( filterMode ){
+            case MODE_CONTAINS:
+            case MODE_CONTAINS_CASE_SENSITIVE:
+                return 0;
+            case MODE_STARTS_WITH:
+            case MODE_STARTS_WITH_CASE_SENSITIVE:
+                return 1;
+            case MODE_EQUALS:
+            case MODE_EQUALS_CASE_SENSITIVE:
+                return 2;
+            default:
+                return -1;
+        }
+    }
 
     public void setServiceType(String serviceType){ this.serviceType = serviceType; }
     

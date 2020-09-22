@@ -111,7 +111,7 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
         lblMetadataFieldName=new Label(metadataFieldName);
         lblMetadataFieldName.setPrefSize(100, 30);
         lblHeaderSpacer=new Label("");
-        lblHeaderSpacer.setPrefSize(100, 25);
+        lblHeaderSpacer.setPrefSize(135, 25);
         
         lblMinField = new Label("min");
         lblMinField.setPrefSize(50, 25);
@@ -128,15 +128,22 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
         txtEqualField = new TextField();
         txtEqualField.setPrefSize(50, 30);
         
+        FilterModePicker modePicker = new FilterModePicker("o", this);
+        modePicker.setOpacity(1);
+        modePicker.setMinSize(30, 30);
+        
         boxHeader.getChildren().add(lblHeaderSpacer);
         boxHeader.getChildren().add(lblMinField);
         boxHeader.getChildren().add(lblMaxField);
         boxHeader.getChildren().add(lblEqualField);
         
         boxBody.getChildren().add(lblMetadataFieldName);
+        boxBody.getChildren().add(modePicker);
         boxBody.getChildren().add(txtMinField);
         boxBody.getChildren().add(txtMaxField);
         boxBody.getChildren().add(txtEqualField);
+        
+        
         
         this.getChildren().add(boxHeader);
         this.getChildren().add(boxBody);
@@ -147,6 +154,8 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
         AnchorPane.setTopAnchor(boxHeader, 0.);
         AnchorPane.setLeftAnchor(boxHeader, 0.);
         AnchorPane.setRightAnchor(boxHeader, 0.);
+        
+        updateGui();
     }
 
     @Override
@@ -163,5 +172,47 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
         
         return castedValue;
     }
-    
+
+    @Override
+    public void nextFilterMode() {
+        filter.setSearchMode( filter.getSearchMode()+1 );
+        updateGui();
+    }
+    private void updateGui(){
+        switch(filter.getSearchMode()){
+            case CaseServiceMetadataIntegerFilter.MODE_MIN:
+                lblEqualField.setOpacity(0.5);
+                txtEqualField.setDisable(true);
+                lblMinField.setOpacity(1);
+                txtMinField.setDisable(false);
+                lblMaxField.setOpacity(0.5);
+                txtMaxField.setDisable(true);
+                break;
+            case CaseServiceMetadataIntegerFilter.MODE_MAX:
+                lblEqualField.setOpacity(0.5);
+                txtEqualField.setDisable(true);
+                lblMinField.setOpacity(0.5);
+                txtMinField.setDisable(true);
+                lblMaxField.setOpacity(1);
+                txtMaxField.setDisable(false);
+                break;
+            case CaseServiceMetadataIntegerFilter.MODE_MIN_MAX:
+                lblEqualField.setOpacity(0.5);
+                txtEqualField.setDisable(true);
+                lblMinField.setOpacity(1);
+                txtMinField.setDisable(false);
+                lblMaxField.setOpacity(1);
+                txtMaxField.setDisable(false);
+                break;
+            case CaseServiceMetadataIntegerFilter.MODE_EQUALS:
+                lblEqualField.setOpacity(1);
+                txtEqualField.setDisable(false);
+                lblMinField.setOpacity(0.5);
+                txtMinField.setDisable(true);
+                lblMaxField.setOpacity(0.5);
+                txtMaxField.setDisable(true);
+                break;
+        }
+        
+    }
 }

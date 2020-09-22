@@ -79,6 +79,11 @@ public class CaseStringMetadataFilterPane extends FilterPane{
     public ClientObjectFilterBase getFilter() {
         return filter;
     }
+
+    @Override
+    public void nextFilterMode() {
+        filter.setSearchMode(filter.getSearchMode()+1);
+    }
     
     
     

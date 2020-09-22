@@ -124,8 +124,12 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
         
     }
     
-    public void setSearchMode(Integer mode){ this.filterMode.setValue( mode != null ? mode : MODE_MIN ); }
-
+    public void setSearchMode(Integer mode){
+        this.filterMode.setValue( mode != null ? ((mode<4)? mode : 0) : MODE_MIN );
+        notifyAllListeners();
+    }
+    public Integer getSearchMode(){ return this.filterMode.getValue(); }
+    
     public void setServiceType(String serviceType){ this.serviceType = serviceType; }
     
     private boolean checkConstrained(IMetadata m) {

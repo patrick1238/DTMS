@@ -14,4 +14,5 @@ import net.patho234.entities.filter.ClientObjectFilterBase;
  */
 abstract public class FilterPane extends AnchorPane {
     abstract public ClientObjectFilterBase getFilter();
+    abstract public void nextFilterMode();
 }
