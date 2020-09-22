@@ -1,111 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="418.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.FilterController">
+<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.FilterController">
    <children>
       <VBox prefHeight="545.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="1500.0" prefWidth="200.0">
+            <FlowPane hgap="5.0" vgap="10.0">
                <children>
-                  <VBox prefHeight="296.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <Button mnemonicParsing="false" onAction="#casesClicked" text="Case">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#twoDimClicked" text="2D">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#threeDimClicked" text="3D">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#fourDimClicked" text="4D">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
+                  <Button mnemonicParsing="false" onAction="#genomicsClicked" text="Genomics">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                <Button mnemonicParsing="false" onAction="#methClicked" text="Methylation">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+               </children>
+            </FlowPane>
+            <VBox prefHeight="296.0" prefWidth="418.0">
+               <children>
+                  <AnchorPane VBox.vgrow="ALWAYS">
                      <children>
-                        <HBox prefHeight="45.0" prefWidth="418.0">
+                        <StackPane fx:id="filterStack" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#casesClicked" text="Case">
-                                 <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </HBox.margin></Button>
-                              <Button mnemonicParsing="false" onAction="#twoDimClicked" text="2D">
-                                 <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </HBox.margin></Button>
-                              <Button mnemonicParsing="false" onAction="#threeDimClicked" text="3D">
-                                 <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </HBox.margin></Button>
-                              <Button mnemonicParsing="false" onAction="#fourDimClicked" text="4D">
-                                 <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </HBox.margin></Button>
-                              <Button mnemonicParsing="false" onAction="#genomicsClicked" text="Genomics">
-                                 <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </HBox.margin></Button>
-                            <Button mnemonicParsing="false" onAction="#methClicked" text="Methylation">
-                                 <HBox.margin>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </HBox.margin></Button>
-                           </children>
-                        </HBox>
-                        <AnchorPane prefHeight="257.0" prefWidth="418.0" VBox.vgrow="ALWAYS">
-                           <children>
-                              <ScrollPane prefHeight="253.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <content>
-                                  <AnchorPane minHeight="100.0" minWidth="150.0" prefHeight="250.0" prefWidth="350.0">
-                                       <children>
-                                          <StackPane fx:id="filterStack" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <AnchorPane fx:id="casePane" prefHeight="200.0" prefWidth="200.0" />
-                                                <AnchorPane fx:id="twoDimPane" prefHeight="200.0" prefWidth="200.0" />
-                                                <AnchorPane fx:id="threeDimPane" prefHeight="200.0" prefWidth="200.0" />
-                                                <AnchorPane fx:id="fourDimPane" prefHeight="200.0" prefWidth="200.0" />
-                                                <AnchorPane fx:id="genomicsPane" prefHeight="200.0" prefWidth="200.0" />
-                                                <AnchorPane fx:id="methPane" prefHeight="200.0" prefWidth="200.0" />
-                                             </children></StackPane>
-                                       </children></AnchorPane>
-                                </content>
+                              <ScrollPane fx:id="caseScrollPane" hbarPolicy="NEVER">
+                                 <content>
+                                    <AnchorPane fx:id="casePane" minHeight="200.0" minWidth="200.0" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="twoDimScrollPane" hbarPolicy="NEVER">
+                                 <content>
+                                    <AnchorPane fx:id="twoDimPane" minHeight="200.0" minWidth="200.0" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="threeDimScrollPane" hbarPolicy="NEVER">
+                                 <content>
+                                    <AnchorPane fx:id="threeDimPane" minHeight="200.0" minWidth="200.0" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="fourDimScrollPane" hbarPolicy="NEVER">
+                                 <content>
+                                    <AnchorPane fx:id="fourDimPane" minHeight="200.0" minWidth="200.0" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="genomicsScrollPane" hbarPolicy="NEVER" StackPane.alignment="TOP_LEFT">
+                                 <content>
+                                    <AnchorPane fx:id="genomicsPane" minHeight="200.0" minWidth="200.0" />
+                                 </content>
+                              </ScrollPane>
+                              <ScrollPane fx:id="methScrollPane" hbarPolicy="NEVER" StackPane.alignment="TOP_LEFT">
+                                 <content>
+                                    <AnchorPane fx:id="methPane" minHeight="200.0" minWidth="200.0" />
+                                 </content>
                               </ScrollPane>
                            </children>
-                        </AnchorPane>
+                        </StackPane>
                      </children>
-                  </VBox>
+                  </AnchorPane>
                </children>
-            </AnchorPane>
-            <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="417.0">
+            </VBox>
+            <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="250.0">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox maxHeight="200.0" minHeight="200.0" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="caseCounter" layoutX="82.0" layoutY="6.0" mnemonicParsing="false" onAction="#caseCounterClicked" text="X Cases" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="twoDimCounter" mnemonicParsing="false" onAction="#twoDimCounterClicked" text="X 2D Images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="threeDimCounter" mnemonicParsing="false" onAction="#threeDimCounterClicked" text="X 3D Images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="fourDimCounter" mnemonicParsing="false" onAction="#fourDimCounterClicked" text="X 4D Images" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="genomicsCounter" mnemonicParsing="false" onAction="#genomicsCounterClicked" text="X Genomics" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="methCounter" mnemonicParsing="false" onAction="#methCounterClicked" text="X Methylation" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
+                        <Button fx:id="caseCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#caseCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X Cases" />
+                        <Button fx:id="twoDimCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#twoDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 2D Images" />
+                        <Button fx:id="threeDimCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#threeDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 3D Images" />
+                        <Button fx:id="fourDimCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#fourDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 4D Images" />
+                        <Button fx:id="genomicsCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#genomicsCounterClicked" prefHeight="40.0" text="X Genomics" />
+                        <Button fx:id="methCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#methCounterClicked" prefHeight="40.0" text="X Methylation" />
                      </children>
                   </VBox>
                </children>

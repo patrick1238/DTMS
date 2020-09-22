@@ -83,7 +83,7 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
      */
     private void internalSearchResultUpdate(){
         long timestamp = System.currentTimeMillis();
-        Logger.getLogger(getClass()).info("Updating search result - original list has "+originalList.size()+" entries.");
+        Logger.getLogger(getClass()).info("Updating search result ["+identifier+"] - original list has "+originalList.size()+" entries.");
         ClientObjectList<T> workingList=new ClientObjectList<>();
         workingList.addAll(originalList);
         for( List<IClientObjectFilter<? super ClientObjectBase>> categoryList : filterList.values() ){
@@ -92,10 +92,10 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
                 count++;
                 // Logger.getLogger(getClass()).info("internalSearchResultUpdate(): Applying filter "+filter.toString()+" ("+count+"/"+categoryList.size()+")");
                 workingList = (ClientObjectList<T>)filter.filterClientObjectList(workingList);
-                // Logger.getLogger(getClass()).info("Filter "+filter+" applied: ");
+                Logger.getLogger(getClass()).info("Updating search result ["+identifier+"] - Filter "+filter.toString()+" applied ->  "+workingList.size()+" entries passed the filter.");
             }
         }
-        Logger.getLogger(getClass()).info("Updating search result - filtered list has "+workingList.size()+" entries.");
+        Logger.getLogger(getClass()).info("Updating search result ["+identifier+"] - filtered list has "+workingList.size()+" entries.");
         resultList = workingList;
         Double totalTime = (System.currentTimeMillis() - timestamp) / 1000.d;
         String strTotalTime = String.format("%.3f", totalTime);
@@ -198,11 +198,11 @@ public class DtmsSearch<T extends ClientObjectBase> implements IDtmsSearch<T>{
         
         @Override
         public void run(){
-            java.util.logging.Logger.getLogger(getClass().getName()).info("Shutting down CaseFilterUpdateThread.");
+            java.util.logging.Logger.getLogger(getClass().getName()).info("Shutting down TerminateUpdateFilterThread.");
             threadToTerminate.isRunning=false;
             threadToTerminate.interrupt();
             while (threadToTerminate.isAlive() && ! threadToTerminate.isInterrupted() ){
-                java.util.logging.Logger.getLogger(getClass().getName()).info("Waiting for shut down of CaseFilterUpdateThread.");
+                java.util.logging.Logger.getLogger(getClass().getName()).info("Waiting for shut down of TerminateUpdateFilterThread.");
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {

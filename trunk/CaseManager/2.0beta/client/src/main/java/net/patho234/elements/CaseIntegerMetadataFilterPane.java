@@ -59,7 +59,7 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 filter.setMinValue(castValue(t1));
-                if(txtMinField.getText().equals("")){
+                if(t1.equals("")){
                     lblMinField.setBackground(new Background(new BackgroundFill(new Color(0.96, 0.96, 0.96, 1.), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 else if(castValue(t1)==null){
@@ -74,7 +74,7 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 filter.setMaxValue(castValue(t1));
-                if(txtMaxField.getText().equals("")){
+                if(t1.equals("")){
                     lblMaxField.setBackground(new Background(new BackgroundFill(new Color(0.96, 0.96, 0.96, 1.), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 else if(castValue(t1)==null){
@@ -89,7 +89,7 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
                 filter.setEqualValue(castValue(t1));
-                if(txtEqualField.getText().equals("")){
+                if(t1.equals("")){
                     lblEqualField.setBackground(new Background(new BackgroundFill(new Color(0.96, 0.96, 0.96, 1.), CornerRadii.EMPTY, Insets.EMPTY)));
                 }
                 else if(castValue(t1)==null){
@@ -156,6 +156,7 @@ public class CaseIntegerMetadataFilterPane extends FilterPane{
     
     public Integer castValue(String strValue){
         Integer castedValue = null;
+        if(strValue==""){ return null; }
         try{
             castedValue = Integer.valueOf(strValue);
         }catch( NumberFormatException ccEx ){ /*ignored we just return null*/ }

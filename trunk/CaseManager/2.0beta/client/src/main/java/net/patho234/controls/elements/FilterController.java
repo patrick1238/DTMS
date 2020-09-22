@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -41,6 +42,12 @@ public class FilterController implements Initializable {
     private AnchorPane twoDimPane;
     @FXML
     private AnchorPane threeDimPane;
+    @FXML
+    private ScrollPane caseScrollPane;
+    @FXML
+    private ScrollPane twoDimScrollPane;
+    @FXML
+    private ScrollPane threeDimScrollPane;
     @FXML
     private AnchorPane fourDimPane;
     @FXML
@@ -70,10 +77,10 @@ public class FilterController implements Initializable {
         
         try {
             caseFilterPane=new CaseFilterPane();
-            //AnchorPane.setBottomAnchor(caseFilterPane, 0.);
+            AnchorPane.setBottomAnchor(caseFilterPane, 0.);
             AnchorPane.setLeftAnchor(caseFilterPane, 0.);
             AnchorPane.setTopAnchor(caseFilterPane, 0.);
-            //AnchorPane.setRightAnchor(caseFilterPane, 0.);
+            AnchorPane.setRightAnchor(caseFilterPane, 0.);
         } catch (IOException ex) {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load CaseFilterPane from fxml file.", ex);
         }
@@ -84,10 +91,10 @@ public class FilterController implements Initializable {
         
         try {
             case2DFilterPane=new Case2DFilterPane();
-            //AnchorPane.setBottomAnchor(case2DFilterPane, 0.);
+            AnchorPane.setBottomAnchor(case2DFilterPane, 0.);
             AnchorPane.setLeftAnchor(case2DFilterPane, 0.);
             AnchorPane.setTopAnchor(case2DFilterPane, 0.);
-            //AnchorPane.setRightAnchor(case2DFilterPane, 0.);
+            AnchorPane.setRightAnchor(case2DFilterPane, 0.);
         } catch (Exception ex) {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
         }
@@ -97,10 +104,10 @@ public class FilterController implements Initializable {
         Case3DFilterPane case3DFilterPane=null;
         try {
             case3DFilterPane=new Case3DFilterPane();
-            //AnchorPane.setBottomAnchor(case3DFilterPane, 0.);
+            AnchorPane.setBottomAnchor(case3DFilterPane, 0.);
             AnchorPane.setLeftAnchor(case3DFilterPane, 0.);
             AnchorPane.setTopAnchor(case3DFilterPane, 0.);
-            //AnchorPane.setRightAnchor(case3DFilterPane, 0.);
+            AnchorPane.setRightAnchor(case3DFilterPane, 0.);
         } catch (Exception ex) {
             Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
         }
@@ -120,21 +127,21 @@ public class FilterController implements Initializable {
     @FXML
     private void casesClicked(ActionEvent event) {
         backPane.toFront();
-        casePane.toFront();
+        caseScrollPane.toFront();
     }
 
     @FXML
     private void twoDimClicked(ActionEvent event) {
         Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing 2D filter pane to front.");
         backPane.toFront();
-        twoDimPane.toFront();
+        twoDimScrollPane.toFront();
     }
 
     @FXML
     private void threeDimClicked(ActionEvent event) {
         Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing 3D filter pane to front.");
         backPane.toFront();
-        threeDimPane.toFront();
+        threeDimScrollPane.toFront();
     }
 
     @FXML

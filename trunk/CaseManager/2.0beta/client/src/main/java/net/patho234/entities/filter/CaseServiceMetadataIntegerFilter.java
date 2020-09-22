@@ -27,8 +27,8 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
     
     String metadataFieldName=null;
     
-    Integer minValue=0;
-    Integer maxValue=Integer.MAX_VALUE;
+    Integer minValue=null;
+    Integer maxValue=null;
     Integer eqValue=null;
     
     String serviceType=null;
@@ -54,7 +54,7 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
         this.minValue = filterValues[0];
         this.maxValue = filterValues[1];
         this.eqValue = filterValues[2];
-        
+        System.out.println("@INIT_FILTER: min="+minValue+" max="+maxValue+" eq="+eqValue);
         this.serviceType = serviceType;
         
         filterMode = (filterMode==null) ? MODE_MIN : filterMode;
@@ -64,36 +64,51 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
     public void setMinValue(Integer newMin){
         if( Objects.equals( this.minValue, newMin) ){ return; }
         this.minValue = newMin;
+        System.out.println("@NEW_VALUE MIN= "+newMin);
         notifyAllListeners();
     }
     
     public void setMaxValue(Integer newMax){
         if( Objects.equals( this.maxValue, newMax) ){ return; }
         this.maxValue = newMax;
+        System.out.println("@NEW_VALUE MAX= "+newMax);
         notifyAllListeners();
     }
     
     public void setEqualValue(Integer newEq){
         if( Objects.equals( this.eqValue, newEq) ){ return; }
         this.eqValue = newEq;
+        System.out.println("@NEW_VALUE EQ= "+newEq);
         notifyAllListeners();
     }
     
     @Override
     public boolean isClientObjectInScope(ClientObjectBase clientObject) {
-        if( filterMode.equals(MODE_MIN) && minValue==null ){ return true; }
-        if( filterMode.equals(MODE_MAX) && maxValue==null ){ return true; }
-        if( filterMode.equals(MODE_EQUALS) && eqValue==null ){ return true; }
+        if( filterMode.getValue().equals(MODE_MIN) && minValue==null ){ return true; }
+        if( filterMode.getValue().equals(MODE_MAX) && maxValue==null ){ return true; }
+        if( filterMode.getValue().equals(MODE_EQUALS) && eqValue==null ){ return true; }
+        if( filterMode.getValue().equals(MODE_MIN_MAX) && (minValue==null && maxValue==null) ){ return true; }
+        
+        Logger.getLogger(getClass()).info("isClientObjectInScope() - performing check: "+toString());
+        
         
         if( clientObject.getClass().equals(ClientCase.class) ){
             List<IService> services = ((ClientCase)clientObject).getServices();
             for(IService service:services){
                 for(IMetadata m : service.getMetadata()){
                     if( m.getName().equals(metadataFieldName) ){
-                        if (checkConstrained(m)){ return true; }
+                        if (checkConstrained(m)){
+                            Logger.getLogger(getClass()).info("@ACCEPTED:");
+                            Logger.getLogger(getClass()).info("          Case: "+service.getCase().getCaseNumber()+" Service: "+service.getServiceDefinition().getName()+" Meta: "+m.getName()+"="+m.getData());
+                            return true;
+                        }else{
+                            Logger.getLogger(getClass()).info("@REJECTED:");
+                            Logger.getLogger(getClass()).info("          Case: "+service.getCase().getCaseNumber()+" Service: "+service.getServiceDefinition().getName()+" Meta: "+m.getName()+"="+m.getData());
+                        }
                     }
                 }
             }
+            
             return false;
         } else if ( clientObject.getClass().equals(ClientService.class) ){
             IService service = ((ClientService)clientObject);
@@ -117,7 +132,7 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
 //        Logger.getLogger(getClass()).info("+++ Checking contraint on "+m.getName()+" - values are: '"+searchTerm+"' & '"+m.getData().toString()+"'");
         if( serviceType != null ){
             if( !m.getService().getServiceDefinition().getName().equals(this.serviceType)){
-//                Logger.getLogger(getClass()).info("+++ ClientObject is rejected - wrong Service TYPE (found: "+m.getService().getServiceDefinition().getName()+" expected: "+this.serviceType+")");
+                Logger.getLogger(getClass()).info("+++ ClientObject is rejected - wrong Service TYPE (found: "+m.getService().getServiceDefinition().getName()+" expected: "+this.serviceType+")");
                 return false;
             }
         }
@@ -126,12 +141,15 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
             tmpValueToCheck=(Integer)m.getData();
         } catch (ClassCastException e) {
             // can not fullfil constrains cause is no Integer / should actually not happen
+            Logger.getLogger(getClass()).info("+++ ClientObject is rejected - cannot be casted to Integer ( "+m.getData()+" )");
             return false;
         }
         boolean minCheck;
         boolean maxCheck;
         switch( filterMode.getValue() ){
             case MODE_MIN:
+                String checkResult = ( minValue==null ) ? "minValue="+minValue + " check: -":"minValue="+minValue + " check: "+(tmpValueToCheck >= minValue);
+                Logger.getLogger(getClass()).info("+++ Performing min-check: "+checkResult+" ");
                 return ( minValue==null ) ? true : tmpValueToCheck >= minValue;
             case MODE_MAX:
                 return ( maxValue==null ) ? true : tmpValueToCheck <= maxValue;
@@ -140,6 +158,8 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
                 maxCheck = ( maxValue==null ) ? true : tmpValueToCheck <= maxValue;
                 return minCheck && maxCheck;
             case MODE_EQUALS:
+                String checkResult2 = ( eqValue==null ) ? "minValue="+eqValue + " check: -":"eqValue="+eqValue + " check: "+(tmpValueToCheck == eqValue);
+                Logger.getLogger(getClass()).info("+++ Performing min-check: "+checkResult2+" ");
                 return ( eqValue==null ) ? true : tmpValueToCheck == eqValue;
             default:
                 Logger.getLogger(getClass()).warn("+++ filterMode of CaseServiceMetadataIntegerFilter is set to an unknown value ('"+filterMode+"'), will return false by default for all items.");
@@ -161,5 +181,25 @@ public class CaseServiceMetadataIntegerFilter  extends ClientObjectFilterBase{
                 Logger.getLogger(CaseServiceMetadataIntegerFilter.class).warn("String '"+modeAsString+"' cannot be converted into a proper filter mode -> returning NULL");
                 return null;
         }
+    }
+    public String getModeAsString(){
+        switch ( filterMode.getValue() ){
+            case MODE_MIN:
+                return "min";
+            case MODE_MAX:
+                return "max";
+            case MODE_MIN_MAX:
+                return "min_max";
+            case MODE_EQUALS:
+                return "equals";
+            default:
+                Logger.getLogger(CaseServiceMetadataIntegerFilter.class).warn("Mode '"+filterMode.getValue()+"' cannot be converted into a proper filter mode string -> returning NULL");
+                return null;
+        }
+    }
+    
+    @Override
+    public String toString(){
+        return "MetadataIntegerFilter@"+getModeAsString()+"?"+minValue+":"+maxValue+":"+eqValue;
     }
 }

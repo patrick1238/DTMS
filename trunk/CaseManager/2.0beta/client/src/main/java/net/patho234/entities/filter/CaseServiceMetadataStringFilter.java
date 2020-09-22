@@ -149,4 +149,9 @@ public class CaseServiceMetadataStringFilter  extends ClientObjectFilterBase{
                 return false;
         }
     }
+    
+    @Override
+    public String toString(){
+        return "MetadataStringFilter@"+filterMode+"?"+searchTerm;
+    }
 }
