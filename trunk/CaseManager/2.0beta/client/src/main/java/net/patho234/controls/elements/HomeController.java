@@ -8,23 +8,24 @@ package net.patho234.controls.elements;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import net.patho234.entities.filter.ClientObjectSearchManager;
-import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.interfaces.IDataDisplay;
-import net.patho234.interfaces.IMetadataValue;
+import net.patho234.interfaces.client.ClientObjectList;
+import net.patho234.interfaces.client.IDtmsSearchListener;
 
 /**
  * FXML Controller class
  *
  * @author patri
  */
-public class HomeController implements Initializable {
+public class HomeController implements Initializable, IDtmsSearchListener {
 
     @FXML
     private Button caseButton;
@@ -159,6 +160,36 @@ public class HomeController implements Initializable {
             }else{
                 System.out.println(key);
             }
+        }
+    }
+
+    @Override
+    public void receiveSearchResults(ClientObjectList newResults, String searchIdentifier) {
+        if(caseButton==null){ 
+            Logger.getLogger(getClass().getName()).warning("HomePane received SearchResult before finished loading...skipping");
+            return;
+        }
+        switch( searchIdentifier ){
+            case "global_cases":
+                Platform.runLater(() -> { caseButton.setText("Cases: " + Integer.toString(newResults.size()));  });
+                break;
+            case "global_2D":
+                Platform.runLater(() -> { twoDimButton.setText("2D: " + Integer.toString(newResults.size()));  });
+                break;
+            case "global_3D":
+                Platform.runLater(() -> { threeDimButton.setText("3D: " + Integer.toString(newResults.size()));  });
+                break;
+            case "global_4D":
+                Platform.runLater(() -> { fourDimButton.setText("4D: " + Integer.toString(newResults.size()));  });
+                break;
+            case "global_Genome":
+                Platform.runLater(() -> { genomicsButton.setText("Genome: " + Integer.toString(newResults.size()));  });
+                break;
+            case "global_Methylation":
+                Platform.runLater(() -> { methButton.setText("Methylation: " + Integer.toString(newResults.size()));  });
+                break;
+            default:
+                Logger.getLogger("TableViewerWindow").warning("TableViewerWindow.receiveSearchResults() for unknown search result ("+searchIdentifier+")");
         }
     }
 }

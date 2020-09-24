@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,13 +27,15 @@ import javafx.scene.paint.Color;
 import net.patho234.elements.Case2DFilterPane;
 import net.patho234.elements.Case3DFilterPane;
 import net.patho234.elements.CaseFilterPane;
+import net.patho234.interfaces.client.ClientObjectList;
+import net.patho234.interfaces.client.IDtmsSearchListener;
 
 /**
  * FXML Controller class
  *
  * @author patri
  */
-public class FilterController implements Initializable {
+public class FilterController implements Initializable, IDtmsSearchListener {
 
     @FXML
     private StackPane filterStack;
@@ -180,4 +183,33 @@ public class FilterController implements Initializable {
     private void methCounterClicked(ActionEvent event) {
     }
     
+    @Override
+    public void receiveSearchResults(ClientObjectList newResults, String searchIdentifier) {
+        if(caseCounter==null){ 
+            Logger.getLogger(getClass().getName()).warning("HomePane received SearchResult before finished loading...skipping");
+            return;
+        }
+        switch( searchIdentifier ){
+            case "global_cases":
+                Platform.runLater(() -> { caseCounter.setText( Integer.toString(newResults.size())+"  Cases" );  });
+                break;
+            case "global_2D":
+                Platform.runLater(() -> { twoDimCounter.setText( Integer.toString(newResults.size())+"  2D images" );  });
+                break;
+            case "global_3D":
+                Platform.runLater(() -> { threeDimCounter.setText(Integer.toString(newResults.size())+"  3D images");  });
+                break;
+            case "global_4D":
+                Platform.runLater(() -> { fourDimCounter.setText(Integer.toString(newResults.size())+"  4D images");  });
+                break;
+            case "global_Genome":
+                Platform.runLater(() -> { genomicsCounter.setText(Integer.toString(newResults.size())+"  Genome data");  });
+                break;
+            case "global_Methylation":
+                Platform.runLater(() -> { methCounter.setText(Integer.toString(newResults.size())+"  Methylation data");  });
+                break;
+            default:
+                Logger.getLogger("TableViewerWindow").warning("TableViewerWindow.receiveSearchResults() for unknown search result ("+searchIdentifier+")");
+        }
+    }
 }

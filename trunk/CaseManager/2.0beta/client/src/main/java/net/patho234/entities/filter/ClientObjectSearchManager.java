@@ -16,6 +16,7 @@ import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearch;
+import net.patho234.interfaces.client.IDtmsSearchListener;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
 import org.jboss.logging.Logger;
 
@@ -71,6 +72,18 @@ public class ClientObjectSearchManager implements ListChangeListener<ClientObjec
     public IDtmsSearch getSearch( String name ){
         Logger.getLogger(getClass()).info("DtmsSearch[ '"+name+"' ] was requested.");
         return dtmsSearches.get(name);
+    }
+    
+    public void addResultListener(IDtmsSearchListener listener){
+        for( IDtmsSearch s : this.dtmsSearches.values()){
+            s.addDtmsSearchResultListener(listener);
+        }
+    }
+    
+    public void removeResultListener(IDtmsSearchListener listener){
+        for( IDtmsSearch s : this.dtmsSearches.values()){
+            s.removeDtmsSearchResultListener(listener);
+        }
     }
     
 }

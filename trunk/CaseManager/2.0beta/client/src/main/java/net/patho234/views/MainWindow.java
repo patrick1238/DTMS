@@ -35,6 +35,7 @@ import net.patho234.entities.pool.MetadataPool;
 import net.patho234.entities.pool.ServiceDefinitionPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.client.ClientObjectList;
+import net.patho234.interfaces.client.IDtmsSearchListener;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
@@ -42,7 +43,7 @@ import net.patho234.webapp_client.FxmlManager;
  *
  * @author rehkind
  */
-public class MainWindow extends Stage {
+public class MainWindow extends Stage{
 
     MainPaneController controller;
     HomeController homeController;
@@ -239,7 +240,7 @@ public class MainWindow extends Stage {
 
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Terminate status", -1));
         Platform.runLater(() -> { 
-            System.out.println("NO DONE PRELOADING");
+            System.out.println("NOW DONE PRELOADING");
             this.preloadingFinished.set(true);} );
         
     }
@@ -298,6 +299,8 @@ public class MainWindow extends Stage {
         mainViewHandler.put(0,anchor(node));
         HomeController homecontroller = fxmlLoader2.getController();
         homecontroller.setDisplay(this.tableviewer);
+        
+        ClientObjectSearchManager.create().addResultListener(homecontroller);
         fxmlLoader2 = new FXMLLoader(this.getClass().getResource("/fxml/elements/fx_filter_pane.fxml"));
         node = null;
         try {
@@ -316,6 +319,7 @@ public class MainWindow extends Stage {
             Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for main window...exiting.", ex);
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
+        ClientObjectSearchManager.create().addResultListener(filtercontroller);
         mainViewHandler.put(2,anchor(node));
         ExportController exportcontroller = fxmlLoader2.getController();
         controller.setPossibleDisplays(mainViewHandler);
