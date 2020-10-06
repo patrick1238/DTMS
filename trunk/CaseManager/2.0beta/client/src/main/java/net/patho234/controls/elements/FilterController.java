@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import net.patho234.elements.Case2DFilterPane;
 import net.patho234.elements.Case3DFilterPane;
+import net.patho234.elements.Case4DFilterPane;
 import net.patho234.elements.CaseFilterPane;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearchListener;
@@ -51,6 +52,8 @@ public class FilterController implements Initializable, IDtmsSearchListener {
     private ScrollPane twoDimScrollPane;
     @FXML
     private ScrollPane threeDimScrollPane;
+    @FXML
+    private ScrollPane fourDimScrollPane;
     @FXML
     private AnchorPane fourDimPane;
     @FXML
@@ -112,9 +115,21 @@ public class FilterController implements Initializable, IDtmsSearchListener {
             AnchorPane.setTopAnchor(case3DFilterPane, 0.);
             AnchorPane.setRightAnchor(case3DFilterPane, 0.);
         } catch (Exception ex) {
-            Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case2DFilterPane ERROR occured.", ex);
+            Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case3DFilterPane ERROR occured.", ex);
         }
         threeDimPane.getChildren().add( case3DFilterPane );
+        
+        Case4DFilterPane case4DFilterPane=null;
+        try {
+            case4DFilterPane=new Case4DFilterPane();
+            AnchorPane.setBottomAnchor(case4DFilterPane, 0.);
+            AnchorPane.setLeftAnchor(case4DFilterPane, 0.);
+            AnchorPane.setTopAnchor(case4DFilterPane, 0.);
+            AnchorPane.setRightAnchor(case4DFilterPane, 0.);
+        } catch (Exception ex) {
+            Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Could not load Case4DFilterPane ERROR occured.", ex);
+        }
+        fourDimPane.getChildren().add( case4DFilterPane );
         
         backPane=new Pane();
         //AnchorPane.setBottomAnchor(backPane, 0.);
@@ -149,6 +164,9 @@ public class FilterController implements Initializable, IDtmsSearchListener {
 
     @FXML
     private void fourDimClicked(ActionEvent event) {
+        Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing 4D filter pane to front.");
+        backPane.toFront();
+        fourDimScrollPane.toFront();
     }
 
     @FXML

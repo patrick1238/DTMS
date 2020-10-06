@@ -128,12 +128,12 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
     private void bindTableViewToSearchManger(){
         ClientObjectSearchManager.create().getSearch("global_cases").addDtmsSearchResultListener(this);
         ClientObjectSearchManager.create().getSearch("global_2D").addDtmsSearchResultListener(this);
-//        ClientObjectSearchManager.create().getSearch("global_3D").addDtmsSearchResultListener(this);
-//        ClientObjectSearchManager.create().getSearch("global_4D").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_3D").addDtmsSearchResultListener(this);
+        ClientObjectSearchManager.create().getSearch("global_4D").addDtmsSearchResultListener(this);
     }
 
     @Override
-    public void receiveSearchResults(ClientObjectList newResults, String searchIdentifier) {
+    synchronized public void receiveSearchResults(ClientObjectList newResults, String searchIdentifier) {
         if(tableViews==null){ 
             Logger.getLogger(getClass().getName()).warning("TableViewerWindow received SearchResult before finished loading...skipping");
             return;
@@ -155,20 +155,29 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 strTime = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d);
                 Logger.getLogger(getClass().getName()).info("caseViewTable now has "+caseView.getItems().size()+" items (Search result processed in "+strTime+" seconds)");
                 Logger.getLogger(getClass().getName()).info("Updating input list for global_2D...");
+                
                 ClientObjectList<ClientService> serviceList2D = new ClientObjectList<>();
+                ClientObjectList<ClientService> serviceList3D = new ClientObjectList<>();
+                ClientObjectList<ClientService> serviceList4D = new ClientObjectList<>();
                 ServiceTypeFilter only2DFilter = new ServiceTypeFilter("2D");
+                ServiceTypeFilter only3DFilter = new ServiceTypeFilter("3D");
+                ServiceTypeFilter only4DFilter = new ServiceTypeFilter("4D");
                 for(ClientCase c : currentCaseList){
 //                    System.out.println("adding services for case: "+c.getCaseNumber());
-                    for( Object s : ServicePool.createPool().getAllEntitiesForCase(c) ){
-                        ClientService cs = (ClientService)s;
+//                    for( Object s : ServicePool.createPool().getAllEntitiesForCase(c) ){
+//                        ClientService cs = (ClientService)s;
 //                        System.out.println("--- | "+cs.getId()+" : "+cs.getServiceDefinition().getName());
 //                        for(IMetadata m : cs.getMetadata()){
 //                            System.out.println("    | --- "+m.getName()+" : "+m.getData());
 //                        }
-                    }
+//                    }
                     serviceList2D.addAll( only2DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(c)) );
+                    serviceList3D.addAll( only3DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(c)) );
+                    serviceList4D.addAll( only4DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(c)) );
                 }
                 ClientObjectSearchManager.create().getSearch("global_2D").setOriniginalList(serviceList2D);
+                ClientObjectSearchManager.create().getSearch("global_3D").setOriniginalList(serviceList3D);
+                ClientObjectSearchManager.create().getSearch("global_4D").setOriniginalList(serviceList4D);
                 break;
             case "global_2D":
                 // ========= 2DTableView ===========
@@ -200,11 +209,11 @@ public class TableViewerWindow extends Stage implements IDataDisplay, IDtmsSearc
                 Integer image4DViewIndex=views.get("4D");
                 System.out.println("image4dViewIndex: "+image4DViewIndex);
                 TableView image4DView = tableViews.get(image4DViewIndex);
-                System.out.println("image3DView: "+image4DView);
+                System.out.println("image4DView: "+image4DView);
                 ReadOnlyClientObjectList<ClientService> filtered4D = new ClientServicesForDefinitionFilter(ServiceDefinitionPool.createPool().getEntity(APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_4D)).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)newResults);
                 image4DView.setItems(filtered4D);
                 current4DServiceList = (ClientObjectList)filtered4D;
-                System.out.println("image3DViewTable now has "+image4DView.getItems().size()+" items");
+                System.out.println("image4DViewTable now has "+image4DView.getItems().size()+" items - received list unfiltered: "+newResults.size()+" items");
                 break;
         // *TODO
             default:

@@ -18,17 +18,17 @@ import net.patho234.interfaces.client.IFilterUpdatedListener;
  *
  * @author rehkind
  */
-public class Case3DFilterPane extends AnchorPane implements IFilterUpdatedListener{
+public class Case4DFilterPane extends AnchorPane implements IFilterUpdatedListener{
     List<FilterPane> filterPanes;
     List<ClientObjectFilterBase> filters;
     private VBox box;
     
     
     
-    public Case3DFilterPane(){
-        filterPanes = CaseFilterFactory.create3DFilterPanes();
+    public Case4DFilterPane(){
+        filterPanes = CaseFilterFactory.create4DFilterPanes();
         filters = new ArrayList<>();
-        List<ClientObjectFilterBase> andFilters3D = new ArrayList<>();
+        List<ClientObjectFilterBase> andFilters4D = new ArrayList<>();
         box = new VBox();
         box.setSpacing(5.);
         AnchorPane.setBottomAnchor(box, 10.);
@@ -41,10 +41,11 @@ public class Case3DFilterPane extends AnchorPane implements IFilterUpdatedListen
             filters.add(fp.getFilter());
             fp.getFilter().addFilterUpdatedListener(this);
         }
-        ClientObjectAndFilter service3DFilter=new ClientObjectAndFilter(filters);
-        andFilters3D.add(service3DFilter);
-        ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("3D", filters);
-        ClientObjectSearchManager.create().getSearch("global_3D").setFilterItems("3D", andFilters3D);
+        
+        ClientObjectAndFilter service4DFilter=new ClientObjectAndFilter(filters);
+        andFilters4D.add(service4DFilter);
+        ClientObjectSearchManager.create().getSearch("global_cases").setFilterItems("4D", filters);
+        ClientObjectSearchManager.create().getSearch("global_4D").setFilterItems("4D", andFilters4D);
         this.getChildren().add(box);
     }
     

@@ -120,7 +120,8 @@ public class MainWindow extends Stage{
                         searchManager.createSearch("global_3D", (ClientObjectList) ServicePool.createPool().getAllEntitiesForDefinition(def3D));
                         timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
                         Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime 3D: "+timeStamp);
-                        searchManager.createSearch("global_4D", (ClientObjectList) ServicePool.createPool().getAllEntities());
+                        ClientServiceDefinition def4D = ServiceDefinitionPool.createPool().getEntity( APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_4D );
+                        searchManager.createSearch("global_4D", (ClientObjectList) ServicePool.createPool().getAllEntitiesForDefinition(def4D));
                         timeStamp = String.format("%.3f", (System.currentTimeMillis()-startTime)/1000.d)+" seconds";
                         Logger.getLogger(getClass().getName()).info("DtmsSearch.init() runtime 4D: "+timeStamp);
                         //loadTableViewerWindow();
