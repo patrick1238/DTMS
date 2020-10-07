@@ -6,6 +6,7 @@
 package net.patho234.controls;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import net.patho234.entities.ClientCase;
+import net.patho234.gui.ClientPopup;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
 
@@ -92,12 +94,20 @@ public class CaseController implements Initializable {
     }
 
     @FXML
-    private void saveButtonClicked(ActionEvent event) {
+    private void saveButtonClicked(ActionEvent event) throws IOException {
+        if( dataObject.hasLocalChanges() ){
+            // TODO: check new values and persist to data base
+            new ClientPopup("Case object has changes", "TODO: check new values and persist...").show(this.casePane.getScene().getWindow());
+        }else{
+            new ClientPopup("Case object has no changes", "Object won't be persited...no changes found.").show(this.casePane.getScene().getWindow());
+        }
     }
 
     public void loadCase(ClientCase caseToLoad) {
         dataObject = caseToLoad;
         this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
+        this.diagnoseBox.editorProperty().getValue().textProperty().bindBidirectional( dataObject.getDiagnosisProperty() );
+        
         setUpDisplay();
     }
     
