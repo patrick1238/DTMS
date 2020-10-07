@@ -312,6 +312,7 @@ public class MainWindow extends Stage{
         }
         mainViewHandler.put(1,anchor(node));
         FilterController filtercontroller = fxmlLoader2.getController();
+        filtercontroller.setDisplay(this.tableviewer);
         fxmlLoader2 = new FXMLLoader(this.getClass().getResource("/fxml/elements/fx_export_pane.fxml"));
         node = null;
         try {

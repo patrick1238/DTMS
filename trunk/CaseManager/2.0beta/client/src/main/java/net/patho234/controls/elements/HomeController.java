@@ -50,6 +50,18 @@ public class HomeController implements Initializable, IDtmsSearchListener {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        caseButton.setGraphic(new CountLabel("Cases",0));
+        caseButton.setText("");
+        twoDimButton.setGraphic(new CountLabel("2D images",0));
+        twoDimButton.setText("");
+        threeDimButton.setGraphic(new CountLabel("3D images",0));
+        threeDimButton.setText("");
+        fourDimButton.setGraphic(new CountLabel("4D images",0));
+        fourDimButton.setText("");
+        genomicsButton.setGraphic(new CountLabel("Genomic data",0));
+        genomicsButton.setText("");
+        methButton.setGraphic(new CountLabel("Methylation data",0));
+        methButton.setText("");
     }    
 
     @FXML
@@ -140,22 +152,22 @@ public class HomeController implements Initializable, IDtmsSearchListener {
         this.viewIDs = this.display.getViews();
         for(String key:this.viewIDs.keySet()){
             if(key.equals("Case")){
-                this.caseButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                ((CountLabel)this.caseButton.getGraphic()).setCount( this.display.getVisibleDataCount(this.viewIDs.get(key)) );
                 this.caseButton.setId(key);
             }else if(key.equals("2D")){
-                this.twoDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                ((CountLabel)this.twoDimButton.getGraphic()).setCount( this.display.getVisibleDataCount(this.viewIDs.get(key)) );
                 this.twoDimButton.setId(key);
             }else if(key.equals("3D")){
-                this.threeDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                ((CountLabel)this.threeDimButton.getGraphic()).setCount( this.display.getVisibleDataCount(this.viewIDs.get(key)) );
                 this.threeDimButton.setId(key);
             }else if(key.equals("4D")){
-                this.fourDimButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                ((CountLabel)this.fourDimButton.getGraphic()).setCount( this.display.getVisibleDataCount(this.viewIDs.get(key)) );
                 this.fourDimButton.setId(key);
             }else if(key.equals("Genomics")){
-                this.genomicsButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                ((CountLabel)this.genomicsButton.getGraphic()).setCount( this.display.getVisibleDataCount(this.viewIDs.get(key)) );
                 this.genomicsButton.setId(key);
             }else if(key.equals("Methylation")){
-                this.methButton.setText(key + ": " + Integer.toString(this.display.getVisibleDataCount(this.viewIDs.get(key))));
+                ((CountLabel)this.methButton.getGraphic()).setCount( this.display.getVisibleDataCount(this.viewIDs.get(key)) );
                 this.methButton.setId(key);
             }else{
                 System.out.println(key);
@@ -171,22 +183,22 @@ public class HomeController implements Initializable, IDtmsSearchListener {
         }
         switch( searchIdentifier ){
             case "global_cases":
-                Platform.runLater(() -> { caseButton.setText("Cases: " + Integer.toString(newResults.size()));  });
+                Platform.runLater(() -> { ((CountLabel)this.caseButton.getGraphic()).setCount( newResults.size() );  });
                 break;
             case "global_2D":
-                Platform.runLater(() -> { twoDimButton.setText("2D: " + Integer.toString(newResults.size()));  });
+                Platform.runLater(() -> { ((CountLabel)this.twoDimButton.getGraphic()).setCount( newResults.size() );  });
                 break;
             case "global_3D":
-                Platform.runLater(() -> { threeDimButton.setText("3D: " + Integer.toString(newResults.size()));  });
+                Platform.runLater(() -> { ((CountLabel)this.threeDimButton.getGraphic()).setCount( newResults.size() );  });
                 break;
             case "global_4D":
-                Platform.runLater(() -> { fourDimButton.setText("4D: " + Integer.toString(newResults.size()));  });
+                Platform.runLater(() -> { ((CountLabel)this.fourDimButton.getGraphic()).setCount( newResults.size() );  });
                 break;
             case "global_Genome":
-                Platform.runLater(() -> { genomicsButton.setText("Genome: " + Integer.toString(newResults.size()));  });
+                Platform.runLater(() -> { ((CountLabel)this.genomicsButton.getGraphic()).setCount( newResults.size() );  });
                 break;
             case "global_Methylation":
-                Platform.runLater(() -> { methButton.setText("Methylation: " + Integer.toString(newResults.size()));  });
+                Platform.runLater(() -> { ((CountLabel)this.methButton.getGraphic()).setCount( newResults.size() );  });
                 break;
             default:
                 Logger.getLogger("TableViewerWindow").warning("TableViewerWindow.receiveSearchResults() for unknown search result ("+searchIdentifier+")");

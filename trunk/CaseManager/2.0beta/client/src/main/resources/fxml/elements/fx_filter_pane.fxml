@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.FilterController">
+<AnchorPane id="AnchorPane" prefHeight="545.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.elements.FilterController">
    <children>
       <VBox prefHeight="545.0" prefWidth="418.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -91,12 +96,30 @@
                <children>
                   <VBox maxHeight="200.0" minHeight="200.0" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="caseCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#caseCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X Cases" />
-                        <Button fx:id="twoDimCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#twoDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 2D Images" />
-                        <Button fx:id="threeDimCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#threeDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 3D Images" />
-                        <Button fx:id="fourDimCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#fourDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 4D Images" />
-                        <Button fx:id="genomicsCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#genomicsCounterClicked" prefHeight="40.0" text="X Genomics" />
-                        <Button fx:id="methCounter" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#methCounterClicked" prefHeight="40.0" text="X Methylation" />
+                        <Button fx:id="caseCounter" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#caseCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X Cases" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Button>
+                        <Button fx:id="twoDimCounter" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#twoDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 2D Images" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Button>
+                        <Button fx:id="threeDimCounter" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#threeDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 3D Images" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Button>
+                        <Button fx:id="fourDimCounter" focusTraversable="false" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#fourDimCounterClicked" prefHeight="40.0" prefWidth="500.0" text="X 4D Images" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Button>
+                        <Button fx:id="genomicsCounter" focusTraversable="false" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#genomicsCounterClicked" prefHeight="40.0" text="X Genomics" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Button>
+                        <Button fx:id="methCounter" focusTraversable="false" maxHeight="40.0" maxWidth="1.7976931348623157E308" minHeight="40.0" mnemonicParsing="false" onAction="#methCounterClicked" prefHeight="40.0" text="X Methylation" textAlignment="CENTER">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding></Button>
                      </children>
                   </VBox>
                </children>

@@ -7,6 +7,7 @@ package net.patho234.controls.elements;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,10 +25,13 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import net.patho234.elements.Case2DFilterPane;
 import net.patho234.elements.Case3DFilterPane;
 import net.patho234.elements.Case4DFilterPane;
 import net.patho234.elements.CaseFilterPane;
+import net.patho234.interfaces.IDataDisplay;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.IDtmsSearchListener;
 
@@ -57,7 +61,11 @@ public class FilterController implements Initializable, IDtmsSearchListener {
     @FXML
     private AnchorPane fourDimPane;
     @FXML
+    private ScrollPane genomicsScrollPane;
+    @FXML
     private AnchorPane genomicsPane;
+    @FXML
+    private ScrollPane methScrollPane;
     @FXML
     private AnchorPane methPane;
     @FXML
@@ -74,6 +82,8 @@ public class FilterController implements Initializable, IDtmsSearchListener {
     private Button methCounter;
     
     private Pane backPane;
+    private IDataDisplay display;
+    private HashMap<String,Integer> viewIDs;
     /**
      * Initializes the controller class.
      */
@@ -138,7 +148,19 @@ public class FilterController implements Initializable, IDtmsSearchListener {
         AnchorPane.setRightAnchor(backPane, 0.);
         backPane.setBackground(new Background(new BackgroundFill(Color.grayRgb(245), CornerRadii.EMPTY, Insets.EMPTY)));
         filterStack.getChildren().add(backPane);
-        
+      
+        caseCounter.setGraphic(new CountLabel("Cases",0));
+        caseCounter.setText("");
+        twoDimCounter.setGraphic(new CountLabel("2D images",0));
+        twoDimCounter.setText("");
+        threeDimCounter.setGraphic(new CountLabel("3D images",0));
+        threeDimCounter.setText("");
+        fourDimCounter.setGraphic(new CountLabel("4D images",0));
+        fourDimCounter.setText("");
+        genomicsCounter.setGraphic(new CountLabel("Genomic data",0));
+        genomicsCounter.setText("");
+        methCounter.setGraphic(new CountLabel("Methylation data",0));
+        methCounter.setText("");
         casesClicked(null);
     }    
 
@@ -171,10 +193,16 @@ public class FilterController implements Initializable, IDtmsSearchListener {
 
     @FXML
     private void genomicsClicked(ActionEvent event) {
+        Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing genomics filter pane to front.");
+        backPane.toFront();
+        genomicsScrollPane.toFront();
     }
 
     @FXML
     private void methClicked(ActionEvent event) {
+        Logger.getLogger(FilterController.class.getName()).log(Level.SEVERE, "Bringing methylation filter pane to front.");
+        backPane.toFront();
+        methScrollPane.toFront();
     }
 
     @FXML
@@ -209,25 +237,53 @@ public class FilterController implements Initializable, IDtmsSearchListener {
         }
         switch( searchIdentifier ){
             case "global_cases":
-                Platform.runLater(() -> { caseCounter.setText( Integer.toString(newResults.size())+"  Cases" );  });
+                Platform.runLater(() -> { ((CountLabel)caseCounter.getGraphic()).setCount(newResults.size() );  });
                 break;
             case "global_2D":
-                Platform.runLater(() -> { twoDimCounter.setText( Integer.toString(newResults.size())+"  2D images" );  });
+                Platform.runLater(() -> { ((CountLabel)twoDimCounter.getGraphic()).setCount(newResults.size() );  });
                 break;
             case "global_3D":
-                Platform.runLater(() -> { threeDimCounter.setText(Integer.toString(newResults.size())+"  3D images");  });
+                Platform.runLater(() -> { ((CountLabel)threeDimCounter.getGraphic()).setCount(newResults.size() );  });
                 break;
             case "global_4D":
-                Platform.runLater(() -> { fourDimCounter.setText(Integer.toString(newResults.size())+"  4D images");  });
+                Platform.runLater(() -> { ((CountLabel)fourDimCounter.getGraphic()).setCount(newResults.size() );  });
                 break;
             case "global_Genome":
-                Platform.runLater(() -> { genomicsCounter.setText(Integer.toString(newResults.size())+"  Genome data");  });
+                Platform.runLater(() -> { ((CountLabel)genomicsCounter.getGraphic()).setCount(newResults.size() );  });
                 break;
             case "global_Methylation":
-                Platform.runLater(() -> { methCounter.setText(Integer.toString(newResults.size())+"  Methylation data");  });
+                Platform.runLater(() -> { ((CountLabel)methCounter.getGraphic()).setCount(newResults.size() );  });
                 break;
             default:
                 Logger.getLogger("TableViewerWindow").warning("TableViewerWindow.receiveSearchResults() for unknown search result ("+searchIdentifier+")");
+        }
+    }
+    
+    public void setDisplay(IDataDisplay display){
+        this.display = display;
+        this.viewIDs = this.display.getViews();
+        for(String key:this.viewIDs.keySet()){
+            if(key.equals("Case")){
+                ((CountLabel)this.caseCounter.getGraphic()).setCount(this.display.getVisibleDataCount(this.viewIDs.get(key)) );
+                this.caseCounter.setId(key);
+            }else if(key.equals("2D")){
+                ((CountLabel)this.twoDimCounter.getGraphic()).setCount(this.display.getVisibleDataCount(this.viewIDs.get(key)) );
+                this.twoDimCounter.setId(key);
+            }else if(key.equals("3D")){
+                ((CountLabel)this.threeDimCounter.getGraphic()).setCount(this.display.getVisibleDataCount(this.viewIDs.get(key)) );
+                this.threeDimCounter.setId(key);
+            }else if(key.equals("4D")){
+                ((CountLabel)this.fourDimCounter.getGraphic()).setCount(this.display.getVisibleDataCount(this.viewIDs.get(key)) );
+                this.fourDimCounter.setId(key);
+            }else if(key.equals("Genomics")){
+                ((CountLabel)this.genomicsCounter.getGraphic()).setCount(this.display.getVisibleDataCount(this.viewIDs.get(key)) );
+                this.genomicsCounter.setId(key);
+            }else if(key.equals("Methylation")){
+                ((CountLabel)this.methCounter.getGraphic()).setCount(this.display.getVisibleDataCount(this.viewIDs.get(key)) );
+                this.methCounter.setId(key);
+            }else{
+                System.out.println("No button defined for key "+key+ " in filter pane");
+            }
         }
     }
 }
