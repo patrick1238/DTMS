@@ -8,6 +8,7 @@ package net.patho234.controls;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -120,6 +121,8 @@ public class MainPaneController implements Initializable {
 
     @FXML
     private void closeClicked(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
     }
 
     @FXML
