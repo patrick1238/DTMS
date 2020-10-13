@@ -65,7 +65,6 @@ public class CaseController implements Initializable {
 
     @FXML
     private void addTwoDimClicked(ActionEvent event) {
-        System.out.println("hello");
         final FileChooser fileChooser = new FileChooser();
         Window stage;
         List<File> list

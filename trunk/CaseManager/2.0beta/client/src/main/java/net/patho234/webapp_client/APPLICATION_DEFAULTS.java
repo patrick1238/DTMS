@@ -5,6 +5,8 @@
  */
 package net.patho234.webapp_client;
 
+import java.text.SimpleDateFormat;
+
 /**
  *
  * @author rehkind
@@ -22,5 +24,6 @@ public class APPLICATION_DEFAULTS {
     final public static int SERVICE_DEFINITION_ID_GENOMIC=6;
     final public static int SERVICE_DEFINITION_ID_METHYLATION=7;
     
-    
+    static final public SimpleDateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+    static final public SimpleDateFormat DEFAULT_DATE_SHORT_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
 }

@@ -155,16 +155,25 @@ public class MainWindow extends Stage{
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Timeout during start-up");
-            alert.setHeaderText("Connection to wildfly server could not be established.");
-            alert.setContentText(ex.getMessage());
-            alert.showAndWait();
-
-            System.exit(1);
         }
+        
+        if( ClinicPool.createPool().getEntity(1) == null ){
+            try {
+                Logger.getLogger(getClass().getName()).info("ClinicPool preloading failed...trying a second time.");
+                ClinicPool.createPool().waitFor(30000);
+                Logger.getLogger(getClass().getName()).info("ClinicPool preloaded..."+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
+            } catch (TimeoutException ex2) {
+                Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex2.getMessage()}));
+                ex2.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Timeout during start-up");
+                alert.setHeaderText("Connection to wildfly server could not be established.");
+                alert.setContentText(ex2.getMessage());
+                alert.showAndWait();
 
+                System.exit(1);
+            }
+        }
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading service definitions...", 24));
         startTime = System.currentTimeMillis();
         ServiceDefinitionPool.createPool().getAllEntities(true);

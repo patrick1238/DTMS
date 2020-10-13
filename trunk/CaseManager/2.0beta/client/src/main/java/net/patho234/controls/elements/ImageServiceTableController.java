@@ -5,6 +5,7 @@
  */
 package net.patho234.controls.elements;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import net.patho234.entities.filter.ClientServicesForDefinitionFilter;
 import net.patho234.interfaces.IMetadata;
 import net.patho234.interfaces.IMetadataValue;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.views.ServiceWindow;
 import org.jboss.logging.Logger;
 
 /**
@@ -74,12 +76,11 @@ public class ImageServiceTableController implements Initializable{
                 if( diff <= doubleClickTime ){
                     Logger.getLogger(getClass()).info("Double click on row performed. TODO: call ServiceWindow ?");
                     System.out.println("EventSrc = "+event.getSource());
-                    TableRow<ClientCase> row = (TableRow)event.getSource();
-                    // TODO: create ServiceWindow and include new ServiceWindow().show()
-//                    ClientService selectedService = row.getItem();
-//                    try { new ServiceWindow(selectedService).show(); }catch(IOException ioEx){
-//                        Logger.getLogger(getClass()).warn("Could not load ServiceWindow for selected service '"+selectedService.getID()+"'", ioEx);
-//                    }
+                    TableRow<ClientService> row = (TableRow)event.getSource();
+                    ClientService selectedService = row.getItem();
+                    try { new ServiceWindow(selectedService).show(); }catch(IOException ioEx){
+                        Logger.getLogger(getClass()).warn("Could not load ServiceWindow for selected service '"+selectedService.getIdProperty().getValue()+"'", ioEx);
+                    }
                 }else{
                     Logger.getLogger(getClass()).info("no double click (diff = "+diff+" ms)");
                 }

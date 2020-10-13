@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" fx:id="servicePane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.patho234.controls.ServiceController">
+   <children>
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="365.0" prefWidth="560.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: #999999;">
+               <children>
+                  <Label focusTraversable="false" minWidth="60.0" text="Case:" textFill="WHITE" />
+                  <TextField fx:id="txtCaseNumber" editable="false" prefWidth="300.0" style="-fx-background-color: #bbbbbb;" text="CASE_NUMBER" />
+                  <Label focusTraversable="false" minWidth="120.0" text="Capture Date:" textFill="WHITE" />
+                  <TextField fx:id="txtCaptureDate" editable="false" minWidth="80.0" prefWidth="200.0" style="-fx-background-color: #bbbbbb;" text="DD/MM/YY" />
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" />
+               </padding>
+            </HBox>
+            <AnchorPane prefHeight="600.0" prefWidth="200.0">
+               <children>
+                  <ScrollPane focusTraversable="false" hbarPolicy="NEVER" layoutY="10.0" prefViewportHeight="245.0" prefViewportWidth="580.0">
+                     <content>
+                        <VBox layoutX="37.0" layoutY="23.0" prefHeight="200.0" prefWidth="550.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" minWidth="60.0" prefHeight="60.0" prefWidth="400.0" spacing="5.0">
+                                 <children>
+                                    <Label focusTraversable="false" text="Type" />
+                                    <TextField fx:id="txtServiceDefinition" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children></AnchorPane>
+            <HBox alignment="CENTER_RIGHT" minHeight="60.0" minWidth="100.0" prefHeight="60.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Button fx:id="bttReset" mnemonicParsing="false" onAction="#onResetClicked" text="Reset" />
+                  <Button fx:id="bttSave" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onSaveClicked" text="Save" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
