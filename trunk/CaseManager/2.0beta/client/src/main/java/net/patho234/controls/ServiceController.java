@@ -7,6 +7,7 @@ package net.patho234.controls;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,8 +16,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import net.patho234.elements.MetadataPane;
 import net.patho234.entities.ClientService;
 import net.patho234.gui.ClientPopup;
+import net.patho234.interfaces.IMetadata;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 
 /**
@@ -40,13 +44,17 @@ public class ServiceController implements Initializable {
     private TextField txtCaptureDate;
     @FXML
     private TextField txtServiceDefinition;
+    @FXML
+    private VBox vbMetadataBox;
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        txtServiceDefinition.setStyle("-fx-text-inner-color: #eeeeee;"+txtServiceDefinition.styleProperty().getValue());
+        servicePane.setMinWidth(350);
+        servicePane.setMinHeight(300);
     }
 
     @FXML
@@ -82,7 +90,13 @@ public class ServiceController implements Initializable {
     
     private void setUpDisplay(){
         // check service definition and create gui elements for metadata fields
-        
+        List<IMetadata> metadata = dataObject.getMetadata();
+        vbMetadataBox.getChildren().clear();
+        for(IMetadata md : metadata){
+            MetadataPane newPane = new MetadataPane(md);
+            newPane.setPrefSize(200, 50);
+            vbMetadataBox.getChildren().add(newPane);
+        }
     }
 
 }

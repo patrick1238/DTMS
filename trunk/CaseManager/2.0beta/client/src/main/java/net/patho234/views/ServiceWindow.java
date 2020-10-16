@@ -39,10 +39,15 @@ public class ServiceWindow extends Stage {
         controller.loadService( theService );
         Scene scene = new Scene(root);
         setScene(scene);
+        
+        initView();
     }
     
-    public void initView(){
+    final public void initView(){
         controller.loadService(myService);
-        this.setTitle(myService.getCase().getCaseNumber() + " - " + myService.getServiceDefinition());
+        this.setTitle(myService.getCase().getCaseNumber() + " - " + myService.getServiceDefinition().getName());
+        setMinWidth(400);
+        setMaxWidth(400);
+        setMinHeight(400);
     }   
 }
