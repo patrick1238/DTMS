@@ -18,6 +18,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import net.patho234.elements.MetadataPane;
+import net.patho234.entities.ClientMetadata;
 import net.patho234.entities.ClientService;
 import net.patho234.gui.ClientPopup;
 import net.patho234.interfaces.IMetadata;
@@ -47,6 +48,7 @@ public class ServiceController implements Initializable {
     @FXML
     private VBox vbMetadataBox;
     
+    List<IMetadata> metadata;
     /**
      * Initializes the controller class.
      */
@@ -59,9 +61,9 @@ public class ServiceController implements Initializable {
 
     @FXML
     private void onSaveClicked(ActionEvent event) throws IOException {
-        if( dataObject.hasLocalChanges() ){
+        if( getNumberOfChangedMetadata()>0 ){
             // TODO: check new values and persist to data base
-            new ClientPopup("Service object has changes", "TODO: check new values and persist...").show(this.servicePane.getScene().getWindow());
+            new ClientPopup("Service object has changes - "+getNumberOfChangedMetadata()+" metadata differ", "TODO: check new values and persist...").show(this.servicePane.getScene().getWindow());
         }else{
             new ClientPopup("Service object has no changes", "Object won't be persited...no changes found.").show(this.servicePane.getScene().getWindow());
         }
@@ -69,16 +71,27 @@ public class ServiceController implements Initializable {
     
     @FXML
     private void onResetClicked(ActionEvent event) throws IOException {
-        if( dataObject.hasLocalChanges() ){
+        if( getNumberOfChangedMetadata()>0 ){
             // TODO: check new values and persist to data base
-            new ClientPopup("Service object has changes", "TODO: reset changes...").show(this.servicePane.getScene().getWindow());
+            new ClientPopup("Service object has changes - "+getNumberOfChangedMetadata()+" metadata differ", "TODO: reset changes...").show(this.servicePane.getScene().getWindow());
         }else{
             new ClientPopup("Service object has no changes", "no changes found...nothing todo").show(this.servicePane.getScene().getWindow());
         }
     }
 
+    private Integer getNumberOfChangedMetadata(){
+        Integer numMetadataWithChanges=0;
+        for( IMetadata md : metadata){
+            if( ((ClientMetadata)md).hasLocalChanges() ){
+                numMetadataWithChanges++;
+            }
+        }
+        return numMetadataWithChanges;
+    }
+    
     public void loadService(ClientService serviceToLoad) {
         dataObject = serviceToLoad;
+        metadata = serviceToLoad.getMetadata();
         // todo: bind service property objects and gui
         this.txtCaseNumber.setText(dataObject.getCase().getCaseNumber());
         this.txtCaptureDate.setText(APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( dataObject.getCase().getEntryDate()) );

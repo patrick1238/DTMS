@@ -6,12 +6,16 @@
 package net.patho234.elements;
 
 import java.util.HashSet;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import net.patho234.elements.validator.DoubleTextFieldValidator;
 import net.patho234.elements.validator.IntegerTextFieldValidator;
+import net.patho234.elements.validator.MetadataStringConverter;
+import net.patho234.entities.ClientMetadata;
 import net.patho234.interfaces.IMetadata;
 
 /**
@@ -19,16 +23,17 @@ import net.patho234.interfaces.IMetadata;
  * @author rehkind
  */
 public class MetadataPane extends AnchorPane{
-    
+    MetadataStringConverter converter;
     
     IMetadata metadata;
     public MetadataPane(IMetadata data){
         this.metadata = data;
-
+        this.converter = new MetadataStringConverter(data);
         initGui();
     }
     
     final public void initGui(){
+        
         HBox row=new HBox();
         String key = metadata.getName();
         Object value = metadata.getName();
@@ -61,6 +66,14 @@ public class MetadataPane extends AnchorPane{
         this.getChildren().add(row);
         
         valueField.setText(String.valueOf( metadata.getData() ));
+        valueField.textProperty().addListener(
+            new ChangeListener<String>(){
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    System.out.println("OLD: "+oldValue+" NEW: "+newValue);
+                    metadata.setData(converter.fromString(newValue));
+                }
+        });
     }
     
 }

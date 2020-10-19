@@ -7,6 +7,7 @@ package net.patho234.entities;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Objects;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -15,12 +16,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IMetadata;
 import net.patho234.interfaces.IService;
+import net.patho234.interfaces.client.IClientObject;
 import org.jboss.logging.Logger;
 
 /**
@@ -39,28 +42,33 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     public ClientMetadata(JsonObject asJson) {
         if(asJson==null){ Logger.getLogger(getClass()).fatal("ClientMetadata(): JSONObject is NULL"); }
         System.out.println("AS_JSON: "+asJson.toString());
+        this.original.setValue(asJson);
         ID.setValue(asJson.getInt("serviceId"));
         this.name.setValue(asJson.getString("name"));
         this.type.setValue(asJson.getString("type"));
         
-        switch( type.getValue() ){
-            case "integer":
-            case "int":
-                this.data.setValue( Integer.valueOf( asJson.getString("value") ) );
-                break;
-            case "double":
-                this.data.setValue( Double.valueOf( asJson.getString("value") ) );
-                break;
-            case "string":
-            case "text":
-            case "url":
-                this.data.setValue( asJson.getString("value") );
-                break;
-        }
+        this.data.setValue( castValue(asJson.getString("value")) );
+        
+        ClientMetadata self=this; 
+        ChangeListener listener = new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                IClientObject.notityAllListeners(changeListener, self, self, self);
+            }
+        };
+        data.addListener(listener);
         //this.data.setValue(getDataValue(asJson));
         serviceId.setValue(asJson.getInt("serviceId"));
         
         generateId();
+        this.addListener(
+            new ChangeListener<ClientMetadata>(){
+            @Override
+            public void changed(ObservableValue<? extends ClientMetadata> observable, ClientMetadata oldValue, ClientMetadata newValue) {
+                System.out.println("METADATA_CHANGED to new value: "+getData().toString());
+                Logger.getLogger(getClass()).info("METADATA_CHANGED to new value: "+getData().toString());
+            }
+        });
     }
     
     static public ClientMetadata createTemplate(String name, int serviceId ) {
@@ -85,11 +93,21 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         if( original.getValue() == null ){ return true; }
         
         boolean nameUnchanged = name.getValue().equals(original.getValue().getString("name"));
-        System.out.println(serviceId.getValue()+ "/" +original.getValue().getInt("serviceId"));
         boolean serviceIdUnchanged = serviceId.getValue().equals(original.getValue().getInt("serviceId"));
-        boolean dataUnchanged = this.data.getValue() == original.getValue().get("value");
+        boolean dataUnchanged = Objects.equals(this.data.getValue().toString(), castValue(original.getValue().getString("value")).toString());
         boolean typeUnchanged = this.type.getValue() == original.getValue().getString("type");
-        return nameUnchanged && serviceIdUnchanged && dataUnchanged && typeUnchanged;
+        
+//        if(nameUnchanged && serviceIdUnchanged && dataUnchanged && typeUnchanged){
+//        if(!(nameUnchanged && serviceIdUnchanged && dataUnchanged && typeUnchanged)){
+//            System.out.println(" ----- OLD:");
+//            System.out.println(" -----     |"+this.original.getValue().toString());
+//            System.out.println(" ----- NEW:");
+//            System.out.println(" -----    |"+toJson().toString());
+//            System.out.println(" ----- CHECK:");
+//            System.out.println(" -----    |"+this.data.getValue().toString()+" VS "+castValue(original.getValue().getString("value")));
+//            System.out.println("NAME "+nameUnchanged+"|SERVICE "+serviceIdUnchanged+"|VALUE "+dataUnchanged+"|TYPE ");
+//        }
+        return !(nameUnchanged && serviceIdUnchanged && dataUnchanged && typeUnchanged);
     }
 
     @Override
@@ -174,6 +192,10 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     public T getData() {
         return (T)data.getValue();
     }
+    
+    public ObjectProperty getDataProperty() {
+        return data;
+    }
 
     @Override
     public void setData(T newData) {
@@ -225,5 +247,22 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
 
     public Integer getServiceID() {
         return this.serviceId.getValue();
+    }
+
+    private Object castValue(String string) {
+        switch( type.getValue() ){
+            case "integer":
+            case "int":
+                return Integer.valueOf( string );
+            case "double":
+                return Double.valueOf( string );
+            case "string":
+            case "text":
+            case "url":
+                return string ;
+            default:
+                Logger.getLogger(getClass()).error("Unknown metadata type: "+type.getValue());
+                return null;
+        }
     }
 }
