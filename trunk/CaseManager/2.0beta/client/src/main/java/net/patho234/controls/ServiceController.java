@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeoutException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +21,8 @@ import javafx.scene.layout.VBox;
 import net.patho234.elements.MetadataPane;
 import net.patho234.entities.ClientMetadata;
 import net.patho234.entities.ClientService;
+import net.patho234.entities.pool.MetadataPool;
+import net.patho234.entities.pool.ServicePool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.interfaces.IMetadata;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
@@ -63,7 +66,13 @@ public class ServiceController implements Initializable {
     private void onSaveClicked(ActionEvent event) throws IOException {
         if( getNumberOfChangedMetadata()>0 ){
             // TODO: check new values and persist to data base
-            new ClientPopup("Service object has changes - "+getNumberOfChangedMetadata()+" metadata differ", "TODO: check new values and persist...").show(this.servicePane.getScene().getWindow());
+            try{
+                ServicePool.createPool().persistEntity(dataObject, true);
+                new ClientPopup("Service object saved - "+getNumberOfChangedMetadata()+" metadata differed", "All changes were persisted to the database...").show(this.servicePane.getScene().getWindow());
+            }catch(TimeoutException toEx){
+                new ClientPopup("Error while savince service object:", "Connection timed out: maybe network is not available at the moment. Please try again later.").show(this.servicePane.getScene().getWindow());
+            }
+            
         }else{
             new ClientPopup("Service object has no changes", "Object won't be persited...no changes found.").show(this.servicePane.getScene().getWindow());
         }
