@@ -243,21 +243,26 @@ public class ServicesResource {
             if( !allFieldsString.contains(key) ){
                 Logger.getLogger("global").warn("Updating field '"+key+"' not possible: does not belong to ServiceDefinition");
             }else{
-                Logger.getLogger("global").warn("Updating field '"+key+"' new value="+newData.getString("value"));
+                
                 switch( newData.getString("type") ){
                     case "int":
-                        metadataRepo.setIntegerMetadata(service, key, Integer.valueOf( newData.getString("value") ));
+                        Logger.getLogger("global").info("Updating field '"+key+"' new value="+newData.getInt("value"));
+                        metadataRepo.setIntegerMetadata(service, key, newData.getInt("value") );
                         break;
                     case "double":
-                        metadataRepo.setDoubleMetadata(service, key, Double.valueOf( newData.getString("value") ));
+                        Logger.getLogger("global").info("Updating field '"+key+"' new value="+newData.getJsonNumber("value").doubleValue());
+                        metadataRepo.setDoubleMetadata(service, key, newData.getJsonNumber("value").doubleValue() );
                         break;
                     case "string":
+                        Logger.getLogger("global").info("Updating field '"+key+"' new value="+newData.getString("value"));
                         metadataRepo.setStringMetadata(service, key, newData.getString("value") );
                         break;
                     case "text":
+                        Logger.getLogger("global").info("Updating field '"+key+"' new value="+newData.getString("value"));
                         metadataRepo.setTextMetadata(service, key, newData.getString("value") );
                         break;
                     case "url":
+                        Logger.getLogger("global").info("Updating field '"+key+"' new value="+newData.getString("value"));
                         metadataRepo.setUrlMetadata(service, key, newData.getString("value") );
                         break;
                     default:
