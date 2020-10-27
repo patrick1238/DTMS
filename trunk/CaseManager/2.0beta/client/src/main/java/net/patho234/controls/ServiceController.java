@@ -81,7 +81,7 @@ public class ServiceController implements Initializable {
     @FXML
     private void onResetClicked(ActionEvent event) throws IOException {
         if( getNumberOfChangedMetadata()>0 ){
-            // TODO: check new values and persist to data base
+            dataObject.resetService();
             new ClientPopup("Service object has changes - "+getNumberOfChangedMetadata()+" metadata differ", "TODO: reset changes...").show(this.servicePane.getScene().getWindow());
         }else{
             new ClientPopup("Service object has no changes", "no changes found...nothing todo").show(this.servicePane.getScene().getWindow());

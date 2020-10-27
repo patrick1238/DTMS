@@ -41,12 +41,12 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     protected PerCaseMapUpdater perCaseMapUpdater=null;
     private HashMap<Integer, ClientObjectList<ClientService>> perCaseMap = new HashMap<>();
     
-    private ServicePool(){ }
+    private ServicePool(){  }
     
     static public ServicePool createPool() {
         if (ServicePool.singletonPool == null){
-            ServicePool.singletonPool=new ServicePool();
             defaultService = ClientService.getServiceTemplate(1, 1);
+            ServicePool.singletonPool=new ServicePool();
         }
         
         return ServicePool.singletonPool;
@@ -112,6 +112,7 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
     @Override
     public ClientService getEntity(int serviceId, Boolean updatePool) {
+        //if( serviceId==-1 ){ return defaultService.getLocalClone(); }
         ClientService returnService = this.cachedServiceList.getByID(serviceId);
         String templateEP = HTTP_ENDPOINT_TEMPLATES.GET_SERVICE;
         String buildEP = templateEP.replace("{ID}", ""+serviceId);
