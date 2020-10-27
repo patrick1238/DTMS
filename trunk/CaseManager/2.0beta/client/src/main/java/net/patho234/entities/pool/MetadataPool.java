@@ -100,6 +100,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         //System.out.println("Filtered metadata="+filteredList.size());
         return filter.filterClientObjectList(unfilteredList);
         */
+        if( perServiceMap==null ){ return new ClientObjectList<>(); }
         return perServiceMap.getOrDefault(requestService.getId(), new ClientObjectList<>());
     }
 

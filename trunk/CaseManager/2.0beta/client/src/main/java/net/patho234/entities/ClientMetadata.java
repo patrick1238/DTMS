@@ -82,6 +82,18 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         return new ClientMetadata(json);
     }
     
+    public void resetMetadata(){
+        Logger.getLogger(getClass()).debug( "ORIGINAL: "+original.getValue().toString() );
+        ID.setValue( getOriginalJson().getInt("id") );
+        serviceId.setValue( getOriginalJson().getInt("serviceId") );
+        type.setValue( getOriginalJson().getString("type") );
+        data.setValue( castValue( getOriginalJson().getString("value") ) );
+        
+        Logger.getLogger(getClass()).debug("------------ resetService() called -------------");
+        Logger.getLogger(getClass()).debug("serviceOriginal: "+original.toString());
+        Logger.getLogger(getClass()).debug("toString():   "+toString());
+    }
+    
     @Override
     public Integer getId(){
         if( this.ID.getValue() == null ){ generateId(); }
@@ -152,7 +164,13 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
 
     @Override
     public void merge(ClientMetadata toMergeWith) {
-        if( toMergeWith.getId() != this.getId() ){ Logger.getLogger(getClass()).info("Can not merge Metadata objects, their ID differs."); return; }
+        if( this.getId()==-1 ){
+            this.ID.setValue( toMergeWith.getId() );
+        }
+        else if( toMergeWith.getId() != this.getId() ){
+            Logger.getLogger(getClass()).info("Can not merge Metadata objects, their ID differs.");
+            return;
+        }
         original.setValue(toMergeWith.original.getValue());
         if( hasLocalChanges() ){ Logger.getLogger(getClass()).info("Can not merge Metadata objects...locale object has changes. Only original Json was updated..."); return; }
         
@@ -184,7 +202,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
 
     @Override
     public IService getService() {
-        // System.out.println("requesting service for metadata ( serviceId="+serviceId.getValue()+")");
+        //Logger.getLogger(getClass()).info("requesting service for metadata ( serviceId="+serviceId.getValue()+")");
         return ServicePool.createPool().getEntity( serviceId.getValue(), false );
     }
 

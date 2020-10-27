@@ -49,5 +49,5 @@ public class ServiceWindow extends Stage {
         setMinWidth(400);
         setMaxWidth(400);
         setMinHeight(400);
-    }   
+    }
 }

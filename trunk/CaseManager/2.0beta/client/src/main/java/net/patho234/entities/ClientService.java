@@ -116,6 +116,13 @@ public class ClientService extends ClientObjectBase<ClientService> implements IS
         Logger.getLogger(getClass()).debug("------------ resetService() called -------------");
         Logger.getLogger(getClass()).debug("serviceOriginal: "+original.toString());
         Logger.getLogger(getClass()).debug("toString():   "+toString());
+        if(ID.getValue() != -1){
+            for(IMetadata md : this.getMetadata()){
+                if(((ClientMetadata)md).getId()!=-1){
+                    ((ClientMetadata)md).resetMetadata();
+                }
+            }
+        }
     }
     
     @Override
