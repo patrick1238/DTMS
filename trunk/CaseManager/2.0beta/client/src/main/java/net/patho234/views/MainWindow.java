@@ -157,7 +157,7 @@ public class MainWindow extends Stage{
             ex.printStackTrace();
         }
         
-        if( ClinicPool.createPool().getEntity(1) == null ){
+        if( ClinicPool.createPool().getAllEntities(false) == null ){
             try {
                 Logger.getLogger(getClass().getName()).info("ClinicPool preloading failed...trying a second time.");
                 ClinicPool.createPool().waitFor(30000);
@@ -173,6 +173,8 @@ public class MainWindow extends Stage{
 
                 System.exit(1);
             }
+        }else{
+            System.out.println("CLINIC_POOL all entities size: "+ClinicPool.createPool().getAllEntities(false).size());
         }
         Platform.runLater(new MainWindow.StatusUpdate(wndControl, "Loading service definitions...", 24));
         startTime = System.currentTimeMillis();
