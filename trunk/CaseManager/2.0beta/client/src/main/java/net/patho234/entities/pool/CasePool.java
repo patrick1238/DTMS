@@ -5,10 +5,14 @@
  */
 package net.patho234.entities.pool;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.patho234.interfaces.IHttpResponse;
@@ -35,6 +39,8 @@ public class CasePool extends AClientObjectPool<ClientCase> {
     
     
     ClientObjectList<ClientCase> cachedCaseList=new ClientObjectList();
+    
+    HashSet<String> loadedDiagnoses=new HashSet<>();
     
     private CasePool(){
         defaultCase = ClientCase.getCaseTemplate();
@@ -215,6 +221,7 @@ public class CasePool extends AClientObjectPool<ClientCase> {
                 Logger.getLogger(getClass()).info("Processing JsonObject case: {0}", new String[]{ theCase.toString() });
                 ClientCase newCase = new ClientCase(theCase);
                 loadedIds.add(newCase.getId());
+                loadedDiagnoses.add(newCase.getDiagnose());
                 System.out.println("\t[ALL]: adding ID "+newCase.getId());
                 cachedCaseList.add(newCase);
             });
@@ -237,17 +244,24 @@ public class CasePool extends AClientObjectPool<ClientCase> {
             JsonObject caseAsJsonObject = (JsonObject)response.getContent();
             ClientCase newCase = new ClientCase( caseAsJsonObject);
             cachedCaseList.add( newCase );
+            loadedDiagnoses.add(newCase.getDiagnose());
             System.out.println("[CREATE] CACHED LIST SIZE NOW "+cachedCaseList.size()+" IDs");
             System.out.println("[CREATE] NEW ID "+newCase.getId());
         }else{ // all other request result in a single case as JSON object
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single case, creating view...");
             JsonObject caseAsJsonObject = (JsonObject)response.getContent();
-
-            cachedCaseList.add(new ClientCase( caseAsJsonObject) );
+            ClientCase newCase = new ClientCase( caseAsJsonObject);
+            loadedDiagnoses.add(newCase.getDiagnose());
+            cachedCaseList.add( newCase );
         }
         
         if( response.getResponseStatus()!=HTTP_STATUS.CACHED ){
             finishPendingRequest(response.getRequestId());
         }
     }
+    
+    public ObservableList<String> getDiagnosesAsList(){
+        return FXCollections.observableArrayList(loadedDiagnoses);
+    }
+    
 }

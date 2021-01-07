@@ -27,9 +27,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import net.patho234.entities.ClientCase;
+import net.patho234.entities.pool.CasePool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
+import org.jboss.logging.Logger;
 
 /**
  * FXML Controller class
@@ -103,19 +105,24 @@ public class CaseController implements Initializable {
     }
 
     public void loadCase(ClientCase caseToLoad) {
+        setUpDisplay();
+        
         dataObject = caseToLoad;
         this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
         this.diagnoseBox.editorProperty().getValue().textProperty().bindBidirectional( dataObject.getDiagnosisProperty() );
         
-        setUpDisplay();
     }
     
     private void setUpDisplay(){
-        ArrayList diagnosis = new ArrayList();
-        diagnosis.add("HL(MT)");
-        diagnosis.add("HL(NS)");
-        diagnosis.add("LA unspezifische Pulpa");
-        diagnosis.add("FL Grad 1");
+        // get all diagnoses from loaded cases
+        List diagnosis=null;
+        try{
+            diagnosis=CasePool.createPool().getDiagnosesAsList();
+        }
+        catch(Exception ex){
+            Logger.getLogger(getClass()).warn("Error while loading diagnosis list...combo box items might not be loaded correctly.");
+        }
+        
         this.diagnoseBox.setItems(FXCollections.observableArrayList(diagnosis));
         new AutoCompleteBox(this.diagnoseBox);
     }
