@@ -6,7 +6,11 @@
 package net.patho234.entities.pool;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import net.patho234.interfaces.IHttpResponse;
@@ -30,6 +34,8 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
     private static ClientClinic defaultClinic;
     
     ClientObjectList<ClientClinic> cachedClinicList=new ClientObjectList();
+    
+    HashSet<String> loadedClinicNames = new HashSet<>();
     
     private ClinicPool(){
         defaultClinic = ClientClinic.getClinicTemplate();
@@ -176,18 +182,32 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
             clinicsAsJsonArray.forEach((clinic) -> {
                 JsonObject joClinic=(JsonObject)clinic;
                 Logger.getLogger(getClass()).info("Processing JsonObject clinic: {0}", new String[]{ joClinic.toString() });
-
-                cachedClinicList.add(new ClientClinic(joClinic));
+                ClientClinic newClinic = new ClientClinic(joClinic);
+                loadedClinicNames.add(newClinic.getName());
+                cachedClinicList.add( newClinic );
             });
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Clinic deleted successfully.");
         } else{ // all other request result in a single clinic as JSON object
             Logger.getLogger(getClass().getName()).info("Received JsonObject for single clinic, creating view...");
             JsonObject clinicAsJsonObject = (JsonObject)response.getContent();
-
-            cachedClinicList.add(new ClientClinic( clinicAsJsonObject) );
+            ClientClinic newClinic = new ClientClinic(clinicAsJsonObject);
+            loadedClinicNames.add(newClinic.getName());
+            cachedClinicList.add( newClinic );
         }
 
         if(! (response.getResponseStatus()==HTTP_STATUS.CACHED) ){ finishPendingRequest(response.getRequestId()); }
+    }
+    
+    public ObservableList<String> getClinicsAsList(){
+        return FXCollections.observableArrayList(loadedClinicNames);
+    }
+
+    public ClientClinic getClinicByName(String clinicName) {
+        for( ClientClinic c : cachedClinicList ){
+            if( c.getName().equals(clinicName) ){ return c; }
+        }
+        
+        return null;
     }
 }

@@ -163,8 +163,9 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         Boolean hasChangesSubmitter = !submitterID.getValue().equals(getOriginalJson().getInt("submitterId"));
         
         Object[] results = new Object[]{hasChangesId,hasChangescaseNumber,hasChangesDiagnose,hasChangesEntryDate,hasChangesClinic,hasChangesSubmitter};
-        // Logger.getLogger(getClass()).info("id: {0} | caseNumber: {1} | diagnose: {2} | entryDate: {3} | clinic: {4} | submitter: {5}", results);
-        //if( hasChanges != (!toJson().equals(caseOriginal)) ){ Logger.getLogger(getClass()).info("hasLocalChanges() JSON_TEST != VALUE_TEST");}
+        Logger.getLogger(getClass()).info("id: {0} | caseNumber: {1} | diagnose: {2} | entryDate: {3} | clinic: {4} | submitter: {5}", results);
+        // if( hasChanges != (!toJson().equals(caseOriginal)) ){ Logger.getLogger(getClass()).info("hasLocalChanges() JSON_TEST != VALUE_TEST");}
+        hasChanges = hasChangescaseNumber | hasChangesDiagnose /*| hasChangesEntryDate*/ | hasChangesClinic | hasChangesSubmitter;
         return hasChanges;
     }
 

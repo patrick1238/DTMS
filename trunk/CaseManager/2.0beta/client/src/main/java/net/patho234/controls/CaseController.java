@@ -26,9 +26,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.pool.CasePool;
+import net.patho234.entities.pool.ClinicPool;
 import net.patho234.gui.ClientPopup;
+import net.patho234.gui.adapter.ClinicForCaseAdapter;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
 import org.jboss.logging.Logger;
@@ -56,7 +60,8 @@ public class CaseController implements Initializable {
     private VBox fileViewerBox;
 
     ClientCase dataObject;
-
+    ClinicForCaseAdapter clinicAdapter;
+    
     /**
      * Initializes the controller class.
      */
@@ -101,6 +106,8 @@ public class CaseController implements Initializable {
             new ClientPopup("Case object has changes", "TODO: check new values and persist...").show(this.casePane.getScene().getWindow());
         }else{
             new ClientPopup("Case object has no changes", "Object won't be persited...no changes found.").show(this.casePane.getScene().getWindow());
+            System.out.println("CACHED: "+dataObject.getOriginalJson().toString());
+            System.out.println("CURRENT: "+dataObject.toString());
         }
     }
 
@@ -111,6 +118,8 @@ public class CaseController implements Initializable {
         this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
         this.diagnoseBox.editorProperty().getValue().textProperty().bindBidirectional( dataObject.getDiagnosisProperty() );
         
+        this.clinicAdapter = new ClinicForCaseAdapter( dataObject );
+        this.clinicAdapter.bindName(this.clinicBox.editorProperty().getValue().textProperty());
     }
     
     private void setUpDisplay(){
@@ -125,6 +134,18 @@ public class CaseController implements Initializable {
         
         this.diagnoseBox.setItems(FXCollections.observableArrayList(diagnosis));
         new AutoCompleteBox(this.diagnoseBox);
+        
+        // get all clinic names from loaded clinics
+        List clinics=null;
+        try{
+            clinics=ClinicPool.createPool().getClinicsAsList();
+        }
+        catch(Exception ex){
+            Logger.getLogger(getClass()).warn("Error while loading diagnosis list...combo box items might not be loaded correctly.");
+        }
+        
+        this.clinicBox.setItems(FXCollections.observableArrayList(clinics));
+        new AutoCompleteBox(this.clinicBox);
     }
 
 }
