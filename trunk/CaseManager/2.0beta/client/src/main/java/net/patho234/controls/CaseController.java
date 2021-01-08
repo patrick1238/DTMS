@@ -8,6 +8,7 @@ package net.patho234.controls;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,10 @@ import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.gui.adapter.ClinicForCaseAdapter;
+import net.patho234.gui.adapter.EntryDateForCaseAdapter;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
+import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 
 /**
@@ -61,6 +64,7 @@ public class CaseController implements Initializable {
 
     ClientCase dataObject;
     ClinicForCaseAdapter clinicAdapter;
+    EntryDateForCaseAdapter entryDateAdapter;
     
     /**
      * Initializes the controller class.
@@ -120,9 +124,17 @@ public class CaseController implements Initializable {
         
         this.clinicAdapter = new ClinicForCaseAdapter( dataObject );
         this.clinicAdapter.bindName(this.clinicBox.editorProperty().getValue().textProperty());
+        
+        this.entryDatePicker.setConverter(APPLICATION_DEFAULTS.DEFAULT_DATE_CONVERTER);
+        String entryDateAsString = dataObject.getEntryDateProperty().getValue();
+        this.entryDatePicker.setValue(APPLICATION_DEFAULTS.DEFAULT_DATE_CONVERTER.fromString(entryDateAsString));
+        
+        this.entryDateAdapter = new EntryDateForCaseAdapter( dataObject );
+        this.entryDateAdapter.bindDate(this.entryDatePicker.valueProperty());
     }
     
     private void setUpDisplay(){
+        
         // get all diagnoses from loaded cases
         List diagnosis=null;
         try{
