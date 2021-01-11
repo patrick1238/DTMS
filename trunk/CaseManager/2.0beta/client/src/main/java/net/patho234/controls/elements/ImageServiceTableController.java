@@ -5,9 +5,12 @@
  */
 package net.patho234.controls.elements;
 
+import com.sun.scenario.Settings;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -47,6 +50,9 @@ public class ImageServiceTableController implements Initializable{
     private TableColumn<ClientService, String> serviceNotes;
     private List<TableColumn<ClientService, String>> metadataColumns=new ArrayList<>();
     
+    private boolean showCaseColumns;
+    private HashMap<String, TableColumn> columnMap;
+    
     Callback<TableColumn<ClientService, String>, TableCell<ClientService, String>> textCellCallback;
     
     EventHandler<Event> rowDoubleClickedHandler;
@@ -55,7 +61,7 @@ public class ImageServiceTableController implements Initializable{
     
     private ClientServiceDefinition serviceDefinition;
     
-    public ImageServiceTableController(TableView view, ObservableList<ClientService> items, ClientServiceDefinition serviceDef){
+    public ImageServiceTableController(TableView view, ObservableList<ClientService> items, ClientServiceDefinition serviceDef, Boolean showCaseColumns){
         super();
         serviceDefinition=serviceDef;
         
@@ -93,24 +99,27 @@ public class ImageServiceTableController implements Initializable{
         
         tableView = view;
         serviceList = items;
-        
+        this.showCaseColumns = showCaseColumns;
+    }
+    
+    public ImageServiceTableController(TableView view, ObservableList<ClientService> items, ClientServiceDefinition serviceDef){
+        this(view, items, serviceDef, true);
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        columnMap = new HashMap<String, TableColumn>();
         caseNumber = new TableColumn<>("Case number");
         clinic = new TableColumn<>("Clinic");
         entryDate = new TableColumn<>("Entry date");
         diagnosis = new TableColumn<>("Diagnosis");
         serviceName = new TableColumn<>("Name");
         
-        tableView.getColumns().clear();
-        tableView.getColumns().add(caseNumber);
-        tableView.getColumns().add(clinic);
-        tableView.getColumns().add(diagnosis);
-        tableView.getColumns().add(entryDate);
-        tableView.getColumns().add(serviceName);
-        
+        columnMap.put("Case number", caseNumber);
+        columnMap.put("Clinic", clinic);
+        columnMap.put("Entry date", entryDate);
+        columnMap.put("Diagnosis", diagnosis);
+        columnMap.put("Name", serviceName);
         
         caseNumber.setCellValueFactory( new Callback<TableColumn.CellDataFeatures<ClientService, String>, ObservableValue<String>>() {
             @Override
@@ -165,6 +174,8 @@ public class ImageServiceTableController implements Initializable{
         });
         
         initializeMetadataFields();
+        loadColumns();
+        
         System.out.println("ALL SERVICES "+serviceList.size());
         ReadOnlyClientObjectList<ClientService> filtered = new ClientServicesForDefinitionFilter(serviceDefinition).filterClientObjectList((ReadOnlyClientObjectList<ClientService>)serviceList);
         System.out.println("SERVICE DEF FILTERED "+filtered.size());
@@ -181,8 +192,8 @@ public class ImageServiceTableController implements Initializable{
             
             TableColumn<ClientService, String> newMetaColumn = new TableColumn<>(mv.getKey());
             newMetaColumn.setCellValueFactory( new MetadataCallback(mv.getKey()) );
-            tableView.getColumns().add(newMetaColumn);
             metadataColumns.add(newMetaColumn);
+            columnMap.put(mv.getKey(), newMetaColumn);
         }
     }
     
@@ -202,5 +213,36 @@ public class ImageServiceTableController implements Initializable{
             }
             return new SimpleStringProperty(  );
         }
+    }
+    
+    private void loadColumns(){
+        tableView.getColumns().clear();
+        // first add columns specified in config:
+        String strColumnOrder = Settings.get("dtms.gui.table_"+serviceDefinition.getName());
+        HashSet<String> addedColumns=new HashSet<>();
+        
+        if( strColumnOrder!=null ){
+            for(String key : strColumnOrder.split(";")){
+                if( this.showCaseColumns && (key=="Case number" || key=="Clinic" || key=="Entry date" || key=="Diagnosis" || key=="Name") ){
+                    continue;
+                }
+                TableColumn tmpCol = columnMap.get(key);
+                if( tmpCol != null ){
+                    tableView.getColumns().add(tmpCol);
+                    addedColumns.add(key);
+                }else{
+                    Logger.getLogger(getClass()).warn("Settings file contains non-existing service table column: '"+key+"'");
+                }
+            }
+        }
+        
+        // second: put all other columns at the end unordered:
+        for( String key : columnMap.keySet() ){
+            if( !addedColumns.contains(key) ){
+                if( this.showCaseColumns && (key=="Case number" || key=="Clinic" || key=="Entry date" || key=="Diagnosis" || key=="Name") ){ continue; }
+                tableView.getColumns().add( columnMap.get(key) );
+            }
+        }
+        
     }
 }

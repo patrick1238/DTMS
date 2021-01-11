@@ -20,6 +20,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -31,10 +32,12 @@ import javax.swing.event.ChangeListener;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
+import net.patho234.entities.pool.ServicePool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.gui.adapter.ClinicForCaseAdapter;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
+import net.patho234.utils.TableViewerControllerFactory;
 import org.jboss.logging.Logger;
 
 /**
@@ -59,6 +62,8 @@ public class CaseController implements Initializable {
     @FXML
     private VBox fileViewerBox;
 
+    private TableView services2D;
+    
     ClientCase dataObject;
     ClinicForCaseAdapter clinicAdapter;
     
@@ -120,6 +125,11 @@ public class CaseController implements Initializable {
         
         this.clinicAdapter = new ClinicForCaseAdapter( dataObject );
         this.clinicAdapter.bindName(this.clinicBox.editorProperty().getValue().textProperty());
+        
+        loadServices();
+    }
+    private void loadServices(){
+        // TODO: load services + set service table views
     }
     
     private void setUpDisplay(){
@@ -146,6 +156,14 @@ public class CaseController implements Initializable {
         
         this.clinicBox.setItems(FXCollections.observableArrayList(clinics));
         new AutoCompleteBox(this.clinicBox);
+        try{
+            services2D = new TableView();
+            TableViewerControllerFactory.generateController("2D", services2D);
+            fileViewerBox.getChildren().add(services2D);
+            services2D.setItems( ServicePool.createPool().getAllEntitiesForCase(dataObject) );
+            }catch (NullPointerException ex){
+            ex.printStackTrace();
+        }
     }
 
 }
