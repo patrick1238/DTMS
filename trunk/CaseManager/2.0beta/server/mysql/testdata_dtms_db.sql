@@ -6,16 +6,16 @@ INSERT INTO `linfo_open_db`.`submitter` (`idsubmitter`, `surname`, `forename`, `
 INSERT INTO `linfo_open_db`.`submitter` (`idsubmitter`, `surname`, `forename`, `title`, `login`, `password`) VALUES (3, 'Musterfrau', 'Miriam', 'Frau', 'guest2', '654321');
 
 # CLINIC_CASE
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (1, 'H1001-19', 1, '2017-03-23', 'cHL (MC)', 1);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (2, 'H1321-19', 1, '2017-06-01', 'cHL (MC)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (3, 'K2233-18', 1, '2017-08-13', 'cHL (NS)', 3);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (4, 'K1234-19', 1, '2017-12-24', 'Lymphadenitis', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (5, 'H121-17', 1, '2018-01-03', 'cHL (NS)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (6, 'H979-17', 1, '2018-03-08', 'cHL (MC)', 3);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (7, 'K385-17', 2, '2018-07-30', 'Lymphadenitis', 3);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (8, 'K3543-19', 2, '2019-09-11', 'cHL (MC)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (9, 'K322-18', 2, '2019-12-04', 'cHL (NS)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (10, 'H1001-18', 2, '2020-01-23', 'cHL (NS)', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (1, 'H1001-19', 1, '23.03.2017', 'cHL (MC)', 1);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (2, 'H1321-19', 1, '01.06.2017', 'cHL (MC)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (3, 'K2233-18', 1, '13.08.2017', 'cHL (NS)', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (4, 'K1234-19', 1, '24.12.2017', 'Lymphadenitis', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (5, 'H121-17', 1, '03.01.2018', 'cHL (NS)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (6, 'H979-17', 1, '08.03.2018', 'cHL (MC)', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (7, 'K385-17', 2, '30.07.2018', 'Lymphadenitis', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (8, 'K3543-19', 2, '11.09.2019', 'cHL (MC)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (9, 'K322-18', 2, '04.12.2019', 'cHL (NS)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (10, 'H1001-18', 2, '32.01.2020', 'cHL (NS)', 3);
 
 
 #CONTACT_PERSON
@@ -61,25 +61,25 @@ INSERT INTO `linfo_open_db`.`contact_for_clinic` (`fkey_cfc_clinic`, `fkey_cfc_c
 INSERT INTO `linfo_open_db`.`contact_for_clinic` (`fkey_cfc_clinic`, `fkey_cfc_contact`, `notes`) VALUES (2, 1, 'Nur Putzangestellte/r hat keine Ahnung von nix');
 
 #METADATA STRING
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Capture date', '2020-01-01 15:00 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Capture date', '2020-01-05 15:23 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Capture date', '2020-02-14 15:10 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Capture date', '2020-03-08 15:45 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Capture date', '2020-03-07 15:00 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Capture date', '2020-06-07 15:23 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Capture date', '2020-06-07 15:10 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Capture date', '2020-06-07 15:45 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Capture date', '2020-07-08 15:00 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Capture date', '2020-07-09 15:23 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Capture date', '2020-07-09 15:10 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Capture date', '2020-07-09 15:45 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Capture date', '2020-07-09 15:00 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Capture date', '2020-08-09 15:23 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Capture date', '2020-08-10 15:10 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Capture date', '2020-08-10 15:45 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (17, 'Capture date', '2020-09-10 15:00 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (18, 'Capture date', '2020-09-11 15:23 MEZ');
-INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Capture date', '2020-09-14 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (1, 'Capture date', '01.01.2020 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (2, 'Capture date', '05.01.2020 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (3, 'Capture date', '14.02.2020 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (4, 'Capture date', '08.03.2020 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (5, 'Capture date', '07.03.2020 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (6, 'Capture date', '07.06.2020 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (7, 'Capture date', '07.06.2020 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (8, 'Capture date', '07.06.2020 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (9, 'Capture date', '08.07.2020 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (10, 'Capture date', '09.07.20209 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (11, 'Capture date', '09.07.2020 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (12, 'Capture date', '09.07.2020 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (13, 'Capture date', '09.07.2020 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (14, 'Capture date', '09.08.2020 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (15, 'Capture date', '10.08.2020 15:10 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (16, 'Capture date', '10.08.2020 15:45 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (17, 'Capture date', '10.09.2020 15:00 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (18, 'Capture date', '11.09.2020 15:23 MEZ');
+INSERT INTO `linfo_open_db`.`metadata_string` (`fkey_service`, `meta_key`, `meta_value`) VALUES (19, 'Capture date', '14.09.2020 15:10 MEZ');
 
 
 #METADATA TEXT

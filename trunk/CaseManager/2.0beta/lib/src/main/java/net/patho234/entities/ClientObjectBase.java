@@ -20,8 +20,8 @@ import net.patho234.property.JsonObjectProperty;
  * @author rehkind
  */
 public abstract class ClientObjectBase<T extends IClientObject> implements IClientObject<T>{
-    static final protected SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
-    static final protected SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+    static final protected SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ssZ");
+    static final protected SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy");
     
     IntegerProperty ID = new SimpleIntegerProperty();
     JsonObjectProperty  original = new JsonObjectProperty();

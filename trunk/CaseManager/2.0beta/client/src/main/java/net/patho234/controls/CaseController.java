@@ -21,6 +21,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -32,11 +33,13 @@ import javax.swing.event.ChangeListener;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
+import net.patho234.entities.pool.ServicePool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.gui.adapter.ClinicForCaseAdapter;
 import net.patho234.gui.adapter.EntryDateForCaseAdapter;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
+import net.patho234.utils.TableViewerControllerFactory;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 
@@ -65,7 +68,7 @@ public class CaseController implements Initializable {
     ClientCase dataObject;
     ClinicForCaseAdapter clinicAdapter;
     EntryDateForCaseAdapter entryDateAdapter;
-    
+    TableView services2D;
     /**
      * Initializes the controller class.
      */
@@ -131,6 +134,12 @@ public class CaseController implements Initializable {
         
         this.entryDateAdapter = new EntryDateForCaseAdapter( dataObject );
         this.entryDateAdapter.bindDate(this.entryDatePicker.valueProperty());
+        
+        loadServices();
+    }
+    
+    private void loadServices(){
+        
     }
     
     private void setUpDisplay(){
@@ -158,6 +167,17 @@ public class CaseController implements Initializable {
         
         this.clinicBox.setItems(FXCollections.observableArrayList(clinics));
         new AutoCompleteBox(this.clinicBox);
+        
+        this.clinicBox.setItems(FXCollections.observableArrayList(clinics));
+        new AutoCompleteBox(this.clinicBox);
+        try{
+            services2D = new TableView();
+            TableViewerControllerFactory.generateController("2D", services2D);
+            fileViewerBox.getChildren().add(services2D);
+            services2D.setItems( ServicePool.createPool().getAllEntitiesForCase(dataObject) );
+            }catch (NullPointerException ex){
+            ex.printStackTrace();
+        }
     }
 
 }

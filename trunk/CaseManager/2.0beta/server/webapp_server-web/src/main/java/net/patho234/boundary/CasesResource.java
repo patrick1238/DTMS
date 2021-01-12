@@ -57,7 +57,7 @@ public class CasesResource {
     final private String CASE_DELETE_URL="/case/delete";
     final private String CASE_GET_CASENUMBER_URL="casepool/case/casenumber/{CaseNumber}";
     
-    final private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+    final private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ssZ");
     
     @EJB
     LocalCaseRepository caseRepo;

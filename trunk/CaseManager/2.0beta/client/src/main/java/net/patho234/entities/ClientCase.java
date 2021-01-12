@@ -17,7 +17,6 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
-
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -112,7 +111,9 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
     @Override
     public void setDiagnose( String newDiagnosis ){ diagnosis.setValue( newDiagnosis ); }
     @Override
-    public void setEntryDate( Date newEntryDate ){ entryDate.setValue( DATE_FORMATTER.format( newEntryDate )); }
+    public void setEntryDate( Date newEntryDate ){ 
+        entryDate.setValue( DATE_FORMATTER.format( newEntryDate ));
+    }
     @Override
     public void setClinic( IClinic newClinic ){  clinicID.setValue( newClinic.getId() ); }
     @Override
@@ -127,7 +128,11 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         setCaseNumber( getOriginalJson().getString("caseNumber") );
         setDiagnose( getOriginalJson().getString("diagnose") );
         try{
-            setEntryDate( DATE_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+            if( getOriginalJson().getString("entryDate").contains(" ")){ // date + time
+                setEntryDate( DATE_TIME_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+            }else{ // date only
+                setEntryDate( DATE_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+            }
         }catch(ParseException ex){
             Logger.getLogger("global").warn("Could not parse entryDate string: "+getOriginalJson().getString("entryDate"));
         }
@@ -154,9 +159,15 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         Boolean hasChangesDiagnose = !diagnosis.getValue().equals(getOriginalJson().getString("diagnose"));
         Boolean hasChangesEntryDate=true;
         try{
-            hasChangesEntryDate = !(DATE_FORMATTER.parse(entryDate.getValue()).getTime()== DATE_FORMATTER.parse(getOriginalJson().getString("entryDate")).getTime());
+            String newDateStr = entryDate.getValue().contains(" ")? DATE_TIME_FORMATTER.format( DATE_FORMATTER.parse(entryDate.getValue()) ) : DATE_FORMATTER.format( DATE_FORMATTER.parse(entryDate.getValue()) );
+            Date oldDate = getOriginalJson().getString("entryDate").contains(" ") ? DATE_TIME_FORMATTER.parse(getOriginalJson().getString("entryDate")) : DATE_FORMATTER.parse(getOriginalJson().getString("entryDate"));
+            String oldDateStr = DATE_FORMATTER.format( oldDate );
+            hasChangesEntryDate = !( Objects.equals( newDateStr, oldDateStr ) );
+            if( hasChangesEntryDate ){ Logger.getLogger(getClass()).info("entry date has changed: old="+oldDateStr+" new="+newDateStr); }
         }catch(ParseException ex){ 
             // ignored we just set it 'true'
+           Logger.getLogger(getClass()).warn("Could not compare entry date...error occured");
+           ex.printStackTrace();
         }
         
         Boolean hasChangesClinic = !clinicID.getValue().equals(getOriginalJson().getInt("clinicId"));

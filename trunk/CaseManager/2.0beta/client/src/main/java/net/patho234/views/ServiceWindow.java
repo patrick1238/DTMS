@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import net.patho234.controls.ServiceController;
 import net.patho234.entities.ClientService;
+import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import net.patho234.webapp_client.FxmlManager;
 
 /**
@@ -29,6 +30,7 @@ public class ServiceWindow extends Stage {
         this.myService = theService;
         loader = new FXMLLoader( getClass().getResource( "/fxml/fx_service_pane.fxml") );
         Parent root=null;
+        
         try {
             root = loader.load();
         } catch (IOException ex) {

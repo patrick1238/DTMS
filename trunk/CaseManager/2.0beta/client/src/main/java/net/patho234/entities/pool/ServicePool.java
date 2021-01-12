@@ -69,6 +69,7 @@ public class ServicePool extends AClientObjectPool<ClientService> {
     }
     
     public ReadOnlyClientObjectList getAllEntitiesForCase(ClientCase requestCase, boolean updatePool) {
+        if(requestCase == null){ return null; }
         ClientServicesForCaseFilter filter = new ClientServicesForCaseFilter(requestCase);
         if( updatePool ){
             try {
@@ -86,6 +87,10 @@ public class ServicePool extends AClientObjectPool<ClientService> {
             ReadOnlyClientObjectList<ClientService> unfilteredList = getAllEntities(false);
             return filter.filterClientObjectList(unfilteredList);
         }
+//        for( Integer key : perCaseMap.keySet()){
+//            System.out.println("Case key: "+key);
+//        }
+//        System.out.println("requested key: "+requestCase.getId());
         ReadOnlyClientObjectList returnList = perCaseMap.get(requestCase.getId());
         if (returnList == null){ returnList=new ClientObjectList<ClientService>(); }
         return returnList;

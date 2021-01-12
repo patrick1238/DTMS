@@ -29,9 +29,9 @@ public class APPLICATION_DEFAULTS {
     final public static int SERVICE_DEFINITION_ID_METHYLATION=7;
     
     static final public Locale DEFAULT_LOCALE=Locale.GERMANY;
-    static final public SimpleDateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
-    static final public SimpleDateFormat DEFAULT_DATE_SHORT_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-    static final public DateTimeFormatter DEFAULT_DATETIME_SHORT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    static final public SimpleDateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ssZ");
+    static final public SimpleDateFormat DEFAULT_DATE_SHORT_FORMATTER = new SimpleDateFormat("dd.MM.yyyy");
+    static final public DateTimeFormatter DEFAULT_DATETIME_SHORT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     
     static final public StringConverter<LocalDate> DEFAULT_DATE_CONVERTER = new StringConverter<LocalDate>(){
         DateTimeFormatter f=DEFAULT_DATETIME_SHORT_FORMATTER.withLocale(DEFAULT_LOCALE);
@@ -39,13 +39,13 @@ public class APPLICATION_DEFAULTS {
         public String toString(LocalDate ld) {
             try{
                 if( ld==null ){ return ""; }
-                String d = ld.getDayOfMonth()+"";
+                String d = ld.getDayOfMonth()+".";
                 d = (d.length()<2) ? "0"+d : d;
-                String m = ld.getMonthValue() + "-";
+                String m = ld.getMonthValue() + ".";
                 m = (m.length()<3) ? "0"+m : m;
-                String y = ld.getYear()+"-";
+                String y = ld.getYear()+"";
                 
-                return  y + m + d;
+                return  d + m + y;
             }catch( Exception ex ){
                 ex.printStackTrace();
                 return null;
