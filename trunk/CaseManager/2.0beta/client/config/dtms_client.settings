@@ -4,4 +4,9 @@ client.password, 123456
 dtms.services, Case:2D:3D:4D:Genomics:Methylation
 dtms.string_filters, Red:2D:contains;Blue:2D:contains;Comment:2D:contains;Red:3D:contains;Blue:3D:contains;Green:3D:contains;Comment:3D:contains
 dtms.integer_filters, Block:2D:equals;Rating:2D:min;Rating:3D:min;Rating:4D:min;Tiles:3D:min;Tiles:4D:min
-dtms.float_filters, Fraction:2D:min;Magnificatiion:3D:min;Magnificatiion:4D:min
+dtms.float_filters, Fraction:2D:min;Magnification:3D:min;Magnificatiion:4D:min
+dtms.gui.table_2D, Name;Red;Blue;Block;Rating;Fraction;Case number;Diagnosis;Comment;Clinic;Entry date
+dtms.gui.table_3D, Name;Red;Blue;Green;Tiles;Block;Rating;Fraction;Magnification;Case number;Diagnosis;Comment;Clinic;Entry date
+dtms.gui.table_4D, Name;Red;Blue;Green;Tiles;Block;Rating;Fraction;Magnification;Case number;Diagnosis;Comment;Clinic;Entry date
+dtms.gui.table_Methylation, 
+dtms.gui.table_Genomics, 
