@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,6 +32,7 @@ import javafx.stage.Window;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.patho234.entities.ClientCase;
+import net.patho234.entities.filter.ServiceTypeFilter;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
 import net.patho234.entities.pool.ServicePool;
@@ -69,12 +71,15 @@ public class CaseController implements Initializable {
     ClinicForCaseAdapter clinicAdapter;
     EntryDateForCaseAdapter entryDateAdapter;
     TableView services2D;
+    TableView services3D;
+    TableView services4D;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
     }
 
     @FXML
@@ -139,11 +144,41 @@ public class CaseController implements Initializable {
     }
     
     private void loadServices(){
+        ServiceTypeFilter only2DFilter = new ServiceTypeFilter("2D");
+        ServiceTypeFilter only3DFilter = new ServiceTypeFilter("3D");
+        ServiceTypeFilter only4DFilter = new ServiceTypeFilter("4D");
         
+        services2D.setItems( only2DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(dataObject) ) );
+        services3D.setItems( only3DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(dataObject) ) );
+        services4D.setItems( only4DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(dataObject) ) );
     }
     
     private void setUpDisplay(){
+        javafx.beans.value.ChangeListener sizeChangedChangeListener = new javafx.beans.value.ChangeListener<Double>() {
+            @Override
+            public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
+                Double newWidth;
+                if( newValue > 300 ){ 
+                    newWidth = newValue-10;
+                }else{
+                    newWidth = 280.;
+                }
+                fileViewerBox.setMinWidth(newWidth);
+                fileViewerBox.setPrefWidth(newWidth);
+                fileViewerBox.setMaxWidth(newWidth);
+                services2D.setMinWidth(newWidth);
+                services2D.setPrefWidth(newWidth);
+                services2D.setMaxWidth(newWidth);
+                services3D.setMinWidth(newWidth);
+                services3D.setPrefWidth(newWidth);
+                services3D.setMaxWidth(newWidth);
+                services4D.setMinWidth(newWidth);
+                services4D.setPrefWidth(newWidth);
+                services4D.setMaxWidth(newWidth);
+            }
+        };
         
+        casePane.widthProperty().addListener(sizeChangedChangeListener);
         // get all diagnoses from loaded cases
         List diagnosis=null;
         try{
@@ -175,7 +210,23 @@ public class CaseController implements Initializable {
             TableViewerControllerFactory.generateController("2D", services2D);
             fileViewerBox.getChildren().add(services2D);
             services2D.setItems( ServicePool.createPool().getAllEntitiesForCase(dataObject) );
-            }catch (NullPointerException ex){
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
+        }
+        try{
+            services3D = new TableView();
+            TableViewerControllerFactory.generateController("3D", services3D);
+            fileViewerBox.getChildren().add(services3D);
+            services3D.setItems( ServicePool.createPool().getAllEntitiesForCase(dataObject) );
+        }catch (NullPointerException ex){
+            ex.printStackTrace();
+        }
+        try{
+            services4D = new TableView();
+            TableViewerControllerFactory.generateController("4D", services4D);
+            fileViewerBox.getChildren().add(services4D);
+            services4D.setItems( ServicePool.createPool().getAllEntitiesForCase(dataObject) );
+        }catch (NullPointerException ex){
             ex.printStackTrace();
         }
     }

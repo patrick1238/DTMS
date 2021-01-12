@@ -40,7 +40,7 @@ public class APPLICATION_DEFAULTS {
             try{
                 if( ld==null ){ return ""; }
                 String d = ld.getDayOfMonth()+".";
-                d = (d.length()<2) ? "0"+d : d;
+                d = (d.length()<3) ? "0"+d : d;
                 String m = ld.getMonthValue() + ".";
                 m = (m.length()<3) ? "0"+m : m;
                 String y = ld.getYear()+"";

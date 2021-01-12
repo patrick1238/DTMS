@@ -6,6 +6,9 @@
 package net.patho234.views;
 
 import java.io.IOException;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -21,6 +24,9 @@ public class CasePane extends AnchorPane {
     FXMLLoader loader;
     CaseController controller;
     ClientCase myCase;
+    
+    @FXML
+    AnchorPane caseMainAnchor;
     
     public CasePane () throws IOException {
         this( ClientCase.getCaseTemplate() );
