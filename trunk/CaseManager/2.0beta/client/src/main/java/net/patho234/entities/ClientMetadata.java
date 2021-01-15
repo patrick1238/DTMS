@@ -84,7 +84,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     
     public void resetMetadata(){
         Logger.getLogger(getClass()).debug( "ORIGINAL: "+original.getValue().toString() );
-        ID.setValue( getOriginalJson().getInt("id") );
+//        ID.setValue( getOriginalJson().getInt("id") );
         serviceId.setValue( getOriginalJson().getInt("serviceId") );
         type.setValue( getOriginalJson().getString("type") );
         data.setValue( castValue( getOriginalJson().getString("value") ) );

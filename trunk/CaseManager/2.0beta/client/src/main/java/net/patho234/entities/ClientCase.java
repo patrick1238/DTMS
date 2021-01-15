@@ -28,6 +28,7 @@ import net.patho234.entities.pool.ClinicPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.client.IClientObject;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
+import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 import org.jboss.logging.Logger.Level;
 
@@ -69,7 +70,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         builder.add("id", -1);
         builder.add("caseNumber", "");
         builder.add("diagnose", "");
-        builder.add("entryDate", DATE_FORMATTER.format( new Date() ));
+        builder.add("entryDate", APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( new Date() ));
         builder.add("clinicId", -1);
         builder.add("submitterId", -1);
         return new ClientCase( builder.build() );
@@ -88,7 +89,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
     public StringProperty getEntryDateProperty(){ return entryDate; }
     @Override
     public Date getEntryDate(){ try {
-            return DATE_FORMATTER.parse(entryDate.getValue()) ;
+            return APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.parse(entryDate.getValue()) ;
         } catch (ParseException ex) {
             Logger.getLogger(ClientCase.class.getName()).log(Level.FATAL, null, ex);
             return null;
@@ -112,7 +113,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
     public void setDiagnose( String newDiagnosis ){ diagnosis.setValue( newDiagnosis ); }
     @Override
     public void setEntryDate( Date newEntryDate ){ 
-        entryDate.setValue( DATE_FORMATTER.format( newEntryDate ));
+        entryDate.setValue( APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( newEntryDate ));
     }
     @Override
     public void setClinic( IClinic newClinic ){  clinicID.setValue( newClinic.getId() ); }
@@ -129,16 +130,24 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         setDiagnose( getOriginalJson().getString("diagnose") );
         try{
             if( getOriginalJson().getString("entryDate").contains(" ")){ // date + time
-                setEntryDate( DATE_TIME_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+                if( getOriginalJson().getString("entryDate").contains(".") ){ // german date formate
+                    setEntryDate( APPLICATION_DEFAULTS.DEFAULT_DATE_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+                }else{ // english date formate
+                    setEntryDate( APPLICATION_DEFAULTS.DEFAULT_DATE_EN_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+                }
             }else{ // date only
-                setEntryDate( DATE_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+                if( getOriginalJson().getString("entryDate").contains(".") ){
+                    setEntryDate( APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+                }else{
+                    setEntryDate( APPLICATION_DEFAULTS.DEFAULT_DATE_EN_SHORT_FORMATTER.parse( getOriginalJson().getString("entryDate")) );
+                }
             }
         }catch(ParseException ex){
             Logger.getLogger("global").warn("Could not parse entryDate string: "+getOriginalJson().getString("entryDate"));
         }
         clinicID.setValue(getOriginalJson().getInt("clinicId"));
         Logger.getLogger("global").info("getOriginalJson(): "+getOriginalJson());
-        Logger.getLogger("global").info("getOriginalJson().getInt(\"submitterId\": "+getOriginalJson().getInt("submitterId"));
+        Logger.getLogger("global").info("submitterId: "+getOriginalJson().getInt("submitterId"));
         submitterID.setValue( getOriginalJson().getInt("submitterId") );
         Logger.getLogger("global").info("------------ resetCase() called -------------");
         Logger.getLogger("global").info("caseOriginal: "+original.toString());
@@ -159,9 +168,9 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         Boolean hasChangesDiagnose = !diagnosis.getValue().equals(getOriginalJson().getString("diagnose"));
         Boolean hasChangesEntryDate=true;
         try{
-            String newDateStr = entryDate.getValue().contains(" ")? DATE_TIME_FORMATTER.format( DATE_FORMATTER.parse(entryDate.getValue()) ) : DATE_FORMATTER.format( DATE_FORMATTER.parse(entryDate.getValue()) );
-            Date oldDate = getOriginalJson().getString("entryDate").contains(" ") ? DATE_TIME_FORMATTER.parse(getOriginalJson().getString("entryDate")) : DATE_FORMATTER.parse(getOriginalJson().getString("entryDate"));
-            String oldDateStr = DATE_FORMATTER.format( oldDate );
+            String newDateStr = entryDate.getValue().contains(" ") ? APPLICATION_DEFAULTS.DEFAULT_DATE_FORMATTER.format( APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.parse(entryDate.getValue()) ) : APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.parse(entryDate.getValue()) );
+            Date oldDate = getOriginalJson().getString("entryDate").contains(" ") ? APPLICATION_DEFAULTS.DEFAULT_DATE_FORMATTER.parse(getOriginalJson().getString("entryDate")) : APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.parse(getOriginalJson().getString("entryDate"));
+            String oldDateStr = APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( oldDate );
             hasChangesEntryDate = !( Objects.equals( newDateStr, oldDateStr ) );
             if( hasChangesEntryDate ){ Logger.getLogger(getClass()).info("entry date has changed: old="+oldDateStr+" new="+newDateStr); }
         }catch(ParseException ex){ 
@@ -219,7 +228,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
             ID.setValue(toMergeWith.getId());
             caseNumber.setValue(toMergeWith.getCaseNumber());
             diagnosis.setValue(toMergeWith.getDiagnose());
-            entryDate.setValue(ClientCase.DATE_FORMATTER.format( toMergeWith.getEntryDate() ));
+            entryDate.setValue(APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( toMergeWith.getEntryDate() ));
             clinicID.setValue(toMergeWith.getClinicIDProperty().getValue());
             submitterID.setValue(toMergeWith.getSubmitterIDProperty().getValue());
             Logger.getLogger(getClass()).info("Successfully merged...");

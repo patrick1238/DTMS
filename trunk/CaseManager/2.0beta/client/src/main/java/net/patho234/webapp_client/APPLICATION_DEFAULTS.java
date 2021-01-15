@@ -31,6 +31,8 @@ public class APPLICATION_DEFAULTS {
     static final public Locale DEFAULT_LOCALE=Locale.GERMANY;
     static final public SimpleDateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ssZ");
     static final public SimpleDateFormat DEFAULT_DATE_SHORT_FORMATTER = new SimpleDateFormat("dd.MM.yyyy");
+    static final public SimpleDateFormat DEFAULT_DATE_EN_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
+    static final public SimpleDateFormat DEFAULT_DATE_EN_SHORT_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
     static final public DateTimeFormatter DEFAULT_DATETIME_SHORT_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     
     static final public StringConverter<LocalDate> DEFAULT_DATE_CONVERTER = new StringConverter<LocalDate>(){

@@ -17,6 +17,7 @@ import net.patho234.entities.pool.SubmitterPool;
 import net.patho234.interfaces.ILogEntry;
 import net.patho234.interfaces.ISubmitter;
 import net.patho234.interfaces.client.IClientObject;
+import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 
 /**
@@ -59,7 +60,7 @@ public class ClientLogEntry extends ClientObjectBase<ClientLogEntry> implements 
     public JsonObject toJson() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("id", ID.getValue() );
-        builder.add("timestamp", DATE_FORMATTER.format(timestamp) );
+        builder.add("timestamp", APPLICATION_DEFAULTS.DEFAULT_DATE_FORMATTER.format(timestamp) );
         builder.add("message", message);
         builder.add("affectedTable", affectedTable );
         builder.add("submitterId", submitterId);
@@ -113,7 +114,11 @@ public class ClientLogEntry extends ClientObjectBase<ClientLogEntry> implements 
         this.message = orig.getString("message");
         this.submitterId = orig.getInt("submitterId");
         try {
-            this.timestamp = DATE_FORMATTER.parse( orig.getString("timestamp") );
+            if(orig.getString("timestamp").contains(".")){
+                this.timestamp = APPLICATION_DEFAULTS.DEFAULT_DATE_FORMATTER.parse( orig.getString("timestamp") );
+            }else{
+                this.timestamp = APPLICATION_DEFAULTS.DEFAULT_DATE_EN_FORMATTER.parse( orig.getString("timestamp") );
+            }
         } catch (ParseException ex) {
             java.util.logging.Logger.getLogger(ClientLogEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
