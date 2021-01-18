@@ -13,6 +13,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import net.patho234.entities.filter.CaseServiceMetadataDateFilter;
 import net.patho234.entities.filter.CaseServiceMetadataStringFilter;
 import net.patho234.entities.filter.ClientObjectFilterBase;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
@@ -48,7 +49,7 @@ public class CaseDateMetadataFilterPane extends FilterPane{
     
     public CaseDateMetadataFilterPane(String metadataFieldName, String serviceType, String filterMode){
         super();
-        filter = new CaseServiceMetadataStringFilter(metadataFieldName,"",filterMode);
+        filter = new CaseServiceMetadataDateFilter(metadataFieldName,"",filterMode);
         filter.setServiceType(serviceType);
         this.metadataFieldName = metadataFieldName;
         this.serviceType = serviceType;
