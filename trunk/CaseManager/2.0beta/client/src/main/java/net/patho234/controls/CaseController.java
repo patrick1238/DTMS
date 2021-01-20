@@ -32,6 +32,7 @@ import javafx.stage.Window;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.patho234.entities.ClientCase;
+import net.patho234.entities.ClientService;
 import net.patho234.entities.filter.ServiceTypeFilter;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
@@ -91,6 +92,19 @@ public class CaseController implements Initializable {
         if (list != null) {
             for (File file : list) {
                 HashMap<String, String> info = FilenameParser.twoDimFrankfurtParser(file.getName());
+                
+                ClientService new2DService = ClientService.getServiceTemplate(-1,APPLICATION_DEFAULTS.SERVICE_DEFINITION_ID_2D);
+                
+                // check if case already exists by case number:
+                String caseNumber = info.get(FilenameParser.CASE_ID);
+                ClientCase caseForService = CasePool.createPool().getEntityByCaseNumber(caseNumber, false);
+                if( caseForService == null ){
+                    // TODO: create case here
+                }
+                
+                // TODO: create service here
+                
+                // TODO: create metadata here
             }
         }
     }

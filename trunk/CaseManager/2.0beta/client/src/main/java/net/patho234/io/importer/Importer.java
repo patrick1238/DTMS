@@ -5,12 +5,12 @@
  */
 package net.patho234.io.importer;
 
-import com.sun.istack.internal.logging.Logger;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 
 /**
@@ -42,7 +42,7 @@ public class Importer {
         HashMap<String,File>folders = select_Folders(identifier);
         HashMap<Integer,ImportCase> cases = DtmsImportParser.parse_dtmsfiles_to_case_map(folders.get("database"));
         for(ImportCase c:cases.values()){
-            Logger.getLogger(Importer.class).fine( c.get_caseNumber() + ":" );
+            Logger.getLogger("Importer").fine( c.get_caseNumber() + ":" );
             System.out.println( c.get_caseNumber() + ":" );
             String output = "2D:\n";
             for(ImportTwoDim t:c.get_twodim_images().values()){
@@ -56,7 +56,7 @@ public class Importer {
             for(ImportFourDim t:c.get_fourdim_images().values()){
                 output = output + t.get_imageID() + " , ";
             }
-            Logger.getLogger(Importer.class).fine( output + "\n" );
+            Logger.getLogger("Importer").fine( output + "\n" );
             System.out.println( output + "\n" );
         }
         return cases;
@@ -71,7 +71,7 @@ public class Importer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Logger.getLogger(Importer.class).setLevel(Level.FINEST);
+        Logger.getLogger("Importer").setLevel(Level.FINEST);
         HashMap<Integer,ImportCase> cases = DTMS_1_Importer();
         System.out.println(cases.keySet().size());
         

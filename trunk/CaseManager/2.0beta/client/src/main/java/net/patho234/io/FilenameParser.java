@@ -13,6 +13,11 @@ import java.util.HashMap;
  * @author patri
  */
 public class FilenameParser {
+    public final static String CASE_ID="CaseID";
+    public final static String BLOCK="Block";
+    public final static String DIAGNOSIS="Diagnosis";
+    public final static String RED="Red";
+    public final static String BLUE="Blue";
     
     public static HashMap<String,String> twoDimFrankfurtParser(String filename){
         HashMap<String,String> info = new HashMap<>();
@@ -21,11 +26,16 @@ public class FilenameParser {
         }
         String[] blank_splitted = filename.split(" ");
         String[] main_info = blank_splitted[0].split("_");
-        info.put("CaseID", main_info[0]+"-"+main_info[1]);
-        info.put("Block", main_info[2]);
-        info.put("Diagnosis", main_info[3]);
-        info.put("Red", main_info[4]);
-        info.put("CaptureDate", blank_splitted[2]);
+        info.put(CASE_ID, main_info[0]+"-"+main_info[1]);
+        info.put(BLOCK, main_info[2]);
+        info.put(DIAGNOSIS, main_info[3]);
+        info.put(RED, main_info[4]);
+        try{
+            info.put("CaptureDate", blank_splitted[2]);
+        }catch(Exception ex){
+            info.put("CaptureDate", blank_splitted[2]);
+            // could not be parsed: if value is required will result in a NULL pointer exception
+        }
         for(String key:info.keySet()){
             System.out.println(key);
             System.out.println(info.get(key));
@@ -40,9 +50,13 @@ public class FilenameParser {
         }
         String test = "L518-18_MZ_CD20_594_Actin_488_63x_001.lif";
         String[] main_info = filename.split("_");
-        info.put("CaseID", main_info[0]);
-        info.put("Diagnosis", main_info[1]);
-        info.put("Red", main_info[4]);
+        info.put(CASE_ID, main_info[0]);
+        info.put(DIAGNOSIS, main_info[1]);
+        info.put(RED, main_info[4]);
+        if(main_info.length>6){
+            info.put(BLUE, main_info[6]);
+            System.out.println("TODO: CHECK IF BLUE IS CORRECT");
+        }
         return info;
     }
     

@@ -33,6 +33,8 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
     private static ClinicPool singletonPool;
     private static ClientClinic defaultClinic;
     
+    private boolean initialized=false;
+    
     ClientObjectList<ClientClinic> cachedClinicList=new ClientObjectList();
     
     HashSet<String> loadedClinicNames = new HashSet<>();
@@ -186,6 +188,7 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
                 loadedClinicNames.add(newClinic.getName());
                 cachedClinicList.add( newClinic );
             });
+            initialized=true;
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Clinic deleted successfully.");
         } else{ // all other request result in a single clinic as JSON object
@@ -209,5 +212,9 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
         }
         
         return null;
+    }
+
+    public boolean isInitialized() {
+        return this.initialized;
     }
 }

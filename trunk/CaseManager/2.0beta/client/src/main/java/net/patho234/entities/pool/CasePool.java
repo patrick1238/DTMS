@@ -73,11 +73,11 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         HashMap<String,Object> param = new HashMap<>();
         param.put("case_id", caseId);
         if(updatePool){
-        try{
-            fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
-        } catch (NotSignedInException ex) {
-            Logger.getLogger(getClass()).log(Level.WARN, "could not load case", ex);
-        }
+            try{
+                fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.GET, param);
+            } catch (NotSignedInException ex) {
+                Logger.getLogger(getClass()).log(Level.WARN, "could not load case", ex);
+            }
         }
         return (returnCase==null) ? defaultCase.getLocalClone() : returnCase;
     }

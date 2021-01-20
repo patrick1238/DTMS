@@ -150,17 +150,17 @@ public class MainWindow extends Stage{
         long startTime = System.currentTimeMillis();
         ClinicPool.createPool().getAllEntities(true);
         try {
-            ClinicPool.createPool().waitFor(30000);
+            ClinicPool.createPool().waitFor(10000);
             Logger.getLogger(getClass().getName()).info("ClinicPool preloaded..."+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
         }
         
-        if( ClinicPool.createPool().getAllEntities(false) == null ){
+        if( !ClinicPool.createPool().isInitialized() ){
             try {
                 Logger.getLogger(getClass().getName()).info("ClinicPool preloading failed...trying a second time.");
-                ClinicPool.createPool().waitFor(30000);
+                ClinicPool.createPool().waitFor(10000);
                 Logger.getLogger(getClass().getName()).info("ClinicPool preloaded..."+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
             } catch (TimeoutException ex2) {
                 Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex2.getMessage()}));
@@ -180,7 +180,7 @@ public class MainWindow extends Stage{
         startTime = System.currentTimeMillis();
         ServiceDefinitionPool.createPool().getAllEntities(true);
         try {
-            ServiceDefinitionPool.createPool().waitFor(30000);
+            ServiceDefinitionPool.createPool().waitFor(10000);
             Logger.getLogger(getClass().getName()).info("ServiceDefinitionPool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
@@ -198,7 +198,7 @@ public class MainWindow extends Stage{
         startTime = System.currentTimeMillis();
         ServicePool.createPool().getAllEntities(true);
         try {
-            ServicePool.createPool().waitFor(30000);
+            ServicePool.createPool().waitFor(10000);
             Logger.getLogger(getClass().getName()).info("ServicePool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
@@ -217,7 +217,7 @@ public class MainWindow extends Stage{
         CasePool.createPool().getAllEntities(true);
         try {
             Logger.getLogger(getClass().getName()).info("CasePool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
-            CasePool.createPool().waitFor(30000);
+            CasePool.createPool().waitFor(10000);
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
             ex.printStackTrace();
@@ -234,7 +234,7 @@ public class MainWindow extends Stage{
         startTime = System.currentTimeMillis();
         MetadataPool.createPool().getAllEntities(true);
         try {
-            MetadataPool.createPool().waitFor(30000);
+            MetadataPool.createPool().waitFor(10000);
             Logger.getLogger(getClass().getName()).info("MetadataPool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));
