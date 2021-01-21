@@ -6,16 +6,16 @@ INSERT INTO `linfo_open_db`.`submitter` (`idsubmitter`, `surname`, `forename`, `
 INSERT INTO `linfo_open_db`.`submitter` (`idsubmitter`, `surname`, `forename`, `title`, `login`, `password`) VALUES (3, 'Musterfrau', 'Miriam', 'Frau', 'guest2', '654321');
 
 # CLINIC_CASE
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (1, 'H1001-19', 1, '23.03.2017', 'cHL (MC)', 1);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (2, 'H1321-19', 1, '01.06.2017', 'cHL (MC)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (3, 'K2233-18', 1, '13.08.2017', 'cHL (NS)', 3);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (4, 'K1234-19', 1, '24.12.2017', 'Lymphadenitis', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (5, 'H121-17', 1, '03.01.2018', 'cHL (NS)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (6, 'H979-17', 1, '08.03.2018', 'cHL (MC)', 3);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (7, 'K385-17', 2, '30.07.2018', 'Lymphadenitis', 3);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (8, 'K3543-19', 2, '11.09.2019', 'cHL (MC)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (9, 'K322-18', 2, '04.12.2019', 'cHL (NS)', 2);
-INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (10, 'H1001-18', 2, '32.01.2020', 'cHL (NS)', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (1, 'H1001-19', 1, '2017-03-23', 'cHL (MC)', 1);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (2, 'H1321-19', 1, '2017-06-01', 'cHL (MC)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (3, 'K2233-18', 1, '2017-08-13', 'cHL (NS)', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (4, 'K1234-19', 1, '2017-12-24', 'Lymphadenitis', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (5, 'H121-17', 1, '2018-01-03', 'cHL (NS)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (6, 'H979-17', 1, '2018-03-08', 'cHL (MC)', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (7, 'K385-17', 2, '2018-07-30', 'Lymphadenitis', 3);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (8, 'K3543-19', 2, '2019-09-11', 'cHL (MC)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (9, 'K322-18', 2, '2019-12-04', 'cHL (NS)', 2);
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (10, 'H1001-18', 2, '2020-01-22', 'cHL (NS)', 3);
 
 
 #CONTACT_PERSON

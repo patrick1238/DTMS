@@ -100,6 +100,7 @@ public class CaseController implements Initializable {
                 ClientCase caseForService = CasePool.createPool().getEntityByCaseNumber(caseNumber, false);
                 if( caseForService == null ){
                     // TODO: create case here
+                    // compare to loaded case and validate if case number match
                 }
                 
                 // TODO: create service here
