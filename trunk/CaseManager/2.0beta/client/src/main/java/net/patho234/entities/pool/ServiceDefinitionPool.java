@@ -120,6 +120,8 @@ public class ServiceDefinitionPool extends AClientObjectPool<ClientServiceDefini
 
                 cachedServiceDefinitionList.add(new ClientServiceDefinition(theDefinition));
             });
+            
+            initialized = true;
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no service as response (deleted)
             Logger.getLogger(getClass().getName()).info("Service deleted successfully.");
         } else{ // all other request result in a single service as JSON object

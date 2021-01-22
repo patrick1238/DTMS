@@ -233,6 +233,7 @@ public class CasePool extends AClientObjectPool<ClientCase> {
                 System.out.println("[ALL] REMOVING CASE WITH ID: "+idToRemove);
                 cachedCaseList.removeById(idToRemove);
             }
+            initialized = true;
             System.out.println("[ALL] CACHED LIST SIZE NOW "+cachedCaseList.size()+" IDs");
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             int deletedId = (Integer)requestToFinish.getParameters().get("case_id");

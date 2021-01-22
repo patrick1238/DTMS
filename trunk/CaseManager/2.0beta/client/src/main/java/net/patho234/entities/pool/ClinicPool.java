@@ -213,8 +213,4 @@ public class ClinicPool extends AClientObjectPool<ClientClinic> {
         
         return null;
     }
-
-    public boolean isInitialized() {
-        return this.initialized;
-    }
 }

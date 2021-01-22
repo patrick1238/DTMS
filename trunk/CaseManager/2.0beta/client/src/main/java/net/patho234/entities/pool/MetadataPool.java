@@ -184,6 +184,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
                 cachedMetadataList.add(newMetadata);
             });
             new PerServiceMapUpdater(this).start();
+            initialized = true;
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.DELETE)){ // no case as response (deleted)
             Logger.getLogger(getClass().getName()).info("Metadata deleted successfully.");
             new PerServiceMapUpdater(this).start();

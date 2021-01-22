@@ -33,6 +33,7 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
     static UUIDGenerator uuidGen = new UUIDGenerator();
     HashMap<Integer, PendingRequest> pendingHttpRequests=new HashMap<>();
     
+    protected boolean initialized=false;
     
     public T getEntity(int ID){ return getEntity(ID, Boolean.FALSE); }
     abstract public T getEntity(int ID, Boolean updatePool);
@@ -174,6 +175,11 @@ public abstract class AClientObjectPool<T extends IClientObject> implements IHtt
                 Logger.getLogger(getClass().getName()).info("HttpResponse with status '"+response.getResponseStatus()+"' received. TODO: handle error");
                 finishPendingRequest(requestID);
         }
+    }
+    
+            
+    public boolean isInitialized(){
+        return initialized;
     }
     
     protected class PendingRequest{

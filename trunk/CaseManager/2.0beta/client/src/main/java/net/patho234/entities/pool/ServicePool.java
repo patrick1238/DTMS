@@ -228,6 +228,7 @@ public class ServicePool extends AClientObjectPool<ClientService> {
             for(int i=0; i<servicesToDelete.size(); i++){
                 cachedServiceList.removeById(servicesToDelete.get(i).getId());
             }
+            initialized = true;
             new PerCaseMapUpdater(this).start();
         } else if(requestToFinish.getRequestType().equals(HTTP_REQUEST_TYPE.GET_ALL_FILTERED)){
             Logger.getLogger(getClass()).info("Received JsonArray for services, updating local service list");
