@@ -42,6 +42,10 @@ public class CaseWindow extends Stage {
     
     public void initView(){
         controller.loadCase(myCase);
-        this.setTitle(myCase.getCaseNumber());
+        if( myCase.getId() == -1 ){ // create a new Case
+            this.setTitle("Create a new case...");
+        }else {
+            this.setTitle(myCase.getCaseNumber());
+        }
     }   
 }

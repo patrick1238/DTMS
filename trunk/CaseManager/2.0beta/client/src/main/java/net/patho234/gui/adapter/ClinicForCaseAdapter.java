@@ -32,7 +32,11 @@ public class ClinicForCaseAdapter {
     }
     
     public void bindName(Property<String> guiProperty){
-        guiProperty.setValue(myCase.getClinic().getName());
+        if(myCase.getClinic()==null){
+            guiProperty.setValue("");
+        }else{
+            guiProperty.setValue(myCase.getClinic().getName());
+        }
         clinicName.bindBidirectional(guiProperty);
     }
     

@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ScrollPane;
@@ -31,6 +33,8 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import net.patho234.elements.validator.ClientCaseValidator;
+import net.patho234.elements.validator.ValidationResult;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientService;
 import net.patho234.entities.filter.ServiceTypeFilter;
@@ -40,6 +44,7 @@ import net.patho234.entities.pool.ServicePool;
 import net.patho234.gui.ClientPopup;
 import net.patho234.gui.adapter.ClinicForCaseAdapter;
 import net.patho234.gui.adapter.EntryDateForCaseAdapter;
+import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
 import net.patho234.utils.TableViewerControllerFactory;
@@ -67,7 +72,9 @@ public class CaseController implements Initializable {
     private ScrollPane fileViewerScrollPane;
     @FXML
     private VBox fileViewerBox;
-
+    @FXML
+    private Button bttSave;
+    
     ClientCase dataObject;
     ClinicForCaseAdapter clinicAdapter;
     EntryDateForCaseAdapter entryDateAdapter;
@@ -128,6 +135,14 @@ public class CaseController implements Initializable {
 
     @FXML
     private void saveButtonClicked(ActionEvent event) throws IOException {
+        // case is new and needs to be created
+        if( dataObject.getId()==-1 ){
+            Logger.getLogger(getClass()).info("Create case was clicked...");
+            createNewCase();
+            return;
+        }
+            
+        // case already exists and maybe needs to be persisted
         if( dataObject.hasLocalChanges() ){
             // TODO: check new values and persist to data base
             new ClientPopup("Case object has changes", "TODO: check new values and persist...").show(this.casePane.getScene().getWindow());
@@ -139,9 +154,9 @@ public class CaseController implements Initializable {
     }
 
     public void loadCase(ClientCase caseToLoad) {
+        dataObject = caseToLoad;
         setUpDisplay();
         
-        dataObject = caseToLoad;
         this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
         this.diagnoseBox.editorProperty().getValue().textProperty().bindBidirectional( dataObject.getDiagnosisProperty() );
         
@@ -159,6 +174,14 @@ public class CaseController implements Initializable {
     }
     
     private void loadServices(){
+        if( dataObject.getId()==-1 ){
+            Logger.getLogger(getClass()).info("Case is not persisted in data base, no services to load.");
+            services2D.setItems(new ClientObjectList());
+            services3D.setItems(new ClientObjectList());
+            services4D.setItems(new ClientObjectList());
+            return;
+        }
+        
         ServiceTypeFilter only2DFilter = new ServiceTypeFilter("2D");
         ServiceTypeFilter only3DFilter = new ServiceTypeFilter("3D");
         ServiceTypeFilter only4DFilter = new ServiceTypeFilter("4D");
@@ -192,6 +215,12 @@ public class CaseController implements Initializable {
                 services4D.setMaxWidth(newWidth);
             }
         };
+        
+        if( dataObject.getId()==-1 ){
+            bttSave.setText("Create case...");
+        }else{
+            bttSave.setText("Save changes");
+        }
         
         casePane.widthProperty().addListener(sizeChangedChangeListener);
         // get all diagnoses from loaded cases
@@ -245,5 +274,36 @@ public class CaseController implements Initializable {
             ex.printStackTrace();
         }
     }
+    
+    
+    private void createNewCase(){
+        ValidationResult r = ClientCaseValidator.validateCreate(dataObject);
+        switch( r.getValidationCode() ){
+            case ValidationResult.CODE_INVALID:
+                try{
+                    new ClientPopup("Case entry is not valid and can not be persisted", "Invalidation reasons:\n"+r.toString(ValidationResult.CODE_MAJOR_CONCERNS)).show(this.casePane.getScene().getWindow());;
+                }catch(IOException ioEx){ ioEx.printStackTrace(); }
+                break;
+            case ValidationResult.CODE_MINOR_CONCERNS:
+            case ValidationResult.CODE_MAJOR_CONCERNS:
+                try{
+                    new ClientPopup("Case entry is valid but has concerns...", "Invalidation reasons:\n"+r.toString(ValidationResult.CODE_MAJOR_CONCERNS)).show(this.casePane.getScene().getWindow());
+                }catch(IOException ioEx){ ioEx.printStackTrace(); }
+                break;
+            case ValidationResult.CODE_VALID:
+            {
+                try {
+                    new ClientPopup("Case entry is valid ", "TODO: CasePool.createEntity()\nValidation results:\n"+r.toString(ValidationResult.CODE_VALID)).show(this.casePane.getScene().getWindow());
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(CaseController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
+            default:
+                
+        }
+        
+        
+        
+    }
 }

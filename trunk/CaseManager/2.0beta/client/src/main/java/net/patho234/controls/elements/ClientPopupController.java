@@ -73,7 +73,7 @@ public class ClientPopupController implements Initializable {
 
     public double getPrefHeight() {
         // only works with current font size...made by testing no clue about the math
-        return (message.getText().length()/40.)*30+140;
+        return (message.getText().length()/40.)*30+190;
     }
 
     public void setHeight(double prefHeight) {

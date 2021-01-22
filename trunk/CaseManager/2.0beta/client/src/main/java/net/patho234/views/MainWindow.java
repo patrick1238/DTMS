@@ -67,6 +67,46 @@ public class MainWindow extends Stage{
             Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for status preloader window...exiting.", ioEx);
             FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
         }
+//        
+//        boolean timeout = false;
+//        int counter=0;
+//        while ( (!(CasePool.createPool().isInitialized() &&
+//                ClinicPool.createPool().isInitialized() &&
+//                ServicePool.createPool().isInitialized() &&
+//                ServiceDefinitionPool.createPool().isInitialized() &&
+//                MetadataPool.createPool().isInitialized())) && !timeout
+//                ) {
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            counter++;
+//            if(counter % 25 == 0){
+//                System.out.println("<ClientPools>.init() "+(counter / 40.)+" seconds (counter='"+counter+"')" );
+//                System.out.println("<ClientPools>: "+(CasePool.createPool().isInitialized())+" | "+(ClinicPool.createPool().isInitialized())+" | "
+//                +(ServicePool.createPool().isInitialized())+" | "+(ServiceDefinitionPool.createPool().isInitialized())+" | "
+//                +(MetadataPool.createPool().isInitialized())+" | ");
+//            }
+//            timeout = counter >= 200;
+//        }
+//        if( timeout ){ Logger.getLogger(getClass().getName()).warning( "Waiting for ClientObjectPools resulted in a timeout." ); }
+//        
+//        if (ServiceDefinitionPool.createPool().getAllEntities().size()  == 0){
+//            Logger.getLogger(getClass().getName()).warning("Client object pools were not initialized correctly...performing one retry.");
+//            
+//            try {
+//                startClientObjectPoolPreloading();
+//            } catch (IOException ioEx) {
+//                Logger.getLogger(RegistrationWindow.class.getName()).log(Level.SEVERE, "Could not load FXML file for status preloader window...exiting.", ioEx);
+//                FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
+//            }
+//        }
+//        
+//        if (ServiceDefinitionPool.createPool().getAllEntities().size()  == 0){
+//            Logger.getLogger(getClass().getName()).severe("Client object pools were not initialized correctly second time...exiting");
+//            FxmlManager.EXIT_APPLICATION_HANDLER.handle(null);
+//        }
 
         FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("/fxml/fx_main_pane.fxml"));
         Parent root = null;
@@ -157,6 +197,12 @@ public class MainWindow extends Stage{
             ex.printStackTrace();
         }
         
+        boolean timeout=false; int counter=0;
+        while ( !ClinicPool.createPool().isInitialized() && !timeout ){
+            try { Thread.sleep(100); } catch (InterruptedException ex) { Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex); }
+            counter++;
+            timeout = counter > 100;
+        }
         if( !ClinicPool.createPool().isInitialized() ){
             try {
                 Logger.getLogger(getClass().getName()).info("ClinicPool preloading failed...trying a second time.");
@@ -280,6 +326,9 @@ public class MainWindow extends Stage{
     }
 
     public boolean loadTableViewerWindow() {
+        if( tableviewer != null ){
+            tableviewer.close();
+        }
         tableviewer = new TableViewerWindow();
         Logger.getLogger(getClass().getName()).info("Initializing TableViewer tables...");
         tableviewer.initializeTables();

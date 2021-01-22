@@ -5,6 +5,7 @@
  */
 package net.patho234.controls;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -16,6 +17,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import net.patho234.entities.ClientCase;
+import net.patho234.entities.pool.CasePool;
+import net.patho234.views.CaseWindow;
 
 /**
  * FXML Controller class
@@ -105,6 +109,17 @@ public class MainPaneController implements Initializable {
 
     @FXML
     private void addCaseClicked(ActionEvent event) {
+        
+        CaseWindow newCaseWnd;
+        try{
+            newCaseWnd = new CaseWindow(ClientCase.getCaseTemplate());
+            newCaseWnd.initView();
+            newCaseWnd.showAndWait();
+        }catch( IOException ioEx ){
+            ioEx.printStackTrace();
+        }
+        
+        
     }
 
     @FXML
