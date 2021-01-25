@@ -38,6 +38,7 @@ import net.patho234.control.LocalSubmitterRepository;
 import net.patho234.entity.CaseEntity;
 import net.patho234.entity.validation.DefaultValidationException;
 import net.patho234.interfaces.ICase;
+import net.patho234.utils.DateParser;
 import net.patho234.utils.HttpAccessRequest;
 import net.patho234.utils.LocalUUIDManager;
 import org.jboss.logging.Logger;
@@ -57,8 +58,6 @@ public class CasesResource {
     final private String CASE_DELETE_URL="/case/delete";
     final private String CASE_GET_CASENUMBER_URL="casepool/case/casenumber/{CaseNumber}";
     
-    final private SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ssZ");
-    
     @EJB
     LocalCaseRepository caseRepo;
     @EJB
@@ -77,12 +76,11 @@ public class CasesResource {
     UriInfo uriInfo;
     
     public CasesResource(){
-        df.setTimeZone(TimeZone.getTimeZone("MEZ"));
+
     }
     
     public CasesResource(UriInfo uriInfo){
         this.uriInfo=uriInfo;
-        df.setTimeZone(TimeZone.getTimeZone("MEZ"));
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -227,14 +225,8 @@ public class CasesResource {
         caseToUpdate.setDiagnose(diagnose);
         String dateAsString = updatedCase.getString("entryDate");
         Date date=null;
-        try{
-            //Date d=new Date(119, 5, 23, 10, 15, 11);
-            // Logger.getLogger("global").info( "example date: "+df.format(d));
-            date=df.parse(dateAsString);
-            
-        }catch(ParseException pEx){
-            Logger.getLogger("global").info("Could not parse entryDate: '"+dateAsString+"'");
-        }
+
+        date=DateParser.parse(dateAsString);
         
         caseToUpdate.setEntryDate(date);
         
@@ -267,6 +259,7 @@ public class CasesResource {
         
         boolean hasAccess=submitterRepo.submitterHasAccess(submitter.getString("login"), submitter.getString("password"));
         if( !hasAccess ){
+            Logger.getLogger("global").log(Logger.Level.WARN, "Submitter has no access.");
             return submitterRepo.createNoPermissionResponse(CasesURLResource.getUpdateURL(uriInfo), submitter.getString("login"), "create case with case number="+createCase.getString("caseNumber"));
         }
         
@@ -299,10 +292,9 @@ public class CasesResource {
         String entryDate=createCase.getString("entryDate");
         Date date=null;
         if( entryDate != null ){
-            try {
-                date=df.parse(entryDate);
-            } catch (ParseException ex) {
-                java.util.logging.Logger.getGlobal().log(Level.WARNING, "Date format couldn't be parsed: '"+entryDate+"'", ex);
+
+            date=DateParser.parse(entryDate);
+            if(date==null) {
                 return DefaultResponse.createUnprocessableEntityResponse(ErrorRepository.createFormatException(CASE_CREATE_URL, "create new case", "Date"));
             }
         }
@@ -387,7 +379,7 @@ public class CasesResource {
         jsonUserBuilder.add("caseNumber", caseToBuild.getCaseNumber())
                 .add("id", caseToBuild.getId())
                 .add("caseNumber", caseToBuild.getCaseNumber())
-                .add("entryDate", ((caseToBuild.getEntryDate()!=null)?df.format( caseToBuild.getEntryDate() ):""))
+                .add("entryDate", ((caseToBuild.getEntryDate()!=null)?DateParser.format( caseToBuild.getEntryDate() ):""))
                 .add("diagnose", (caseToBuild.getDiagnose()!=null)?caseToBuild.getDiagnose():"")
                 .add("submitterId",caseToBuild.getSubmitter().getId() )
                 .add("clinicId", caseToBuild.getClinic().getId() )
@@ -421,7 +413,7 @@ public class CasesResource {
         sb.append("\tcase number: ").append(aCase.getCaseNumber());
         sb.append("\tclinic: ").append(aCase.getClinic());
         sb.append("\tentry date: ").append(
-                (aCase.getEntryDate() != null) ? df.format( aCase.getEntryDate() ) : "-" );
+                (aCase.getEntryDate() != null) ? DateParser.format( aCase.getEntryDate() ) : "-" );
         sb.append("\tdiagnosis: ").append(
                 (aCase.getDiagnose() != null) ? aCase.getDiagnose() : "-" );
         sb.append("\tsubmitter: ").append(
