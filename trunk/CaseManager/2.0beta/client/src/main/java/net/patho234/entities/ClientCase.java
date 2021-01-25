@@ -72,7 +72,7 @@ public class ClientCase extends ClientObjectBase<ClientCase> implements ICase{
         builder.add("diagnose", "");
         builder.add("entryDate", APPLICATION_DEFAULTS.DEFAULT_DATE_SHORT_FORMATTER.format( new Date() ));
         builder.add("clinicId", -1);
-        builder.add("submitterId", -1);
+        builder.add("submitterId", (UserLogin.getLogin()) == null ? -1 : UserLogin.getLogin().getId());
         return new ClientCase( builder.build() );
     }
     

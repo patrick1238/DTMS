@@ -123,7 +123,7 @@ public class CasePool extends AClientObjectPool<ClientCase> {
         Integer requestId = requestIDs[requestIDs.length-1];
         waitForRequest(requestId);
         
-        getEntityByCaseNumber(toCreate.getCaseNumber(), true);
+        //getEntityByCaseNumber(toCreate.getCaseNumber(), true);
         return requestId;
     }
 

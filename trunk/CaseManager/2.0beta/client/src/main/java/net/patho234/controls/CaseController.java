@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Menu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,6 +38,7 @@ import net.patho234.elements.validator.ClientCaseValidator;
 import net.patho234.elements.validator.ValidationResult;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientService;
+import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.filter.ServiceTypeFilter;
 import net.patho234.entities.pool.CasePool;
 import net.patho234.entities.pool.ClinicPool;
@@ -74,6 +76,8 @@ public class CaseController implements Initializable {
     private VBox fileViewerBox;
     @FXML
     private Button bttSave;
+    @FXML
+    private Menu menuAdd;
     
     ClientCase dataObject;
     ClinicForCaseAdapter clinicAdapter;
@@ -81,6 +85,8 @@ public class CaseController implements Initializable {
     TableView services2D;
     TableView services3D;
     TableView services4D;
+    
+    private boolean initialized=false;
     
     /**
      * Initializes the controller class.
@@ -155,8 +161,11 @@ public class CaseController implements Initializable {
 
     public void loadCase(ClientCase caseToLoad) {
         dataObject = caseToLoad;
-        setUpDisplay();
-        
+        if( !initialized ){
+            setUpDisplay();
+        }else{
+            updateDisplay();
+        }
         this.caseIDField.textProperty().bindBidirectional(dataObject.getCaseNumberProperty());
         this.diagnoseBox.editorProperty().getValue().textProperty().bindBidirectional( dataObject.getDiagnosisProperty() );
         
@@ -191,6 +200,22 @@ public class CaseController implements Initializable {
         services4D.setItems( only4DFilter.filterClientObjectList( ServicePool.createPool().getAllEntitiesForCase(dataObject) ) );
     }
     
+    private void updateDisplay(){
+        if( dataObject.getId()==-1 ){
+            System.out.println("[987] NEW CASE");
+            bttSave.setText("Create case...");
+            menuAdd.getItems().forEach((t) -> {
+                t.setDisable(true);
+            });
+        }else{
+            System.out.println("[987] PERSISTED CASE");
+            bttSave.setText("Save changes");
+            menuAdd.getItems().forEach((t) -> {
+                t.setDisable(false);
+            });
+        }
+    }
+    
     private void setUpDisplay(){
         javafx.beans.value.ChangeListener sizeChangedChangeListener = new javafx.beans.value.ChangeListener<Double>() {
             @Override
@@ -216,11 +241,7 @@ public class CaseController implements Initializable {
             }
         };
         
-        if( dataObject.getId()==-1 ){
-            bttSave.setText("Create case...");
-        }else{
-            bttSave.setText("Save changes");
-        }
+        updateDisplay();
         
         casePane.widthProperty().addListener(sizeChangedChangeListener);
         // get all diagnoses from loaded cases
@@ -273,6 +294,8 @@ public class CaseController implements Initializable {
         }catch (NullPointerException ex){
             ex.printStackTrace();
         }
+        
+        this.initialized = true;
     }
     
     
@@ -293,7 +316,20 @@ public class CaseController implements Initializable {
             case ValidationResult.CODE_VALID:
             {
                 try {
-                    new ClientPopup("Case entry is valid ", "TODO: CasePool.createEntity()\nValidation results:\n"+r.toString(ValidationResult.CODE_VALID)).show(this.casePane.getScene().getWindow());
+                    
+                    try {
+                        int requestId = CasePool.createPool().createEntity(dataObject);
+                        CasePool.createPool().waitForRequest(requestId);
+//                        System.out.println("DATA_BEFORE:"+dataObject.toString());
+                        dataObject = CasePool.createPool().getEntityByCaseNumber(dataObject.getCaseNumber(), Boolean.FALSE);
+//                        System.out.println("DATA_AFTER:"+dataObject.toString());
+                    } catch (Exception e) {
+                        new ClientPopup("Error while creating new case...", "Case could not be created...network connection might be unstable.").show(this.casePane.getScene().getWindow());
+                    }finally{
+                        loadCase(dataObject);
+                        ClientObjectSearchManager.create().updateAll();
+                    }
+                    
                 } catch (IOException ex) {
                     java.util.logging.Logger.getLogger(CaseController.class.getName()).log(Level.SEVERE, null, ex);
                 }

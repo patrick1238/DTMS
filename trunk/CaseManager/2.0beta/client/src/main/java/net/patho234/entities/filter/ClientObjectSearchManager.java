@@ -7,6 +7,7 @@ package net.patho234.entities.filter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.AnchorPane;
 import net.patho234.entities.ClientCase;
@@ -83,6 +84,12 @@ public class ClientObjectSearchManager implements ListChangeListener<ClientObjec
     public void removeResultListener(IDtmsSearchListener listener){
         for( IDtmsSearch s : this.dtmsSearches.values()){
             s.removeDtmsSearchResultListener(listener);
+        }
+    }
+
+    public void updateAll() {
+        for( Entry<String, IDtmsSearch> e : dtmsSearches.entrySet() ){
+            e.getValue().updateSearchResult();
         }
     }
     

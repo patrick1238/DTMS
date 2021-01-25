@@ -20,7 +20,7 @@
    <children>
       <MenuBar layoutX="5.0" layoutY="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
-          <Menu mnemonicParsing="false" text="Add">
+          <Menu fx:id="menuAdd" mnemonicParsing="false" text="Add">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#addTwoDimClicked" text="2DImage" />
                   <MenuItem mnemonicParsing="false" onAction="#addThreeDimClicked" text="3DImage" />
