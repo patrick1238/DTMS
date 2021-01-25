@@ -114,6 +114,9 @@ public class LoginController implements Initializable, ISubmitterReceiver {
             return;
         }
         
+        ISubmitter submitter = getSubmitter(user);
+        UserLogin.setLogin(submitter);
+        
         // TODO:
         // start MainWindow here
         usernameField.getScene().getWindow().setOnCloseRequest(FxmlManager.DISPOSE_WINDOW_HANDLER);
@@ -122,7 +125,14 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         MainWindow mainWnd = new MainWindow();
         //mainWnd.show();
     }
-    
+    private ISubmitter getSubmitter( String user ){
+        ReadOnlyClientObjectList<ClientSubmitter> submitters = SubmitterPool.createPool().getAllEntities();
+        for(ClientSubmitter s : submitters){
+            if(s.getLogin().equals(user)){ return s; }
+        }
+        return null;
+    }
+            
     private boolean isValidLogin(String login, String password){
         ReadOnlyClientObjectList<ClientSubmitter> submitters = SubmitterPool.createPool().getAllEntities();
         boolean isValid=false;
