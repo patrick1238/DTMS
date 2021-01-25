@@ -22,13 +22,15 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
         beginChange();
         try{
             internalPut(object);
+            endChange();
             return true;
         }catch(IndexOutOfBoundsException ex){
             Logger.getLogger(getClass()).warn(ex.getMessage());
             Logger.getLogger(getClass()).warn(String.format( "caused by object: {0}", new Object[]{ object }) );
+            endChange();
             return false;
         }finally{
-            endChange();
+            
         }
     }
     
@@ -69,6 +71,8 @@ public class ClientObjectList<T extends IClientObject> extends ReadOnlyClientObj
     
     
     public void removeById(int entityId){
+        beginChange();
         this.cachedObjects.remove(entityId);
+        endChange();
     }
 }
