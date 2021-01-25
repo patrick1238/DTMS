@@ -9,6 +9,8 @@ package net.patho234.controls;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,6 +56,17 @@ public class LoginController implements Initializable, ISubmitterReceiver {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        SubmitterPool.createPool().getAllEntities(true);
+        try {
+            SubmitterPool.createPool().waitFor(5000);
+        } catch (TimeoutException ex) {
+            java.util.logging.Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // TODO: remove next two lines...just inserted for testing
+        usernameField.setText( "guest" );
+        passwordField.setText( "123456");
+        
     }    
 
     @FXML
@@ -73,8 +86,10 @@ public class LoginController implements Initializable, ISubmitterReceiver {
 
     @FXML
     private void loginPressed(ActionEvent event) {
-        String user = "guest";//usernameField.getText();
-        String pwd = "123456";//passwordField.getText();
+        String user; String pwd;
+        
+        user = usernameField.getText();
+        pwd = passwordField.getText();
         
         boolean allowLogin=true;
         String errorMsg="";
@@ -87,6 +102,8 @@ public class LoginController implements Initializable, ISubmitterReceiver {
             allowLogin=false;
             errorMsg+="Required password field is empty.\n";
         }
+        
+        allowLogin = allowLogin && isValidLogin(user, pwd);
         
         if( !allowLogin ){
             try {
