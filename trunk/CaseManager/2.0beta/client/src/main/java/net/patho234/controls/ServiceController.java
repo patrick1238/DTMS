@@ -41,6 +41,9 @@ public class ServiceController implements Initializable {
     private Button bttReset;
     @FXML
     private Button bttSave;
+    @FXML
+    private Button bttCreate;
+    
     
     @FXML
     private TextField txtCaseNumber;
@@ -52,6 +55,8 @@ public class ServiceController implements Initializable {
     private VBox vbMetadataBox;
     
     List<IMetadata> metadata;
+    
+    
     /**
      * Initializes the controller class.
      */
@@ -112,12 +117,16 @@ public class ServiceController implements Initializable {
     
     private void setUpDisplay(){
         // check service definition and create gui elements for metadata fields
-        List<IMetadata> metadata = dataObject.getMetadata();
-        vbMetadataBox.getChildren().clear();
-        for(IMetadata md : metadata){
-            MetadataPane newPane = new MetadataPane(md);
-            newPane.setPrefSize(200, 50);
-            vbMetadataBox.getChildren().add(newPane);
+        if(dataObject.getId()==-1){ // create a new service
+            
+        }else{
+            List<IMetadata> metadata = dataObject.getMetadata();
+            vbMetadataBox.getChildren().clear();
+            for(IMetadata md : metadata){
+                MetadataPane newPane = new MetadataPane(md);
+                newPane.setPrefSize(200, 50);
+                vbMetadataBox.getChildren().add(newPane);
+            }
         }
     }
 

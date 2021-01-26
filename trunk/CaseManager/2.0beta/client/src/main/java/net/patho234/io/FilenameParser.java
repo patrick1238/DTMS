@@ -18,22 +18,23 @@ public class FilenameParser {
     public final static String DIAGNOSIS="Diagnosis";
     public final static String RED="Red";
     public final static String BLUE="Blue";
+    public final static String LOCATION="Location";
     
     public static HashMap<String,String> twoDimFrankfurtParser(String filename){
         HashMap<String,String> info = new HashMap<>();
         if (filename.indexOf(".") > 0) {
             filename = filename.substring(0, filename.lastIndexOf("."));
         }
-        String[] blank_splitted = filename.split(" ");
-        String[] main_info = blank_splitted[0].split("_");
-        info.put(CASE_ID, main_info[0]+"-"+main_info[1]);
-        info.put(BLOCK, main_info[2]);
-        info.put(DIAGNOSIS, main_info[3]);
-        info.put(RED, main_info[4]);
+        String[] captureDateSplitted = filename.split(" - ");
+        String[] mainInfo = captureDateSplitted[0].split("_");
+        info.put(CASE_ID, mainInfo[0]+"-"+mainInfo[1]);
+        info.put(BLOCK, mainInfo[2]);
+        info.put(DIAGNOSIS, mainInfo[3]);
+        info.put(RED, mainInfo[4]);
         try{
-            info.put("CaptureDate", blank_splitted[2]);
+            info.put("CaptureDate", captureDateSplitted[1]);
         }catch(Exception ex){
-            info.put("CaptureDate", blank_splitted[2]);
+            info.put("CaptureDate", null);
             // could not be parsed: if value is required will result in a NULL pointer exception
         }
         for(String key:info.keySet()){

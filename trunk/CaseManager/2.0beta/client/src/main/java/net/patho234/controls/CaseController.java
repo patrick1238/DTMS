@@ -50,6 +50,7 @@ import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
 import net.patho234.utils.TableViewerControllerFactory;
+import net.patho234.views.ServiceWindow;
 import net.patho234.webapp_client.APPLICATION_DEFAULTS;
 import org.jboss.logging.Logger;
 
@@ -100,8 +101,7 @@ public class CaseController implements Initializable {
     private void addTwoDimClicked(ActionEvent event) {
         final FileChooser fileChooser = new FileChooser();
         Window stage;
-        List<File> list
-                = fileChooser.showOpenMultipleDialog(new Stage());
+        List<File> list = fileChooser.showOpenMultipleDialog(new Stage());
         if (list != null) {
             for (File file : list) {
                 HashMap<String, String> info = FilenameParser.twoDimFrankfurtParser(file.getName());
@@ -111,13 +111,34 @@ public class CaseController implements Initializable {
                 // check if case already exists by case number:
                 String caseNumber = info.get(FilenameParser.CASE_ID);
                 ClientCase caseForService = CasePool.createPool().getEntityByCaseNumber(caseNumber, false);
-                if( caseForService == null ){
-                    // TODO: create case here
-                    // compare to loaded case and validate if case number match
+                if( caseForService.getId()==-1 ){ // case not found
+                    try {
+                        // TODO: create case here
+                        // compare to loaded case and validate if case number match
+                        // maybe remove cause not needed? -> create case forced before new 2D is added?
+                        Logger.getLogger(getClass()).error("Case '"+caseNumber+"' not found in database...cannot add services for non-existing cases.");
+                        new ClientPopup("Case number not found...", "A case with case number '"+caseNumber+"' wasn't found in database! Service cannot be created.").show(bttSave.getScene().getWindow());
+                        return;
+                    } catch (IOException ex) {
+                        java.util.logging.Logger.getLogger(CaseController.class.getName()).log(Level.SEVERE, null, ex);
+                    } finally{
+                        //bttSave.getScene().getWindow().hide();
+                    }
+                }else{
+                    System.out.println("[234]: "+caseForService);
                 }
                 
                 // TODO: create service here
+                new2DService.setCase(caseForService);
                 
+                try{
+                    ServiceWindow serviceWnd = new ServiceWindow(new2DService);
+                    
+                    serviceWnd.initView();
+                    serviceWnd.showAndWait();
+                }catch(IOException ioEx){
+                    Logger.getLogger(getClass()).error("FXML file for ServiceWindow not found. Jar files seems to be broken.");
+                }
                 // TODO: create metadata here
             }
         }
@@ -202,13 +223,11 @@ public class CaseController implements Initializable {
     
     private void updateDisplay(){
         if( dataObject.getId()==-1 ){
-            System.out.println("[987] NEW CASE");
             bttSave.setText("Create case...");
             menuAdd.getItems().forEach((t) -> {
                 t.setDisable(true);
             });
         }else{
-            System.out.println("[987] PERSISTED CASE");
             bttSave.setText("Save changes");
             menuAdd.getItems().forEach((t) -> {
                 t.setDisable(false);
