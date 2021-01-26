@@ -105,6 +105,18 @@ public class LoginController implements Initializable, ISubmitterReceiver {
         
         allowLogin = allowLogin && isValidLogin(user, pwd);
         
+        if( !allowLogin && SubmitterPool.createPool().getAllEntities(false).isEmpty() ){ 
+            Logger.getLogger(getClass()).warn("SubmitterPool seems not to be initialized correctly...loading submitter.");
+            SubmitterPool.createPool().getAllEntities(true);
+            
+            try {
+                SubmitterPool.createPool().waitFor(4000);
+            } catch (TimeoutException ex) {
+                java.util.logging.Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            allowLogin=isValidLogin(user, pwd);
+        }
+        
         if( !allowLogin ){
             try {
                 new ClientPopup("Login failed", errorMsg).show( usernameField.getScene().getWindow() );

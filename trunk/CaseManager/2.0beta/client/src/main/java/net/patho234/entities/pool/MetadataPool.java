@@ -102,6 +102,12 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         */
         if( perServiceMap==null ){ return new ClientObjectList<>(); }
         
+//        // if service is not yet persisted (id=-1): create all metadata fields from service def:
+//        if( requestService.getId() == -1 ){
+//            requestService.getServiceDefinition().getMetadataValues();
+//            for()
+//        }
+//        
         return perServiceMap.getOrDefault(requestService.getId(), new ClientObjectList<>());
     }
 

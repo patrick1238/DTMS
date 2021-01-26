@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -20,7 +21,10 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
@@ -47,6 +51,7 @@ import net.patho234.gui.ClientPopup;
 import net.patho234.gui.adapter.ClinicForCaseAdapter;
 import net.patho234.gui.adapter.EntryDateForCaseAdapter;
 import net.patho234.interfaces.client.ClientObjectList;
+import net.patho234.interfaces.client.ReadOnlyClientObjectList;
 import net.patho234.io.FilenameParser;
 import net.patho234.utils.AutoCompleteBox;
 import net.patho234.utils.TableViewerControllerFactory;
@@ -124,12 +129,36 @@ public class CaseController implements Initializable {
                     } finally{
                         //bttSave.getScene().getWindow().hide();
                     }
-                }else{
-                    System.out.println("[234]: "+caseForService);
                 }
                 
                 // TODO: create service here
                 new2DService.setCase(caseForService);
+                
+                System.out.println("about to add new service: "+new2DService);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Create a new 2D Service");
+                alert.setContentText("Create a new 2D service for the case: "+caseNumber+"?");
+                ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+                ButtonType noButton = new ButtonType("Cancel", ButtonBar.ButtonData.NO);
+
+                alert.getButtonTypes().setAll(okButton, noButton);
+                alert.showAndWait().ifPresent(type -> {
+                        if (type == ButtonType.YES) {
+                            try {
+                                int requestId=ServicePool.createPool().createEntity(new2DService);
+                                ServicePool.createPool().waitForRequest(requestId);
+                                ReadOnlyClientObjectList<ClientService> allEntitiesForCase = ServicePool.createPool().getAllEntitiesForCase(caseForService);
+                                ClientService createService=null;
+                                for( ClientService cs : allEntitiesForCase ){
+                                    if( createService == null ){  }
+                                }
+                            } catch (TimeoutException ex) {
+                                java.util.logging.Logger.getLogger(CaseController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            return;
+                        }
+                });
                 
                 try{
                     ServiceWindow serviceWnd = new ServiceWindow(new2DService);

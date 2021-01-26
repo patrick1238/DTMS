@@ -63,7 +63,7 @@ public class ServiceController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         txtServiceDefinition.setStyle("-fx-text-inner-color: #eeeeee;"+txtServiceDefinition.styleProperty().getValue());
-        servicePane.setMinWidth(350);
+        servicePane.setMinWidth(400);
         servicePane.setMinHeight(300);
     }
 
