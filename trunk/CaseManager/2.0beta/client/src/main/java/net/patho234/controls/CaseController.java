@@ -12,6 +12,7 @@ import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
@@ -31,6 +32,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -68,6 +70,8 @@ public class CaseController implements Initializable {
 
     @FXML
     private GridPane casePane;
+    @FXML
+    private AnchorPane caseMainAnchorPane;
     @FXML
     private ComboBox<?> clinicBox;
     @FXML
@@ -140,28 +144,33 @@ public class CaseController implements Initializable {
                 alert.setContentText("Create a new 2D service for the case: "+caseNumber+"?");
                 ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
                 ButtonType noButton = new ButtonType("Cancel", ButtonBar.ButtonData.NO);
-
+                ClientService createService=null;
                 alert.getButtonTypes().setAll(okButton, noButton);
-                alert.showAndWait().ifPresent(type -> {
-                        if (type == ButtonType.YES) {
-                            try {
-                                int requestId=ServicePool.createPool().createEntity(new2DService);
-                                ServicePool.createPool().waitForRequest(requestId);
-                                ReadOnlyClientObjectList<ClientService> allEntitiesForCase = ServicePool.createPool().getAllEntitiesForCase(caseForService);
-                                ClientService createService=null;
-                                for( ClientService cs : allEntitiesForCase ){
-                                    if( createService == null ){  }
+                Optional<ButtonType> alertResult = alert.showAndWait();
+                if( alertResult.get().getButtonData().equals(ButtonBar.ButtonData.YES) ){
+                    try {
+                        int requestId=ServicePool.createPool().createEntity(new2DService);
+                        ServicePool.createPool().waitForRequest(requestId);
+                        ReadOnlyClientObjectList<ClientService> allEntitiesForCase = ServicePool.createPool().getAllEntitiesForCase(caseForService);
+                        for( ClientService cs : allEntitiesForCase ){
+                            if( createService == null ){
+                                createService = cs;
+                            }else{
+                                if( createService.getId()<cs.getId() ){
+                                    createService = cs;
                                 }
-                            } catch (TimeoutException ex) {
-                                java.util.logging.Logger.getLogger(CaseController.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                        } else {
-                            return;
                         }
-                });
+                        loadServices();
+                    } catch (TimeoutException ex) {
+                        java.util.logging.Logger.getLogger(CaseController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }else{
+                    return;
+                }
                 
                 try{
-                    ServiceWindow serviceWnd = new ServiceWindow(new2DService);
+                    ServiceWindow serviceWnd = new ServiceWindow(createService);
                     
                     serviceWnd.initView();
                     serviceWnd.showAndWait();
@@ -268,30 +277,56 @@ public class CaseController implements Initializable {
         javafx.beans.value.ChangeListener sizeChangedChangeListener = new javafx.beans.value.ChangeListener<Double>() {
             @Override
             public void changed(ObservableValue<? extends Double> observable, Double oldValue, Double newValue) {
-                Double newWidth;
-                if( newValue > 300 ){ 
-                    newWidth = newValue-10;
-                }else{
-                    newWidth = 280.;
+                if(observable.equals(caseMainAnchorPane.widthProperty())){
+                    Double newWidth;
+                    if( newValue > 300 ){ 
+                        newWidth = newValue-10;
+                    }else{
+                        newWidth = 280.;
+                    }
+                    fileViewerBox.setMinWidth(newWidth);
+                    fileViewerBox.setPrefWidth(newWidth);
+                    fileViewerBox.setMaxWidth(newWidth);
+                    services2D.setMinWidth(newWidth);
+                    services2D.setPrefWidth(newWidth);
+                    services2D.setMaxWidth(newWidth);
+                    services3D.setMinWidth(newWidth);
+                    services3D.setPrefWidth(newWidth);
+                    services3D.setMaxWidth(newWidth);
+                    services4D.setMinWidth(newWidth);
+                    services4D.setPrefWidth(newWidth);
+                    services4D.setMaxWidth(newWidth);
                 }
-                fileViewerBox.setMinWidth(newWidth);
-                fileViewerBox.setPrefWidth(newWidth);
-                fileViewerBox.setMaxWidth(newWidth);
-                services2D.setMinWidth(newWidth);
-                services2D.setPrefWidth(newWidth);
-                services2D.setMaxWidth(newWidth);
-                services3D.setMinWidth(newWidth);
-                services3D.setPrefWidth(newWidth);
-                services3D.setMaxWidth(newWidth);
-                services4D.setMinWidth(newWidth);
-                services4D.setPrefWidth(newWidth);
-                services4D.setMaxWidth(newWidth);
+                else if(observable.equals(caseMainAnchorPane.heightProperty())){
+                    Double newHeight;
+                    if( newValue > 400 ){ 
+                        newHeight = newValue-210;
+                    }else{
+                        newHeight = 280.;
+                    }
+                    Double newHeight3 = newHeight/3 - 10;
+                    fileViewerBox.setMinHeight(newHeight);
+                    fileViewerBox.setPrefHeight(newHeight);
+                    fileViewerBox.setMaxHeight(newHeight);
+                    services2D.setMinHeight(newHeight3);
+                    services2D.setPrefHeight(newHeight3);
+                    services2D.setMaxHeight(newHeight3);
+                    services3D.setMinHeight(newHeight3);
+                    services3D.setPrefHeight(newHeight3);
+                    services3D.setMaxHeight(newHeight3);
+                    services4D.setMinHeight(newHeight3);
+                    services4D.setPrefHeight(newHeight3);
+                    services4D.setMaxHeight(newHeight3);
+                }
             }
         };
         
+        fileViewerBox.setSpacing(10);
+        
         updateDisplay();
         
-        casePane.widthProperty().addListener(sizeChangedChangeListener);
+        caseMainAnchorPane.widthProperty().addListener(sizeChangedChangeListener);
+        caseMainAnchorPane.heightProperty().addListener(sizeChangedChangeListener);
         // get all diagnoses from loaded cases
         List diagnosis=null;
         try{

@@ -81,9 +81,12 @@ public class ServiceRepository extends AbstractFacade<ServiceEntity> implements 
     @Override
     public boolean createService(IService serviceToCreate) {
         Query qry=em.createNamedQuery("ServiceEntity.maxId");
+        System.out.println("createService(): before ID="+serviceToCreate.getId());
         Integer maxId = (Integer)qry.getSingleResult();
         maxId+=1;
+        System.out.println("createService(): new ID="+maxId);
         ((ServiceEntity)serviceToCreate).setId(maxId);
+        
         validate((ServiceEntity)serviceToCreate);
         
         try{

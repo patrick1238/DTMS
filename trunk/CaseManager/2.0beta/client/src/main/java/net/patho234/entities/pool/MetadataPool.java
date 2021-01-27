@@ -101,7 +101,7 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
         return filter.filterClientObjectList(unfilteredList);
         */
         if( perServiceMap==null ){ return new ClientObjectList<>(); }
-        
+        if( requestService.getId() == -1 ){ System.out.println("MetadataRequest for unpersisted service !!!!"); }
 //        // if service is not yet persisted (id=-1): create all metadata fields from service def:
 //        if( requestService.getId() == -1 ){
 //            requestService.getServiceDefinition().getMetadataValues();
@@ -175,7 +175,10 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
             metadataAsJsonArray.forEach((metadata) -> {
                 JsonObject joMeta=(JsonObject)metadata;
                 Logger.getLogger(getClass()).info("Processing JsonObject metadata: {0}", new String[]{ joMeta.toString() });
-                ClientMetadata newMetadata = new ClientMetadata( joMeta );                
+                ClientMetadata newMetadata = new ClientMetadata( joMeta );
+                if(newMetadata.getService().getCase().getCaseNumber().equals("L501-18")){
+                    System.out.println("NEW LOADED METADATA (L501-18): "+newMetadata);
+                }
                 cachedMetadataList.add(newMetadata);
             });
             new PerServiceMapUpdater(this).start();

@@ -280,7 +280,7 @@ public class MainWindow extends Stage{
         startTime = System.currentTimeMillis();
         MetadataPool.createPool().getAllEntities(true);
         try {
-            MetadataPool.createPool().waitFor(10000);
+            MetadataPool.createPool().waitFor(15000);
             Logger.getLogger(getClass().getName()).info("MetadataPool preloaded......"+String.format("%.3f seconds", ((System.currentTimeMillis()-startTime)/1000.d)));
         } catch (TimeoutException ex) {
             Logger.getLogger(getClass().getName()).severe(String.format("ERROR during start-up: %s", new Object[]{ex.getMessage()}));

@@ -61,6 +61,8 @@ public class MetadataResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getAllMetadata() {
+        Logger.getLogger(getClass()).info("________start METADATA getAll()_________");
+        long sTime = System.currentTimeMillis();
         List<IMetadata> entries = metaRepo.getAllEntities();
         JsonArrayBuilder arrayBuilder=Json.createArrayBuilder();
         
@@ -69,6 +71,8 @@ public class MetadataResource {
                 arrayBuilder.add( getMetadataBuilderJson(m) );
             }
         }
+        Logger.getLogger(getClass()).info("________(        "+((System.currentTimeMillis()-sTime)/100.)+"        )_________");
+        Logger.getLogger(getClass()).info("________end METADATA getAll()_________");
         return DefaultResponse.createOKResponse( arrayBuilder.build() );
     }
 
@@ -154,7 +158,10 @@ public class MetadataResource {
     }
     
     private IMetadataValue getMetadataValueForMetadata( IMetadata meta ){
-        HashMap<IServiceDefinition, List<IMetadataValue>> fieldsPerDef = meta.getService().getServiceDefinition().getMetadataValues();
+        IService service = meta.getService();
+        System.out.println("metadata: "+meta);
+        IServiceDefinition definition = service.getServiceDefinition();
+        HashMap<IServiceDefinition, List<IMetadataValue>> fieldsPerDef = definition.getMetadataValues();
         StringBuilder sb=new StringBuilder();
         sb.append("\nTrying to find MetadataValue for Metadata: '"+meta.getName()+"'");
         for(IServiceDefinition def : fieldsPerDef.keySet()){

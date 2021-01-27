@@ -16,7 +16,7 @@ INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_c
 INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (8, 'K3543-19', 2, '2019-09-11', 'cHL (MC)', 2);
 INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (9, 'K322-18', 2, '2019-12-04', 'cHL (NS)', 2);
 INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (10, 'H1001-18', 2, '2020-01-22', 'cHL (NS)', 3);
-
+INSERT INTO `linfo_open_db`.`clinic_case` (`idcase`, `case_number`, `fkey_case_clinic`, `case_entry_date`, `case_diagnosis`, `fkey_case_submitter`) VALUES (11, 'L501-18', 2, '2020-06-22', 'cHL (NS)', 3);
 
 #CONTACT_PERSON
 INSERT INTO `linfo_open_db`.`contact_person` (`idcontact_person`, `title`, `forename`, `surname`, `email`, `phone`) VALUES (1, 'Dr.', 'Johann', 'Johanson', 'jomail@nomail.com', '93459 93458');

@@ -125,11 +125,18 @@ public class MetadataRepository implements LocalMetadataRepository {
     public IMetadataDouble setDoubleMetadata(IService service, String key, Double value) {
         MetadataDoubleEntity updateEntity=doubleRepo.find(new MetadataDoubleEntityPK(service.getId(), key));
         if( updateEntity!=null ){
-            em.merge( updateEntity );
+            if(value!=null){
+                updateEntity.setData(value);
+                em.merge( updateEntity );
+            }else{
+                em.remove(updateEntity);
+            }
         }else{
-            updateEntity = new MetadataDoubleEntity(service.getId(), key);
-            updateEntity.setData(value);
-            em.persist( updateEntity );
+            if( value != null ){
+                updateEntity = new MetadataDoubleEntity(service.getId(), key);
+                updateEntity.setData(value);
+                em.persist( updateEntity );
+            }
         }
         return updateEntity;
     }
@@ -138,12 +145,18 @@ public class MetadataRepository implements LocalMetadataRepository {
     public IMetadataInt setIntegerMetadata(IService service, String key, Integer value) {
         MetadataIntEntity updateEntity=intRepo.find(new MetadataIntEntityPK(service.getId(), key));
         if( updateEntity!=null ){
-            updateEntity.setData(value);
-            em.merge( updateEntity );
+            if(value!=null){
+                updateEntity.setData(value);
+                em.merge( updateEntity );
+            }else{
+                em.remove(updateEntity);
+            }
         }else{
-            updateEntity = new MetadataIntEntity(service.getId(), key);
-            updateEntity.setData(value);
-            em.persist( updateEntity );
+            if( value != null ){
+                updateEntity = new MetadataIntEntity(service.getId(), key);
+                updateEntity.setData(value);
+                em.persist( updateEntity );
+            }
         }
         return updateEntity;
     }
@@ -151,6 +164,7 @@ public class MetadataRepository implements LocalMetadataRepository {
     @Override
     public IMetadataString setStringMetadata(IService service, String key, String value) {
         MetadataStringEntity updateEntity=stringRepo.find(new MetadataStringEntityPK(service.getId(), key));
+        if( value == null ){ value=""; }
         if( updateEntity!=null ){
             updateEntity.setData(value);
             em.merge( updateEntity );
@@ -165,6 +179,7 @@ public class MetadataRepository implements LocalMetadataRepository {
     @Override
     public IMetadataText setTextMetadata(IService service, String key, String value) {
         MetadataTextEntity updateEntity=textRepo.find(new MetadataTextEntityPK(service.getId(), key));
+        if( value == null ){ value=""; }
         if( updateEntity!=null ){
             updateEntity.setData(value);
             em.merge( updateEntity );
@@ -179,6 +194,7 @@ public class MetadataRepository implements LocalMetadataRepository {
     @Override
     public IMetadataUrl setUrlMetadata(IService service, String key, String value) {
         MetadataUrlEntity updateEntity=urlRepo.find(new MetadataUrlEntityPK(service.getId(), key));
+        if( value == null ){ value=""; }
         if( updateEntity!=null ){
             updateEntity.setData(value);
             em.merge( updateEntity );

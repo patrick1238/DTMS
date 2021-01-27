@@ -324,7 +324,7 @@ public class ServicesResource {
         }
         
         
-        Logger.getLogger("DEBUG").warn( "whole service: "+createService.toString() );
+        Logger.getLogger("DEBUG").warn( "whole unpersisted service: "+createService.toString() );
         if(createService.containsKey("serviceMetadata")){
             Logger.getLogger("DEBUG").warn( "serviceMetadata is present in createService" );
         }else{

@@ -40,7 +40,7 @@ public class MetadataUrlEntity implements Serializable, IMetadataUrl {
     protected MetadataUrlEntityPK metadataUrlEntityPK;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 200)
+    @Size(min = 0, max = 200)
     @Column(name = "meta_value")
     private String metaValue;
     @JoinColumn(name = "fkey_service", referencedColumnName = "idservice", insertable = false, updatable = false)

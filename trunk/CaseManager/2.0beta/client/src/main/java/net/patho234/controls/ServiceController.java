@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import net.patho234.elements.MetadataPane;
 import net.patho234.entities.ClientMetadata;
 import net.patho234.entities.ClientService;
+import net.patho234.entities.filter.ClientObjectSearchManager;
 import net.patho234.entities.pool.MetadataPool;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.gui.ClientPopup;
@@ -57,6 +58,8 @@ public class ServiceController implements Initializable {
     List<IMetadata> metadata;
     
     
+    private boolean isInitialized=false;
+    
     /**
      * Initializes the controller class.
      */
@@ -73,7 +76,9 @@ public class ServiceController implements Initializable {
             // TODO: check new values and persist to data base
             try{
                 ServicePool.createPool().persistEntity(dataObject, true);
+                
                 new ClientPopup("Service object saved - "+getNumberOfChangedMetadata()+" metadata differed", "All changes were persisted to the database...").show(this.servicePane.getScene().getWindow());
+                ClientObjectSearchManager.create().updateAll();
             }catch(TimeoutException toEx){
                 new ClientPopup("Error while savince service object:", "Connection timed out: maybe network is not available at the moment. Please try again later.").show(this.servicePane.getScene().getWindow());
             }
@@ -115,19 +120,20 @@ public class ServiceController implements Initializable {
         setUpDisplay();
     }
     
-    private void setUpDisplay(){
-        // check service definition and create gui elements for metadata fields
+    private void setUpDisplay(){ 
+    // check service definition and create gui elements for metadata fields
         if(dataObject.getId()==-1){ // create a new service
             
         }else{
             List<IMetadata> metadata = dataObject.getMetadata();
             vbMetadataBox.getChildren().clear();
             for(IMetadata md : metadata){
+                System.out.println(" ++ "+md);
                 MetadataPane newPane = new MetadataPane(md);
                 newPane.setPrefSize(200, 50);
                 vbMetadataBox.getChildren().add(newPane);
             }
         }
     }
-
+    
 }

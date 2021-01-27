@@ -38,7 +38,7 @@ public class ClientMetadataKey {
         }
         
         final ClientMetadataKey other = (ClientMetadataKey) obj;
-        Boolean isEqual = (name == other.name) && (serviceId == other.serviceId);
+        Boolean isEqual = Objects.equals(name, other.name) && Objects.equals(serviceId, other.serviceId);
         return isEqual;
     }
     

@@ -61,9 +61,11 @@ public class ServiceEntity implements Serializable, IService {
     private static final long serialVersionUID = 1L;
     @JoinColumn(name = "fkey_case", referencedColumnName = "idcase")
     @ManyToOne
+    @NotNull
     private CaseEntity fkeyCase;
     @JoinColumn(name = "fkey_service_definition", referencedColumnName = "idservice_definition")
     @ManyToOne
+    @NotNull
     private ServiceDefinitionEntity fkeyServiceDefinition;
     
     // TODO: add submitter

@@ -106,7 +106,12 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         
         boolean nameUnchanged = name.getValue().equals(original.getValue().getString("name"));
         boolean serviceIdUnchanged = serviceId.getValue().equals(original.getValue().getInt("serviceId"));
-        boolean dataUnchanged = Objects.equals(this.data.getValue().toString(), castValue(original.getValue().getString("value")).toString());
+        boolean dataUnchanged;
+        if(this.data.getValue()==null || castValue(original.getValue().getString("value"))==null){
+            dataUnchanged = this.data.getValue()==null && castValue(original.getValue().getString("value"))==null;
+        }else{
+            dataUnchanged = Objects.equals(this.data.getValue().toString(), castValue(original.getValue().getString("value")).toString());
+        }
         boolean typeUnchanged = this.type.getValue() == original.getValue().getString("type");
         
 //        if(nameUnchanged && serviceIdUnchanged && dataUnchanged && typeUnchanged){
@@ -147,15 +152,15 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
                 builder.add("type", "double");
                 break;
             case "string":
-                builder.add("value", (String)data.getValue());
+                builder.add("value", (data.getValue()==null)?"":(String)data.getValue());
                 builder.add("type", "string");
                 break;
             case "text":
-                builder.add("value", (String)data.getValue());
+                builder.add("value", (data.getValue()==null)?"":(String)data.getValue());
                 builder.add("type", "text");
                 break;
             case "url":
-                builder.add("value", (String)data.getValue());
+                builder.add("value", (data.getValue()==null)?"":(String)data.getValue());
                 builder.add("type", "url");
                 break;
         }
@@ -268,15 +273,19 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     }
 
     private Object castValue(String string) {
+        //System.out.println("string='"+string+"'");
         switch( type.getValue() ){
             case "integer":
             case "int":
+                if(string.equals("null")){ return null; }
                 return Integer.valueOf( string );
             case "double":
+                if(string.equals("null")){ return null; }
                 return Double.valueOf( string );
             case "string":
             case "text":
             case "url":
+                if(string.equals("null")){ return null; }
                 return string ;
             default:
                 Logger.getLogger(getClass()).error("Unknown metadata type: "+type.getValue());
