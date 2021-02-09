@@ -147,11 +147,21 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         switch(type.getValue()){
             case "integer":
             case "int":
-                builder.add("value", (Integer)data.getValue());
+                if(data.getValue()==null){
+                    builder.add("value", JsonValue.NULL);
+                }
+                else{
+                    builder.add("value", (Integer)data.getValue());
+                }
                 builder.add("type", "int");
                 break;
             case "double":
-                builder.add("value", (Double)data.getValue());
+                if(data.getValue()==null){
+                    builder.add("value", JsonValue.NULL);
+                }
+                else{
+                    builder.add("value", (Double)data.getValue());
+                }
                 builder.add("type", "double");
                 break;
             case "string":
@@ -244,6 +254,7 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     public METADATA_TYPE getType() {
         switch ( type.getValue() ){
             case "integer":
+            case "int":
                 return IMetadata.METADATA_TYPE.INTEGER;
             case "double":
                 return IMetadata.METADATA_TYPE.DOUBLE;

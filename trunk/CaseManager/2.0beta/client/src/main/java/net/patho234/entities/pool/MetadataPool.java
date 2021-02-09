@@ -114,17 +114,55 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
 //            requestService.getServiceDefinition().getMetadataValues();
 //            for()
 //        }
-//        
-        return perServiceMap.getOrDefault(requestService.getId(), buildMetadataFromServiceDef(requestService));
+//      
+        ClientObjectList<ClientMetadata> returnList=null;
+        if( perServiceMap.get(requestService.getId())==null ){
+            System.out.println("complete service def");
+            returnList = buildMetadataFromServiceDef(requestService);
+        }else{
+            System.out.println("partly service def");
+            returnList = fillUpMetadataFromServiceDef( requestService, perServiceMap.get(requestService.getId()) );
+        }
+        return returnList;
+    }
+    
+    public ClientObjectList<ClientMetadata> fillUpMetadataFromServiceDef(ClientService requestService, ClientObjectList<ClientMetadata> partList){
+        ClientObjectList<ClientMetadata> serviceDefList = buildMetadataFromServiceDef(requestService);
+        ReadOnlyClientObjectList<ClientMetadata> metaList = new ClientObjectList<>();
+        System.out.println("size: "+serviceDefList.size());
+        for( ClientMetadata cm : serviceDefList ){
+            String tmpName = cm.getName();
+            
+            ClientMetadata partMetadata=null;
+            inner: for( ClientMetadata tmpMeta : partList ){
+                if( tmpName.equals(tmpMeta.getName()) ){
+                    partMetadata = tmpMeta;
+                    break inner;
+                }
+            }
+            
+            if( partMetadata!=null ){
+                //System.out.println("adding "+cm.getName()+" [already set]");
+                metaList.add(partMetadata);
+            }else{
+                //System.out.println("adding "+cm.getName()+" [from service def]");
+                metaList.add(cm);
+            }
+        }
+        return (ClientObjectList<ClientMetadata>) metaList;
     }
     
     public ClientObjectList<ClientMetadata> buildMetadataFromServiceDef(ClientService requestService){
         ReadOnlyClientObjectList<ClientMetadata> metaList = new ClientObjectList<>();
-        
+        //System.out.println("buildMetadataFromServiceDef("+requestService.getServiceDefinition().getName()+")");
+        //System.out.println("num service def categories: "+requestService.getServiceDefinition().getMetadataValues().size()); 
+               
         for( Entry<IServiceDefinition, List<IMetadataValue>> e: requestService.getServiceDefinition().getMetadataValues().entrySet()){
+            //List<IMetadataValue> values = requestService.getServiceDefinition().getMetadataValues().get(requestService.getServiceDefinition());
+            System.out.println("-- "+requestService.getServiceDefinition().getName()+": "+e.getValue().size()); 
             for(IMetadataValue mv : e.getValue()){
                 if( !mv.isDepricated() ){
-                    System.out.println("adding metadataValue: "+mv);
+                    //System.out.println("adding metadataValue: "+mv);
                     ClientMetadata meta=null;
                     JsonObjectBuilder builder = Json.createObjectBuilder();
                     builder.add("id", -1);
@@ -157,6 +195,9 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
                     }
                     
                     meta=new ClientMetadata(builder.build());
+                    metaList.add(meta);
+                }else{
+                    System.out.println(mv.getKey()+" will be ignored...deprecated.");
                 }
             }
         }

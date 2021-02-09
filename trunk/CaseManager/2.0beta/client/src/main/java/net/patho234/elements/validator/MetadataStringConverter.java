@@ -44,6 +44,8 @@ public class MetadataStringConverter extends StringConverter{
             case UNDEFINED:
             default:
                 Logger.getLogger(getClass()).warn("MetadataStringConverter.fromString() called for UNDEFINED or UNKNOWN metadata type...returning NULL");
+                Logger.getLogger(getClass()).warn("MetadataStringConverter.fromString() meta is: "+meta);
+                Logger.getLogger(getClass()).warn("MetadataStringConverter.fromString() string is: "+string);
                 return null;
         }
     }
