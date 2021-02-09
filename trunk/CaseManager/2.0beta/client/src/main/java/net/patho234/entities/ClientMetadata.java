@@ -18,8 +18,11 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javax.json.Json;
+import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import javax.json.JsonValue.ValueType;
 import net.patho234.entities.pool.ServicePool;
 import net.patho234.interfaces.IMetadata;
 import net.patho234.interfaces.IService;
@@ -41,13 +44,13 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
     
     public ClientMetadata(JsonObject asJson) {
         if(asJson==null){ Logger.getLogger(getClass()).fatal("ClientMetadata(): JSONObject is NULL"); }
-        System.out.println("AS_JSON: "+asJson.toString());
+        //System.out.println("AS_JSON: "+asJson.toString());
         this.original.setValue(asJson);
         ID.setValue(asJson.getInt("serviceId"));
         this.name.setValue(asJson.getString("name"));
         this.type.setValue(asJson.getString("type"));
         
-        this.data.setValue( castValue(asJson.getString("value")) );
+        this.data.setValue( castValue(asJson.get("value")) );
         
         ClientMetadata self=this; 
         ChangeListener listener = new ChangeListener() {
@@ -287,6 +290,33 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
             case "url":
                 if(string.equals("null")){ return null; }
                 return string ;
+            default:
+                Logger.getLogger(getClass()).error("Unknown metadata type: "+type.getValue());
+                return null;
+        }
+    }
+    
+    private Object castValue(JsonValue jObj) {
+        //System.out.println("jObj='"+jObj+"'");
+        switch( type.getValue() ){
+            case "integer":
+            case "int":
+                if(jObj.getValueType().equals(ValueType.NULL) || jObj.toString() == "null"){ return null; }
+                if(jObj.getValueType().equals(ValueType.STRING)){
+                    return Integer.valueOf( jObj.toString().replaceAll("\"", "") );
+                }
+                return ((JsonNumber)jObj).intValue();
+            case "double":
+                if(jObj.getValueType().equals(ValueType.NULL) || jObj.toString() == "null"){ return null; }
+                if(jObj.getValueType().equals(ValueType.STRING)){
+                    return Double.valueOf( jObj.toString().replaceAll("\"", "") );
+                }
+                return ((JsonNumber)jObj).doubleValue();
+            case "string":
+            case "text":
+            case "url":
+                if(jObj.getValueType().equals(ValueType.NULL)){ return null; }
+                return jObj.toString().replaceAll("\"", "");
             default:
                 Logger.getLogger(getClass()).error("Unknown metadata type: "+type.getValue());
                 return null;

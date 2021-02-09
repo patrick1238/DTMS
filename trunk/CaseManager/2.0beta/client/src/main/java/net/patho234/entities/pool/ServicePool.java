@@ -143,6 +143,8 @@ public class ServicePool extends AClientObjectPool<ClientService> {
         
         JsonObject httpBody = toCreate.toJson();
         
+        System.out.println("[13131313]: creating new service");
+        System.out.println("          - "+toCreate.toJson());
         try{
             fireHTTPRequest(templateEP, buildEP, HTTP_REQUEST_TYPE.CREATE, httpBody, param);
         } catch (NotSignedInException ex) {

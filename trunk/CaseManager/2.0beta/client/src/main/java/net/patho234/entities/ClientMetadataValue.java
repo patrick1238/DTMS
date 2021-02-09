@@ -115,4 +115,9 @@ public class ClientMetadataValue extends ClientObjectBase<ClientMetadataValue> i
     public void setUnit(String unit) {
         unitProperty.setValue(unit);
     }
+    
+    @Override
+    public String toString(){
+        return toJson().toString();
+    }
 }

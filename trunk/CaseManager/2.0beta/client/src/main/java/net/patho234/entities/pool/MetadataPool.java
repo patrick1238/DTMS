@@ -7,12 +7,17 @@ package net.patho234.entities.pool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeoutException;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonString;
 import javax.json.JsonStructure;
+import javax.json.JsonValue;
 import net.patho234.entities.ClientCase;
 import net.patho234.entities.ClientMetadata;
 import net.patho234.entities.ClientService;
@@ -22,6 +27,8 @@ import net.patho234.entities.filter.ClientObjectLocalChangesFilter;
 import net.patho234.http.HTTP_ENDPOINT_TEMPLATES;
 import net.patho234.http.NotSignedInException;
 import net.patho234.interfaces.IHttpResponse;
+import net.patho234.interfaces.IMetadataValue;
+import net.patho234.interfaces.IServiceDefinition;
 import net.patho234.interfaces.client.ClientObjectList;
 import net.patho234.interfaces.client.ReadOnlyClientObjectList;
 import net.patho234.utils.HTTP_REQUEST_TYPE;
@@ -108,7 +115,52 @@ public class MetadataPool extends AClientObjectPool<ClientMetadata> {
 //            for()
 //        }
 //        
-        return perServiceMap.getOrDefault(requestService.getId(), new ClientObjectList<>());
+        return perServiceMap.getOrDefault(requestService.getId(), buildMetadataFromServiceDef(requestService));
+    }
+    
+    public ClientObjectList<ClientMetadata> buildMetadataFromServiceDef(ClientService requestService){
+        ReadOnlyClientObjectList<ClientMetadata> metaList = new ClientObjectList<>();
+        
+        for( Entry<IServiceDefinition, List<IMetadataValue>> e: requestService.getServiceDefinition().getMetadataValues().entrySet()){
+            for(IMetadataValue mv : e.getValue()){
+                if( !mv.isDepricated() ){
+                    System.out.println("adding metadataValue: "+mv);
+                    ClientMetadata meta=null;
+                    JsonObjectBuilder builder = Json.createObjectBuilder();
+                    builder.add("id", -1);
+                    builder.add("name", mv.getKey());
+                    builder.add("serviceId", requestService.getId());
+                    switch (mv.getValueType()) {
+                        case "integer":
+                        case "int":
+                            builder.add("value", JsonValue.NULL);
+                            builder.add("type", "int");
+                            break;
+                        case "double":
+                            builder.add("value", JsonValue.NULL);
+                            builder.add("type", "double");
+                            break;
+                        case "string":
+                            builder.add("value", "");
+                            builder.add("type", "string");
+                            break;
+                        case "text":
+                            builder.add("value", "");
+                            builder.add("type", "text");
+                            break;
+                        case "url":
+                            builder.add("value", "");
+                            builder.add("type", "url");
+                            break;
+                        default:
+                            Logger.getLogger(getClass()).error("Unknown metadata type: "+mv.getValueType());
+                    }
+                    
+                    meta=new ClientMetadata(builder.build());
+                }
+            }
+        }
+        return (ClientObjectList<ClientMetadata>)metaList;
     }
 
     public ReadOnlyClientObjectList<ClientMetadata> getMetadataForCase(ClientCase requestCase, Boolean updatePool){

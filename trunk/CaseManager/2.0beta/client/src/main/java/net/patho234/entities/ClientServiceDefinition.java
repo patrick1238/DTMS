@@ -91,7 +91,15 @@ public class ClientServiceDefinition extends ClientObjectBase<ClientServiceDefin
 
     @Override
     public HashMap<IServiceDefinition, List<IMetadataValue>> getMetadataValues() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        HashMap<IServiceDefinition, List<IMetadataValue>> metaValues = new HashMap<>();
+        metaValues.put(this, fields);
+        IServiceDefinition parent = getParentDefinition();
+        while(parent != null){
+            metaValues.put(parent, ((ClientServiceDefinition)parent).fields);
+            parent=parent.getParentDefinition();
+        }
+        
+        return metaValues;
     }
     
     public List<IMetadataValue> getFields() {
