@@ -110,9 +110,14 @@ public class ClientMetadata<T> extends ClientObjectBase<ClientMetadata> implemen
         boolean nameUnchanged = name.getValue().equals(original.getValue().getString("name"));
         boolean serviceIdUnchanged = serviceId.getValue().equals(original.getValue().getInt("serviceId"));
         boolean dataUnchanged;
-        if(this.data.getValue()==null || castValue(original.getValue().getString("value"))==null){
-            dataUnchanged = this.data.getValue()==null && castValue(original.getValue().getString("value"))==null;
-        }else{
+        if( this.data.getValue()==null ){
+            System.out.println("origValue: "+original.getValue());
+            dataUnchanged = castValue(original.getValue().get("value"))==null;
+        } else if( castValue(original.getValue().get("value"))==null ){
+            dataUnchanged = this.data.getValue()==null;
+            
+        }
+        else{
             dataUnchanged = Objects.equals(this.data.getValue().toString(), castValue(original.getValue().getString("value")).toString());
         }
         boolean typeUnchanged = this.type.getValue() == original.getValue().getString("type");
