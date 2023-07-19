@@ -1,0 +1,53 @@
+##DTMS Pharma config##
+
+##Paths
+csvPathGeneral=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\Storages\\DataStorage.csv
+csvPath2D=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\Storages\\2DPropertyStorage.csv
+csvPath3D=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\Storages\\3DPropertyStorage.csv
+csvPath4D=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\Storages\\4DPropertyStorage.csv
+ConfigPath=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\config\\config.txt
+ErrorlogPath=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\\AdditionalFiles\\errorlog.txt
+InputImagePath=C:\
+
+##Backup paths
+backupFiles=csvPathGeneral,csvPath2D,csvPath3D,csvPath4D,ConfigPath
+
+##Database
+ImageServer=C:\Users\patri\OneDrive\Dokumente\Patho\Literatur\Own work\Patrick\Diss\Tools\DTMS_version_1.1\Resources\Images\
+ImageServerLogic=CaseNumber,PrimaryStaining,FileType
+
+#Exportoptions
+Exporter_options=DTMS folder,Diagnosis related,Stain related,unrelated,anonymized
+
+##LHDataStorageProperties
+PossibleTypes=2D,3D,4D
+RecentFiles=None
+AddressID=B
+LastImageID=31
+BackUpDate=2023-07-04
+
+#Shortcuts
+shortcuts=File>Add image-Ctrl+Q
+
+##GeneralImageProperties
+GeneralHeader=ImageID,CaseID,CaseNumber,EntryDate,CaptureDate,Diagnose,PrimaryStaining,SecondaryStaining,ThirdStaining,FileType,FilePath,Comment
+GeneralControlItems=Label,Label,Field,Field,Field,Box,Box,Box,Box,Box,Button,Field
+GeneralWorkingFile=FilePath
+
+##2DImageProperties
+2DHeader=ImageID,CaseID,CaseNumber,PrimaryStaining,Cellgraph,FilePath
+2DControlItems=Label,Label,Label,Label,Button,Label
+2DWorkingFile=Cellgraph
+
+##3DImageProperties
+3DHeader=ImageID,CaseID,CaseNumber,PrimaryStaining,Tiles,ImarisFile,OverviewFile,FilePath
+3DControlItems=Label,Label,Label,Label,Field,Button,Button,Label
+3DWorkingFile=ImarisFile
+
+##4DImageProperties
+4DHeader=ImageID,CaseID,CaseNumber,PrimaryStaining,Tiles,ImarisFile,OverviewFile,FilePath
+4DControlItems=Label,Label,Label,Label,Field,Button,Button,Label
+4DWorkingFile=ImarisFile
+
+##ImageIdentifier
+ImageIdentifier=ImageID,CaseID,CaseNumber,PrimaryStaining,FilePath
