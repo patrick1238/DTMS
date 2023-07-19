@@ -1,0 +1,20 @@
+Jul 19, 2023 11:10:54 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 15.0.1 by JavaFX runtime of version 8.0.111
+Jul 19, 2023 11:10:54 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.111
+Jul 19, 2023 11:10:54 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.111
+Jul 19, 2023 11:10:54 AM BackgroundHandler.ErrorLog createLogEntry
+INFORMATION: DTMS started
+Jul 19, 2023 11:10:58 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNUNG: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.111
+Jul 19, 2023 11:11:30 AM BackgroundHandler.ErrorLog createLogEntry
+SCHWERWIEGEND: File is empty or the filepath contains blanks, remove blanks and retry
+Jul 19, 2023 11:12:16 AM BackgroundHandler.ErrorLog createLogEntry
+INFORMATION: B31 added
+Jul 19, 2023 11:12:16 AM BackgroundHandler.ErrorLog createLogEntry
+INFORMATION: Properties of B31 added
+Jul 19, 2023 11:12:35 AM BackgroundHandler.ErrorLog createLogEntry
+INFORMATION: B31 removed from database
+Jul 19, 2023 11:12:35 AM BackgroundHandler.ErrorLog createLogEntry
+INFORMATION: Properties of B31 removed from database
